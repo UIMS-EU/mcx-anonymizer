@@ -1,0 +1,275 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# Warning texts of the MCX standards (feature 008, FR-006). An MCX server includes the Warning
+# code 399 with a text "<3-digit code> <explanatory text>" from a table of its standard
+# (TS 24.379 §4.4.1/§4.4.2, TS 24.281 §4.4.1/§4.4.2, TS 24.282 §4.9.1/§4.9.2). A warn-text that
+# is exactly one of these entries after warn-code 399 is standard vocabulary and is kept; any other
+# text is blanked (rules/sip-headers.yaml, Warning). The texts are quoted verbatim from the tables;
+# "<detailed reason>" of code 100 is expanded with the reasons its Description lists (its
+# free-text variant is not an entry). Sources: rules/SOURCES.md.
+ruleset: mcxanon-sip
+version: 1.2.0
+warning_texts:
+  # TS 24.379 V19.6.0 §4.4.2, Table 4.4.2-2
+  - {warn_code: 399, text: "100 function not allowed due to group definition", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "100 function not allowed due to access policy", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "100 function not allowed due to local policy", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "100 function not allowed due to user authorisation", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "100 function not allowed due to pre-established session not supported", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "101 service authorisation failed", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "102 too many simultaneous affiliations", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "103 maximum simultaneous MCPTT group calls reached", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "104 isfocus not assigned", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "105 subscription not allowed in a broadcast group call", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "106 user not authorised to join chat group", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "107 user not authorised to make private calls", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "108 user not authorised to make chat group calls", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "109 user not authorised to make prearranged group calls", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "110 user declined the call invitation", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "111 group call proceeded without all required group members", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "112 group call abandoned due to required group members not part of the group session", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "113 group document does not exist", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "114 unable to retrieve group document", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "115 group is disabled", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "116 user is not part of the MCPTT group", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "117 the group identity indicated in the request is a prearranged group", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "118 the group identity indicated in the request is a chat group", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "119 user is not authorised to initiate the group call", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "120 user is not affiliated to this group", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "121 user is not authorised to join the group call", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "122 too many participants", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "123 MCPTT session already exists", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "124 maximum number of private calls reached", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "125 user not authorised to make private call with automatic commencement", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "126 user not authorised to make private call with manual commencement", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "127 user not authorised to be called in private call", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "128 isfocus already assigned", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "136 authentication of the MIKEY-SAKKE I_MESSAGE failed", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "137 the indicated group call does not exist", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "138 subscription of conference events not allowed", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "139 integrity protection check failed", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "140 unable to decrypt XML content", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "141 user unknown to the participating function", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "142 unable to determine the controlling function", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "143 not authorised to force auto answer", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "144 user not authorised to call this particular user", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "145 unable to determine called party", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "146 T-PF unable to determine the service settings for the called user", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "147 user is authorized to initiate a temporary group call", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "148 group is regrouped", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "149 SIP INFO request pending", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "150 invalid combinations of data received in MIME body", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "151 user not authorised to make a private call call-back request", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "152 user not authorised to make a private call call-back cancel request", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "153 user not authorised to call any of the users requested in the first-to-answer call", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "154 user not authorised to make ambient listening call", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "155 user not authorised to change user's selected group", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "156 user not authorised to originate a first-to-answer call", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "157 user not authorised to request a remotely initiated group call", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "158 user not authorised to request a remotely initiated private call", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "159 user not authorised to be called by this originating user", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "160 user not authorised to request creation of a regroup", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "161 user not authorised to request removal of a regroup", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "162 group call abandoned due to required group members not affiliated", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "163 the group identity indicated in the request does not exist", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "164 maximum number of service authorizations reached", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "165 group ID for regroup already in use", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "166 constituent group is in an emergency call state", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "167 call is not allowed on the preconfigured group", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "168 alert is not allowed on the preconfigured group", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "169 user is not authorised to remove regroup in an emergency state", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "170 user not authorised to make a private call transfer request", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "171 functional alias not allowed to call this particular functional alias", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "172 functional alias not allowed to be called from this functional alias", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "173 user not authorised to make a private call forwarding request", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "174 maximum number of allowed forwardings exceeded", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "175 call is forwarded", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "176 user not authorized to request for binding/unbinding of a functional alias with the MCPTT group(s) for the MCPTT user", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "177 unable to determine target functional alias or group for creating/removing a binding information for the MCPTT user", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "178 MCPTT group binding already exists with other functional alias for the MCPTT user", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "179 service not authorized with the interconnected system", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "180 service not authorized by the interconnected system", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "181 called user requires to use floor control", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "182 called user requires to not use floor control", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "183 MCPTT codec required", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "184 user not authorised to make adhoc group calls", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "185 user not authorised to initiate the adhoc group call", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "186 the MCPTT system do not support adhoc group call", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "187 can't determine the adhoc group participants", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "188 user is not allowed to participate in adhoc group call", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "189 maximum number of allowed adhoc group participants exceeded", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "190 user is not authorised to initiate modify adhoc group call participants", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "191 call forwarding due to migration", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "192 invalid location request target client list", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "193 user not authorized to request location information", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "194 user not authorized to request location configuration changes", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "195 can't determine the adhoc group", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "196 user participates under another constituent group", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "197 targeted emergency group call is not ongoing", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "198 targeted emergency private call is not ongoing", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "199 remote user is not in emergency state", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "200 user not authorised to trigger an emergency remote floor request", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "201 user not authorized to change the functional alias status", source: {spec: TS 24.379, version: "19.6.0", clause: "4.4.2"}}
+  # TS 24.281 V19.5.0 §4.4.2, Table 4.4.2-2
+  - {warn_code: 399, text: "100 function not allowed due to group definition", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "100 function not allowed due to access policy", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "100 function not allowed due to local policy", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "100 function not allowed due to user authorisation", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "101 service authorisation failed", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "102 too many simultaneous affiliations", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "103 maximum simultaneous MCVideo group calls reached", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "104 isfocus not assigned", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "105 subscription not allowed in a broadcast group call", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "106 user not authorised to join chat group", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "107 user not authorised to make private calls", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "108 user not authorised to make chat group calls", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "109 user not authorised to make prearranged group calls", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "110 user declined the call invitation", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "111 group call proceeded without all required group members", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "112 group call abandoned due to required group members not part of the group session", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "113 group document does not exist", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "114 unable to retrieve group document", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "115 group is disabled", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "116 user is not part of the MCVideo group", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "117 the group identity indicated in the request is a prearranged group", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "118 the group identity indicated in the request is a chat group", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "119 user is not authorised to initiate the group call", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "120 user is not affiliated to this group", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "121 user is not authorised to join the group call", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "122 too many participants", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "123 MCVideo session already exists", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "124 maximum number of private calls reached", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "125 user not authorised to make private call with automatic commencement", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "126 user not authorised to make private call with manual commencement", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "127 user not authorised to be called in private call", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "128 isfocus already assigned", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "137 the indicated group call does not exist", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "138 subscription of conference events not allowed", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "139 integrity protection check failed", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "140 unable to decrypt XML content", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "141 user unknown to the participating function", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "142 unable to determine the controlling function", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "143 not authorised to force auto answer", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "144 user not authorised to call this particular user", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "145 unable to determine called party", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "146 T-PF unable to determine the service settings for the called user", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "147 user is authorized to initiate a temporary group call", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "148 group is regrouped", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "149 SIP-INFO request pending", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "150 invalid combinations of data received in MIME body", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "154 user not authorised to make ambient viewing call", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "159 user not authorised to be called by this originating user", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "160 user not authorised to request creation of a regroup", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "161 user not authorised to request removal of a regroup", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "162 group call abandoned due to required group members not affiliated", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "163 the group identity indicated in the request does not exist", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "165 group ID for regroup already in use", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "166 maximum number of service authorizations reached", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "167 call is not allowed on the preconfigured group", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "168 alert is not allowed on the preconfigured group", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "171 functional alias not allowed to call this particular functional alias", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "172 functional alias not allowed to be called from this functional alias", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "176 user not authorized to request for binding/unbinding of a functional alias with the MCVideo group(s) for the MCVideo user", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "177 unable to determine target functional alias or group for creating/removing a binding information for the MCVideo user", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "178 MCVideo group binding already exists with other functional alias for the MCVideo user", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "179 service not authorized with the interconnected system", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "180 service not authorized by the interconnected system", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "184 user not authorised to make adhoc group calls", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "185 user not authorised to initiate the adhoc group call", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "186 the MCVideo system do not support adhoc group call", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "187 can't determine the adhoc group participants", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "188 user is not allowed to participate in adhoc group call", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "189 maximum number of allowed adhoc group participants exceeded", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "190 user is not authorised to initiate modify adhoc group call participants", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "191 Invalid location request target client list", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "192 user not authorized to request location information", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "193 user not authorized to request location configuration changes", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "194 can't determine the adhoc group", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "195 user participates under another constituent group", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  - {warn_code: 399, text: "196 call forwarding due to migration", source: {spec: TS 24.281, version: "19.5.0", clause: "4.4.2"}}
+  # TS 24.282 V19.6.0 §4.9.2, Table 4.9.2-2
+  - {warn_code: 399, text: "101 service authorisation failed", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "102 too many simultaneous affiliations", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "104 isfocus not assigned", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "110 user declined the call invitation", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "113 group document does not exist", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "114 unable to retrieve group document", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "115 group is disabled", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "116 user is not part of the MCData group", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "120 user is not affiliated to this group", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "136 authentication of the MIKEY-SAKKE I_MESSAGE failed", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "137 the indicated group communication does not exist", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "138 subscription of conference events not allowed", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "139 integrity protection check failed", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "140 unable to decrypt XML content", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "141 user unknown to the participating function", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "142 unable to determine the controlling function", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "145 unable to determine called party", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "148 group is regrouped", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "149 SIP-INFO request pending", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "150 invalid combinations of data received in MIME body", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "160 user not authorised to request creation of a regroup", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "161 user not authorised to request removal of a regroup", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "162 group call abandoned due to required group members not affiliated", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "163 the group identity indicated in the request does not exist", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "165 group ID for regroup already in use", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "167 call is not allowed on the preconfigured group", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "168 alert is not allowed on the preconfigured group", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "176 user not authorized to request for binding/unbinding of a functional alias with the MCData group(s) for the MCData user", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "177 unable to determine target functional alias or group for creating/removing a binding information for the MCData user", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "178 MCData group binding already exists with other functional alias for the MCData user", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "179 service not authorized with the interconnected system", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "180 service not authorized by the interconnected system", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "198 no users are affiliated to this group", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "199 expected MIME bodies not in the request\"", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "200 user not authorised to transmit data", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "201 user not authorised to transmit data on this group identity", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "202 user not authorised for one-to-one MCData communications due to exceeding the maximum amount of data that can be sent in a single request", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "203 message too large to send over signalling control plane", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "204 unable to determine targeted user for one-to-one SDS", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "205 unable to determine targeted user for one-to-one FD", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "206 short data service not allowed for this group", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "207 SDS services not supported for this group", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "208 user not authorised for MCData communications on this group identity due to exceeding the maximum amount of data that can be sent in a single request", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "209 one FD SIGNALLING PAYLOAD or FD HTTP TERMINATION message only must be present in FD request", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "210 Only one File URL must be present in the FD request", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "211 payload for an FD request is not FILEURL", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "212 file referenced by file URL does not exist", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "213 file distribution not allowed for this group", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "214 FD services not supported for this group", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "215 request to transmit is queued by the server", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "216 unable to correlate the disposition notification", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "217 user not authorised for SDS communications on this group identity due to message size", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "218 user not authorised for one-to-one SDS communications due to message size", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "219 user not authorised for FD communications on this group identity due to file size", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "220 user not authorised for FD communications due to file size", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "221 user not authorised to initiate one-to-one SDS session", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "222 user not authorised to initiate group SDS session on this group identity", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "223 No Conversation ID or Message ID present", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "224 No Transmission available", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "225 User not authorized to initiate pre-established session", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "226 function not allowed due to pre-established session not supported", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "227 unable to determine targeted user for one-to-one IP Connectivity", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "228 maximum number of service authorizations reached", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "229 one-to-one MCData communication not authorised to the targeted user", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "230 one-to-one MCData communication not authorised from this originating user", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "231 user deferred the call invitation", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "232 communication is stored for later delivery", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "233 user not authorised to initiate emergency communication", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "234 user not authorized to enable or disable the storage of MCData communications into the MCData message store", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "235 unable to determine target user or group for enabling or disabling the storage of MCData communications into the MCData message store", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "236 user not authorised to initiate imminent peril communication", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "237 user not authorised to make adhoc group data communications", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "238 user not authorised to initiate the adhoc group data communication", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "239 the MCData system do not support adhoc group data communication", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "240 Can’t determine the adhoc group participants", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "241 user is not allowed to participate in adhoc group data communication", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "242 maximum number of allowed adhoc group participants exceeded", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "243 user is not authorised to initiate modify adhoc group data communication participants", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "244 Invalid location request target client list", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "245 user not authorized to request location information", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "246 user not authorized to request location configuration changes", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "247 can't determine the adhoc group", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "248 communication forwarding due to migration", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "249 User not authorised for one-to-one message due to message size", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}
+  - {warn_code: 399, text: "250 Unable to determine targeted user for one-to-one message", source: {spec: TS 24.282, version: "19.6.0", clause: "4.9.2"}}

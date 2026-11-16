@@ -722,6 +722,12 @@ struct Rewriter {
       auto agent = component(r, "agent", w.agent);
       if (!agent) return agent;
       if (!*agent) continue;
+      // Feature 008 (FR-006): a text of the MCX warning-text tables after warn-code 399 is kept.
+      if (ctx.rules.kept_warning_text(w.code, w.text)) {
+        w.agent = **agent;
+        out.push_back(render_warning(w));
+        continue;
+      }
       ctx.counters.removed(w.text);
       // Decision D2: a leading 3-digit MCX warn code (TS 24.379 §4.4.2) is kept.
       const bool mcx_code = w.text.size() >= 3 && all_digits(w.text.substr(0, 3)) &&

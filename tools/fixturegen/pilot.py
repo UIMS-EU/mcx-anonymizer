@@ -9,6 +9,8 @@
     acknowledgement yet, a multipart PUBLISH (mcptt-info with an access token, pidf) is split over
     two segments, the second also starting the next SUBSCRIBE; the server acknowledges the second
     segment before the third completes the SUBSCRIBE; then a retransmission of the second segment.
+  - pilot_warning.pcapng (FR-006): 403 responses whose Warning carries a text of the MCX
+    warning-text tables, one that extends a table text with a canary, and a free canary text.
 """
 from sip import Capture, TcpConn, UA, PCSCF, _Cv, multipart, request, response
 
@@ -129,6 +131,30 @@ def gen_gap(c, out):
 
 
 FIXTURES.append(gen_gap)
+
+TABLE_TEXTS = ("200 user not authorised to transmit data",                                 # TS 24.282 §4.9.2
+               "229 one-to-one MCData communication not authorised to the targeted user",  # TS 24.282 §4.9.2
+               "106 user not authorised to join chat group")                               # TS 24.379 §4.4.2
+
+
+def gen_warning(c, out):
+    name = "pilot_warning.pcapng"
+    v = _Cv(c, name)
+    dom = v.label("sip:From.uri") + ".example.net"
+    cap = Capture()
+    t = TcpConn(UA, PCSCF, 42200, 5060)
+    cap.extend(t.handshake())
+    texts = list(TABLE_TEXTS) + [TABLE_TEXTS[0] + " at " + v.s("sip:Warning.text"), "229 " + v.s("sip:Warning.text")]
+    for n, text in enumerate(texts, 1):
+        cap.add(t.send(0, request("MESSAGE", f"sip:{v.s('sip:To.uri')}@{dom}", _dialog(v, "MESSAGE", n, dom))))
+        agent = v.label("sip:Warning.agent") + ".example.net"
+        cap.add(t.send(1, response(403, "Forbidden", _dialog(v, "MESSAGE", n, dom) + [
+            ("Warning", f'399 {agent} "{text}"')])))
+    cap.add(t.ack(0))
+    _write(cap, out, name)
+
+
+FIXTURES.append(gen_warning)
 
 
 def gen(c, out):

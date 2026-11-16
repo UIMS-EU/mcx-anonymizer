@@ -52,6 +52,7 @@ add_executable(mcxanon_unit_tests
   unit/sdp_test.cpp
   unit/multipart_test.cpp
   unit/sip_rewrite_test.cpp
+  unit/sip_warning_test.cpp
   unit/apply_length_test.cpp
   unit/tokens_test.cpp
   unit/sip_vocabulary_test.cpp

@@ -11,6 +11,8 @@ change of the protocol view.
     acknowledges: each direction's output segments are contiguous, every acknowledgement is at a
     segment boundary of the output, every message's Content-Length equals its body, the retransmission repeats its first transmission, and (with tshark) there is no
     "previous segment not captured" or "ACKed segment that wasn't captured" (FR-005).
+  - pilot_warning: table warning texts survive verbatim with the agent pseudonymised; other texts
+    are blanked to their code; no canary survives (FR-006).
 
 Usage: test_pilot_fixes.py MCXANON FIXTURE_DIR
 """
@@ -132,5 +134,19 @@ with tempfile.TemporaryDirectory() as tmp:
         if shutil.which("tshark"):
             before, after = tshark_flags(fixtures / name), tshark_flags(out)
             check(len(after) <= len(before), f"{name} no new lost-segment or ACKed-unseen expert entry ({after})")
+
+    # M4: the normative warning texts.
+    name = "pilot_warning.pcapng"
+    out, report = anonymise(tmp, data, name)
+    if out is not None:
+        warnings = [sip_messages.header(m.headers, "warning") for m in sip_messages.messages(str(out))]
+        warnings = [w for w in warnings if w]
+        texts = [w.split('"')[1] for w in warnings]
+        check(texts[:3] == ["200 user not authorised to transmit data",
+                            "229 one-to-one MCData communication not authorised to the targeted user",
+                            "106 user not authorised to join chat group"], f"{name} the table texts are kept ({texts})")
+        check(texts[3:] == ["200", "229"], f"{name} other texts are blanked to their code ({texts[3:]})")
+        check(all(w.startswith("399 d-") and ".invalid " in w for w in warnings),
+              f"{name} the warn-agent is pseudonymised ({warnings[:1]})")
 
 sys.exit(1 if failures else 0)

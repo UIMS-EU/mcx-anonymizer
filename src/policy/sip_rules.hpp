@@ -209,6 +209,14 @@ struct SipMethodRule {
   Source source;
 };
 
+// Feature 008 (FR-006): a warn-text that an MCX standard's table defines for warn-code 399
+// (TS 24.379 §4.4.2, TS 24.281 §4.4.2, TS 24.282 §4.9.2): "<3-digit code> <explanatory text>".
+struct SipWarningText {
+  std::string warn_code;  // the SIP warn-code, 3 digits
+  std::string text;       // the whole warn-text, unquoted
+  Source source;
+};
+
 struct SipRuleSet {
   std::string name;
   std::string version;
@@ -220,7 +228,10 @@ struct SipRuleSet {
   std::vector<SipBodyRule> bodies;
   std::vector<FeatureTagRule> feature_tags;
   std::vector<SipMethodRule> methods;
+  std::vector<SipWarningText> warning_texts;
 
+  // True when (warn_code, text) is a listed warning text (exact, case-sensitive).
+  [[nodiscard]] bool kept_warning_text(std::string_view warn_code, std::string_view text) const;
   // True when the method is listed (or when the rule set lists no methods: a test seam).
   [[nodiscard]] bool known_method(std::string_view method) const;
   // Full name, alias or compact form, compared case-insensitively.

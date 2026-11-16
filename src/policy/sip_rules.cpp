@@ -201,7 +201,7 @@ class Loader {
         continue;
       }
       if (k != "ruleset" && k != "version" && k != "headers" && k != "uri" && k != "sdp" &&
-          k != "bodies" && k != "feature_tags" && k != "methods") {
+          k != "bodies" && k != "feature_tags" && k != "methods" && (http_ || k != "warning_texts")) {
         return err("unknown key '" + k + "'");
       }
     }
@@ -243,6 +243,36 @@ class Loader {
     }
     if (root.has_child("methods")) {
       if (auto r = methods(root["methods"]); !r) return r;
+    }
+    if (root.has_child("warning_texts")) {
+      if (auto r = warning_texts(root["warning_texts"]); !r) return r;
+    }
+    return {};
+  }
+
+  // Feature 008 (FR-006): warn_code = 3DIGIT; text = 3DIGIT SP 1*char, as the tables write it.
+  Result<void> warning_texts(ryml::ConstNodeRef n) {
+    if (!n.is_seq()) return err("'warning_texts' must be a sequence");
+    const auto digits3 = [](std::string_view v) {
+      return v.size() == 3 && std::all_of(v.begin(), v.end(), [](char c) { return c >= '0' && c <= '9'; });
+    };
+    for (const auto w : n.children()) {
+      if (auto r = only_keys(w, {"warn_code", "text", "source"}, "warning text"); !r) return r;
+      auto code = text(w, "warn_code", "warning text");
+      if (!code) return std::unexpected(code.error());
+      auto t = text(w, "text", "warning text " + *code);
+      if (!t) return std::unexpected(t.error());
+      const std::string what = "warning text '" + *t + "'";
+      if (!digits3(*code)) return err(what + ": warn_code must be 3 digits");
+      if (t->size() < 5 || !digits3(std::string_view(*t).substr(0, 3)) || (*t)[3] != ' ') {
+        return err(what + ": text must be a 3-digit code, a space and a text");
+      }
+      auto src = source(w, what);
+      if (!src) return std::unexpected(src.error());
+      for (const auto& x : rs_.warning_texts) {
+        if (x.warn_code == *code && x.text == *t && x.source.spec == src->spec) return err(what + ": duplicate");
+      }
+      rs_.warning_texts.push_back({*code, *t, *src});
     }
     return {};
   }
@@ -772,6 +802,11 @@ const SipParamRule* SipHeaderRule::find_param(std::string_view which) const {
 
 const SipParamRule* SipUriRules::find_param(std::string_view which) const {
   return find_param_in(params, which);
+}
+
+bool SipRuleSet::kept_warning_text(std::string_view warn_code, std::string_view text) const {
+  return std::any_of(warning_texts.begin(), warning_texts.end(),
+                     [&](const SipWarningText& w) { return w.warn_code == warn_code && w.text == text; });
 }
 
 bool SipRuleSet::known_method(std::string_view method) const {

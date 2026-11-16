@@ -905,7 +905,7 @@ headers:
       agent: {action: pseudonymise, category: host}
       text: {action: blank, value: ""}
     source: {spec: RFC 3261, version: "2002-06", clause: "20.43"}
-    note: "a leading 3-digit MCX warn code (TS 24.379 §4.4.2) is kept"
+    note: "a leading 3-digit MCX warn code (TS 24.379 §4.4.2) is kept; after warn-code 399, a text of the MCX warning-text tables (sip-warning-texts.yaml) is kept whole"
   - name: WWW-Authenticate
     grammar: challenge
     components:
