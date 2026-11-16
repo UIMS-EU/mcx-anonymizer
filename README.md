@@ -299,7 +299,12 @@ and `a=floorid`), value lists the rules do not model (`a=content`, `a=rtcp-xr`,
 lines. The text of
 Warning and the `text` parameter of Reason are blanked (an MCX warn code is
 kept), `s=` becomes `-`, and the reason phrase of a status line becomes the
-RFC 3261 default phrase for its code (`-` for codes without one).
+RFC 3261 default phrase for its code (`-` for codes without one). A Warning
+with warn code 399 whose text is exactly one of the warning texts of
+TS 24.379 §4.4.2, TS 24.281 §4.4.2 or TS 24.282 §4.9.2 (for example
+`"200 user not authorised to transmit data"`) keeps its text, since the
+standard prescribes it; the warn agent is pseudonymised
+(`rules/sip-warning-texts.yaml`).
 
 **Emptied:** SDP and `multipart/*` bodies are parsed (multipart up to 4 levels),
 and the MCX XML bodies are rewritten (next section). Every other body type,
@@ -405,7 +410,13 @@ poc-settings). Every element and attribute has a rule with its source (3GPP
 TS 24.379 Annex F, TS 24.282 Annex D, TS 24.281 Annex F, TS 33.180, and the schemas
 of TS 37.579-5; see `rules/xml-*.yaml` and `rules/SOURCES.md`). Rules are keyed on
 the namespace and the local name, never on a prefix. Only the edited values change:
-prefixes, quoting, whitespace and the order of everything else stay as written.
+quoting, whitespace and the order of everything else stay as written. Namespace
+prefixes that the schemas or prefix tables of the standards declare for their
+namespace (`mcpttPI10`, `mcdataPI10`, `mcvideoPI10`, `mcs10Set`, `PoC1Set`, …) stay
+as written; any other prefix can carry a vendor or site name and is renamed to
+`ns1`, `ns2`, … in the whole body (declarations, tags and attribute names), so the
+body declares the same namespaces and stays well-formed. Renamed declarations are
+counted by namespace (`xml.prefixes_rewritten`).
 
 **Kept:** the element structure, enumerated and boolean values (session types,
 emergency, alert and imminent-peril indicators, request and response types,
@@ -423,6 +434,9 @@ cell identities per component (an ECGI in a location report has the pseudonym th
 floor control Location field gives it), and identifiers without a grammar (same
 length and character classes). XCAP paths keep their application usage, tree and
 fixed document names; the user part, group ID and other segments are pseudonymised.
+The URLs of MCVideo video pull and push (`<video-pull-url>`, `<video-push-url>`)
+keep their scheme; the host takes the domain pseudonym it has in SIP URIs and each
+path segment is pseudonymised (a URL with a query or fragment is removed).
 Bodies embedded in a resource-list entry URI (the `body` URI header of a REFER for a
 pre-established session) are decoded, rewritten like top-level bodies, and encoded
 again.
@@ -562,9 +576,11 @@ Before publishing, the output is scanned for:
   lenient XML reader. Not searched, because the output keeps them on purpose:
   values of the standard XML vocabulary (namespace, element and attribute names,
   enumerations), booleans, dates and times, decimal numbers of fewer than 7 digits,
-  hex values of up to 6 digits, Resource-Priority values, and the fields the rules
-  keep as free tokens or wide numbers (trigger IDs, frequencies). An unknown element
-  name is searched as a tag (`<name`), not as a bare word;
+  hex values of up to 6 digits, Resource-Priority values, the standard namespace
+  prefixes, and the fields the rules keep as free tokens or wide numbers (trigger
+  IDs, frequencies). An unknown element name is searched as a tag (`<name`), not as
+  a bare word; any other declared prefix is searched in the forms `xmlns:P=`, `<P:`
+  and `</P:`;
 - every value the anonymiser removed during the run;
 - every entry of an optional deny list (`--deny-list words.txt`, one entry per
   line, for host names, site names, subscriber identities and similar).
@@ -596,6 +612,17 @@ chance match, only in these cases:
   project mapping, for example the hex form `0a281477` of 10.40.20.119 inside
   the domain pseudonym `d-0a281477`. A pseudonym is derived from another value
   and carries nothing of the matched one.
+
+A match of any value except a deny-list entry is also ignored, and counted as a
+suppressed cookie match, when it lies entirely inside the `z9hG4bK` that every
+`branch=` parameter keeps (RFC 3261 §8.1.1.7): those seven characters are a
+constant, not a value of the input.
+
+Over TCP the scanner reads each segment together with the end of the previous
+one. A value that runs up to the end of a segment may be cut by the segment
+boundary (`branch=z9hG` with `4bK…` in the next segment). It is searched only
+when the next segment of the direction does not give its whole value, and
+otherwise counted as a skipped input fragment.
 
 Some values cannot be searched without meaningless matches. They are still
 pseudonymised, and the report counts them as unscannable: values shorter than 4

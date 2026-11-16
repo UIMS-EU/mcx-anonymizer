@@ -68,10 +68,10 @@ on 2026-11-12.
 |---|---|---|---|
 | SIP core | RFC 3261 | 2002-06 | message grammar (§7, §25), header fields (§20), compact forms (§7.3.3), framing (§18.3), URI comparison (§19.1.4), tags (§19.3), branch cookie (§8.1.1.7) |
 | IMS SIP profile | 3GPP TS 24.229 | 24229-j70 (V19.7.0) | profile tables of annex A (A.2.1.4.x), headers of §7.2, P-headers of §7.2A, media feature tags §7.9, feature-capability indicators §7.9A |
-| MCPTT call control | 3GPP TS 24.379 | V19.6.0 | MCPTT SIP procedures, SDP offers, warn codes (§4.4.2) |
+| MCPTT call control | 3GPP TS 24.379 | V19.6.0 | MCPTT SIP procedures, SDP offers, warn codes and warning texts (§4.4.1, §4.4.2; `sip-warning-texts.yaml`) |
 | MCPTT media plane control | 3GPP TS 24.380 | V19.1.0 | `a=fmtp:MCPTT` (§12.1.2.3) |
-| MCData signalling | 3GPP TS 24.282 | V19.6.0 | MCData SIP procedures, MSRP SDP |
-| MCVideo signalling | 3GPP TS 24.281 | V19.5.0 | MCVideo SIP procedures and SDP |
+| MCData signalling | 3GPP TS 24.282 | V19.6.0 | MCData SIP procedures, MSRP SDP, warning texts (§4.9.1, §4.9.2) |
+| MCVideo signalling | 3GPP TS 24.281 | V19.5.0 | MCVideo SIP procedures and SDP, warning texts (§4.4.1, §4.4.2) |
 | MCVideo media plane control | 3GPP TS 24.581 | V19.1.0 | `a=fmtp:MCVideo` (§12.1.2.3) |
 | MCData media plane control | 3GPP TS 24.582 | V19.0.0 | `a=fmtp:MCDATA` (§13.5, §13.6) |
 | MC security | 3GPP TS 33.180 | V20.0.0 | identities inside MIKEY (§E.7) |
@@ -165,6 +165,14 @@ their XML schemas as published in 3GPP TS 37.579-5, because the RFC texts were n
 | IMS registration | 3GPP TS 24.229 | 24229-j70 (V19.7.0) | reginfo usage (§5.4.2.1.2) |
 | Numbering and identities | 3GPP TS 23.003 | 23003-k10 (V20.1.0) | ECI (§19.6) and NCI (§19.6A) widths |
 | MC configuration and groups | 3GPP TS 24.484, TS 24.481 | V19.5.0, V19.2.0 | XCAP AUIDs and document names in xcap-diff selectors; the GKTP namespace (TS 24.481 §7.7.4.2), removed as a credential |
+
+Namespace prefixes (`prefixes:` of a namespace): the prefixes that a schema of the documents
+above binds to the namespace (`xmlns:P="N"`) or that one of their "Assignment of prefixes to
+namespace names" tables lists, for example TS 24.379 §9.3.1.2 (Table 9.3.1.2-2, `mcpttPI10`),
+§7.4.1.2.2 (Table 7.4.1.2.2-1, `PoC1Set`, `mcs10Set`), TS 24.282 §8.4.1.2 (`mcdataPI10`),
+TS 24.281 §8.3.1.2 (`mcvideoPI10`), TS 24.481 §7.2.2 (`rl`, `mcpttgi`), and the schemas of
+TS 37.579-5 (`tns` for pidf, reginfo, gruuinfo and conference-info). Each entry cites the clause
+it was taken from. The output keeps these prefixes; any other prefix is renamed (feature 008).
 
 ### Documents not yet available (XML)
 

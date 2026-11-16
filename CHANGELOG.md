@@ -4,6 +4,30 @@ All notable changes are listed here. The project follows
 [Semantic Versioning](https://semver.org/); while the version is 0.x, a minor
 release can change the command line, the report format and the project format.
 
+## [Unreleased]
+
+Fixes from the first run on captures of a third-party MCX system.
+
+### Fixed
+
+- The residual-leak scanner no longer reports a leak for a value that a TCP
+  segment boundary cut (`branch=z9hG` with `4bK…` in the next segment): such a
+  fragment is searched only if the next segment does not give the whole value,
+  and is counted as `scan.skipped_input_fragments`. Matches inside the
+  `z9hG4bK` cookie of a `branch` parameter are counted as
+  `scan.suppressed_cookie_matches` instead of failing the run.
+- Namespace prefixes declared by the standards' schemas (`mcpttPI10`,
+  `mcdataPI10`, `mcvideoPI10`, `mcs10Set`, …) are standard vocabulary: kept, and
+  not searched by the scanner. Any other prefix is renamed to `ns1`, `ns2`, … and
+  counted as `xml.prefixes_rewritten`.
+- A TCP segment that starts inside a rewritten message and waits for a later
+  message while the peer acknowledges no longer leaves a one-byte gap in the
+  output sequence numbers.
+- A Warning with warn code 399 and a text of the warning-text tables of
+  TS 24.379, TS 24.281 or TS 24.282 keeps its text.
+- `<video-pull-url>` and `<video-push-url>` of MCVideo are pseudonymised instead
+  of removed.
+
 ## [0.1.0] - 2026-11-16
 
 First public release (preview). `mcxanon` anonymises pcap and pcapng captures
