@@ -33,6 +33,7 @@ add_executable(mcxanon_unit_tests
   unit/scan_walker_test.cpp
   unit/scan_harvest_test.cpp
   unit/scan_pseudonym_test.cpp
+  unit/scan_cookie_test.cpp
   unit/denylist_test.cpp
   unit/crypto_container_test.cpp
   unit/passphrase_source_test.cpp

@@ -11,6 +11,7 @@
 #include "scan/walker/walker.hpp"
 
 #include <algorithm>
+#include <cctype>
 #include <cerrno>
 #include <cstdio>
 #include <cstring>
@@ -74,6 +75,9 @@ struct Engine {
   void hit(std::size_t pattern, std::uint64_t offset, std::uint64_t frame, std::string_view via = {});
   // A text-encoded match of a 4-byte token, when the index has pseudonyms.
   [[nodiscard]] bool coverable(std::size_t pattern) const;
+  // Feature 008 (FR-002): a match short enough to lie inside the branch cookie, not a deny entry.
+  [[nodiscard]] bool cookie_sized(std::size_t pattern) const;
+  [[nodiscard]] bool in_cookie(const Candidate& c, const ContextFn& context, std::vector<std::uint8_t>& buf) const;
   // Resolves the deferred candidates once the whole file has been scanned.
   void resolve(const ContextFn& context);
 
@@ -85,6 +89,8 @@ struct Engine {
   std::vector<Warning> warnings_;
   std::set<std::pair<std::uint32_t, std::uint64_t>> seen_;
   std::uint64_t suppressed_ = 0;
+  std::uint64_t suppressed_cookie_ = 0;
+  std::set<std::pair<std::uint32_t, std::uint64_t>> cookie_seen_;
 };
 
 }  // namespace
@@ -192,6 +198,7 @@ ScanResult Engine::result() {
                    [](const Warning& a, const Warning& b) { return a.file_offset < b.file_offset; });
   r.warnings = std::move(warnings_);
   r.suppressed_chance_matches = suppressed_;
+  r.suppressed_cookie_matches = suppressed_cookie_;
   return r;
 }
 
@@ -202,12 +209,56 @@ bool Engine::coverable(std::size_t pattern) const {
   return ix.matcher.short_binary(pattern) ? !ix.byte_pseudonyms.empty() : !ix.pseudonyms.empty();
 }
 
+constexpr std::string_view kCookie = "z9hG4bK";  // RFC 3261 §8.1.1.7
+constexpr std::string_view kBranch = "branch=";
+
+bool Engine::cookie_sized(std::size_t pattern) const {
+  return ix.matcher.length(pattern) <= kCookie.size() &&
+         ix.tokens[ix.matcher.token(pattern)].category != TokenCategory::deny;
+}
+
+// Feature 008 (FR-002): the match lies wholly inside [p, p + 7) where the file holds "z9hG4bK"
+// preceded by "branch=" (the parameter name in any case).
+bool Engine::in_cookie(const Candidate& c, const ContextFn& context, std::vector<std::uint8_t>& buf) const {
+  if (!cookie_sized(c.pattern)) return false;
+  const std::uint64_t len = ix.matcher.length(c.pattern);
+  const std::uint64_t span = 1 + kBranch.size() + kCookie.size();  // the separator, "branch=", the cookie
+  if (c.offset + len < span) return false;
+  const std::uint64_t lo = c.offset + len - span;
+  buf.resize(static_cast<std::size_t>(c.offset - lo + kCookie.size()));
+  buf.resize(context(lo, buf.data(), buf.size()));
+  const std::string_view ctx(reinterpret_cast<const char*>(buf.data()), buf.size());
+  const auto s = static_cast<std::size_t>(c.offset - lo);  // match start in ctx
+  for (std::size_t p = s + len - kCookie.size(); p <= s; ++p) {
+    if (p < kBranch.size() + 1 || p + kCookie.size() > ctx.size() || ctx.substr(p, kCookie.size()) != kCookie) continue;
+    // The parameter name starts after ";" or the whitespace around it (RFC 3261 §25.1 SEMI).
+    const auto name = ctx.substr(p - kBranch.size(), kBranch.size());
+    const std::size_t at = p - kBranch.size();
+    const bool bounded = at > 0 && (ctx[at - 1] == ';' || ctx[at - 1] == ' ' || ctx[at - 1] == '\t');
+    if (bounded && std::equal(name.begin(), name.end(), kBranch.begin(), [](char a, char b) {
+          return std::tolower(static_cast<unsigned char>(a)) == b;
+        })) {
+      return true;
+    }
+  }
+  return false;
+}
+
 // A candidate is a chance match when some pseudonym occupies [a, a + L) with
 // a <= offset and offset + length <= a + L, in the bytes of the file as written.
 void Engine::resolve(const ContextFn& context) {
   if (candidates_.empty()) return;
   std::vector<std::uint8_t> buf;
   for (const auto& c : candidates_) {
+    if (in_cookie(c, context, buf)) {
+      // One count per token and offset, as hits are (several encodings may match the same bytes).
+      if (cookie_seen_.insert({ix.matcher.token(c.pattern), c.offset}).second) ++suppressed_cookie_;
+      continue;
+    }
+    if (!coverable(c.pattern)) {
+      hit(c.pattern, c.offset, c.frame);
+      continue;
+    }
     const bool raw = ix.matcher.short_binary(c.pattern);
     const auto& set = raw ? ix.byte_pseudonyms : ix.pseudonyms;
     const auto& lengths = raw ? ix.byte_pseudonym_lengths : ix.pseudonym_lengths;
@@ -324,7 +375,7 @@ Result<ScanResult> scan_stream(const detail::ReadFn& read, const ContextFn& cont
     }
     // At most kMaxCandidates deferred chance-match checks; beyond that a match is a hit at once
     // (fail-closed), so memory stays bounded however often a short token matches.
-    if (e.coverable(pattern) && e.candidates_.size() < kMaxCandidates) {
+    if ((e.coverable(pattern) || e.cookie_sized(pattern)) && e.candidates_.size() < kMaxCandidates) {
       e.candidates_.push_back({pattern, offset, frame});
       return;
     }

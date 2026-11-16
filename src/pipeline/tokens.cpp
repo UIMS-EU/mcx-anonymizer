@@ -140,6 +140,7 @@ Report::Scan to_report_scan(const scan::ScanResult& r) {
   s.patterns = r.patterns;
   s.unscannable_tokens = r.unscannable_tokens;
   s.suppressed_chance_matches = r.suppressed_chance_matches;
+  s.suppressed_cookie_matches = r.suppressed_cookie_matches;
   s.unscannable_by_category = r.unscannable_by_category;
   for (const auto& h : r.hits) {
     s.hits.push_back({h.frame_number, h.file_offset, h.encoding, std::string(scan::to_string(h.category)), h.label});

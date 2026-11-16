@@ -58,6 +58,10 @@ struct ScanResult {
   std::uint64_t patterns = 0;
   std::uint64_t unscannable_tokens = 0;
   std::uint64_t suppressed_chance_matches = 0;
+  // Feature 008 (FR-002): matches wholly inside the "z9hG4bK" cookie that follows "branch=" in the
+  // scanned bytes (RFC 3261 §8.1.1.7: every rewritten branch keeps it). Deny-list entries are
+  // never suppressed.
+  std::uint64_t suppressed_cookie_matches = 0;
   // Unscannable tokens by "<category>/<reason>"; reason short (under 4 bytes) or vocabulary
   // (equal to or contained in a standard term the output keeps).
   std::map<std::string, std::uint64_t> unscannable_by_category;
