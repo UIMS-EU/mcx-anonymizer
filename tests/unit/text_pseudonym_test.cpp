@@ -285,3 +285,21 @@ TEST_CASE("short SDP session ids never end a run with a collision", "[pseudo][te
     CHECK(*r != v);
   }
 }
+
+TEST_CASE("short opaque values never end a run with a collision", "[pseudo][text][opaque]") {
+  // GKTP id attributes ("k1", "k2", "k3", TS 24.481 GKTP) keep length and character classes: a
+  // two-character space of a few hundred values, in which a later id often equals the pseudonym of
+  // an earlier one. Below the scanner's 4-byte minimum they are no scan tokens (as short SDP
+  // session ids are not), so that is no collision; a longer opaque value still is.
+  const auto s = secret();
+  Mapping m;
+  Pseudonymiser p(s, m);
+  const auto k = text(p, Category::opaque, "k1");
+  const auto r = p.text(Category::opaque, k);
+  REQUIRE(r.has_value());
+  CHECK(*r != k);
+  const auto id = text(p, Category::opaque, "gktp-id-1");
+  const auto c = p.text(Category::opaque, id);
+  REQUIRE_FALSE(c.has_value());
+  CHECK(c.error().code == ErrorCode::collision);
+}

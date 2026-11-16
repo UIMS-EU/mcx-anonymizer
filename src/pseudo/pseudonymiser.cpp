@@ -238,12 +238,14 @@ Result<Bytes> Pseudonymiser::assign(Category c, ByteView original) {
   // VLAN IDs and ports share one small value space with their pseudonyms by
   // design and are not scan tokens, so the rule applies to addresses only.
   // Values shorter than the scanner's 4-byte minimum (1- to 3-digit SDP session ids, short digest
-  // or cell-id values) are no scan tokens either, and their value space is small, so a later
-  // original equal to an issued pseudonym is likely and harmless (feature 002).
+  // or cell-id values, short opaque values such as GKTP ids "k1") are no scan tokens either, and
+  // their value space is small, so a later original equal to an issued pseudonym is likely and
+  // harmless (feature 002).
   const bool small_space = c == Category::vlan || c == Category::port_eph || c == Category::tac ||
                            c == Category::mbms_sai || c == Category::mbsfn_area ||
                            c == Category::nr_tac || c == Category::mbs_fsa ||
-                           ((c == Category::sdp_sess || c == Category::digest || c == Category::cell_id) &&
+                           ((c == Category::sdp_sess || c == Category::digest || c == Category::cell_id ||
+                             c == Category::opaque) &&
                             original.size() < 4);
   if (!small_space && mapping_.is_issued_pseudonym(c, original)) {
     return fail(ErrorCode::collision,

@@ -32,6 +32,10 @@ Fixes from the first run on captures of a third-party MCX system.
   boundaries. Before, some projects
   failed on location reports with a false leak, because a cell identity
   pseudonym began with the same digits.
+- A short opaque value of fewer than 4 characters (a GKTP `id` such as `k1`)
+  that equals a pseudonym already issued no longer stops the run as an
+  ambiguous mapping, as short SDP session IDs do not: such values are too short
+  to be searched, and their pseudonyms come from a space of a few hundred.
 
 ## [0.1.0] - 2026-11-16
 
