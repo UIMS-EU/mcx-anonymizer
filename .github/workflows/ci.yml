@@ -57,8 +57,8 @@ jobs:
       - name: Dependency licences are permissive
         run: >
           docker run --rm -v "$PWD:/work" -w /work mcxanon-ci bash -c
-          'conan profile detect --force >/dev/null 2>&1 || true;
-           python3 tools/check-licenses.py --project . '
+          'conan graph info . -pr:h gcc14 -pr:b gcc14 -s compiler.cppstd=23 --format=json > /tmp/graph.json &&
+           python3 tools/check-licenses.py --graph-json /tmp/graph.json'
 
   gates:
     runs-on: ubuntu-latest
