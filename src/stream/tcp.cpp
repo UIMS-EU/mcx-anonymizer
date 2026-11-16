@@ -640,8 +640,27 @@ void TcpStreams::prune(Dir& d) {
   // R14/R15: breakpoints below the peer's acknowledgement are merged into one coarse span.
   constexpr std::size_t kSoft = 64;
   if (d.pieces.size() <= kSoft) return;
+  // Feature 008 (FR-005): a merged span maps its inner offsets linearly, so no breakpoint is merged
+  // above an offset that a waiting segment still maps in this direction: the start of a segment
+  // whose output waits for later bytes, and the acknowledgement and SACK edges of a segment whose
+  // acknowledgement waits for this direction. Both kinds wait in d.waiting.
+  std::uint64_t bound = d.acked;
+  for (const auto& [need, t] : d.waiting) {
+    const auto it = segs_.find(t);
+    if (it == segs_.end() || it->second.done) continue;
+    const Seg& g = it->second;
+    if (g.direction == d.key && !g.own_done && g.in_window && g.s >= 0) {
+      bound = std::min(bound, static_cast<std::uint64_t>(g.s));
+    }
+    if (g.reverse == d.key && g.rev_known) {
+      if (g.ack_off >= 0) bound = std::min(bound, static_cast<std::uint64_t>(g.ack_off));
+      for (const auto edge : g.sack_off) {
+        if (edge >= 0) bound = std::min(bound, static_cast<std::uint64_t>(edge));
+      }
+    }
+  }
   std::size_t k = 0;
-  while (k < d.pieces.size() && d.pieces[k].orig + d.pieces[k].orig_len <= d.acked) ++k;
+  while (k < d.pieces.size() && d.pieces[k].orig + d.pieces[k].orig_len <= bound) ++k;
   if (d.pieces.size() > kMaxOffsetBreakpoints && k < d.pieces.size() / 2) k = d.pieces.size() / 2;
   if (k < 2) return;
   Piece merged{d.pieces[0].orig, 0, d.pieces[0].out, 0, true};  // kept line ends are forgotten

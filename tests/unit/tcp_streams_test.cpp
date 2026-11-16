@@ -588,3 +588,44 @@ TEST_CASE("an oversized message with a declared length is skipped exactly", "[tc
   CHECK(out == std::string(kBig - 2, '\0') + "\r\n" + rewritten(kMsg1));
   CHECK(c.streams.stats().bytes_unframable == kBig - 2);
 }
+
+TEST_CASE("pruning keeps the breakpoints that a waiting segment still maps", "[tcp][offsets]") {
+  // Feature 008 (FR-005), the shape of the pilot: on a direction with more than 64 breakpoints, a
+  // message spans segments A and B, B also starts the next message, and the peer acknowledges B
+  // before segment C completes that message. B's start lies inside the first message; it must map
+  // where A's end mapped, although the acknowledgement lets the breakpoints below it be merged.
+  Conn c;
+  handshake(c);
+  std::uint32_t seq = kIsnC + 1;
+  std::string big = "MESSAGE sip:x SIP/2.0\r\nX:";
+  for (int i = 0; i < 100; ++i) big += " secret";
+  big += "\r\n\r\n";
+  const auto m0 = c.seg(kC2S, seq, kIsnS + 1, big);
+  seq += static_cast<std::uint32_t>(big.size());
+  REQUIRE(m0.ready);
+  const auto o0 = c.take(m0.ticket);
+  std::string msg1 = "MESSAGE sip:y SIP/2.0\r\nY: secret secret secret secret\r\nZ: secret padding\r\n\r\n";
+  std::string msg2 = "MESSAGE sip:z SIP/2.0\r\nW: secret\r\n\r\n";
+  const std::size_t cut1 = 30;               // inside msg1, between two pseudonymised values
+  const std::size_t cut2 = 10;               // inside msg2
+  const std::string a = msg1.substr(0, cut1);
+  const std::string b = msg1.substr(cut1) + msg2.substr(0, cut2);
+  const std::string cc = msg2.substr(cut2);
+  const auto sa = c.seg(kC2S, seq, kIsnS + 1, a);
+  const auto sb = c.seg(kC2S, seq + static_cast<std::uint32_t>(a.size()), kIsnS + 1, b);
+  const std::uint32_t b_end = seq + static_cast<std::uint32_t>(a.size() + b.size());
+  // The peer acknowledges everything up to the end of B.
+  const auto ack = c.seg(kS2C, kIsnS + 1, b_end, "");
+  const auto sc = c.seg(kC2S, b_end, kIsnS + 1, cc);
+  REQUIRE(sc.ready);
+  const auto oa = c.take(sa.ticket);
+  const auto ob = c.take(sb.ticket);
+  const auto oc = c.take(sc.ticket);
+  const auto oack = c.take(ack.ticket);
+  CHECK(oa.seq == kIsnC + 1 + o0.payload.size());
+  CHECK(oa.seq + oa.payload.size() == ob.seq);  // no gap, no overlap
+  CHECK(ob.seq + ob.payload.size() == oc.seq);
+  CHECK(text(oa.payload) + text(ob.payload) + text(oc.payload) == rewritten(msg1) + rewritten(msg2));
+  REQUIRE(oack.ack.has_value());
+  CHECK(*oack.ack == ob.seq + ob.payload.size());  // the ACK of B's end is the end of B's output
+}

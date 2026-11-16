@@ -253,7 +253,7 @@ class TcpStreams {
   void advanced(Dir& d, std::vector<Ticket>& rdy);
   Result<void> give_up(Dir& d, std::uint64_t until, std::vector<Ticket>& rdy);
   void gap_to(Dir& d, std::uint64_t to, std::vector<Ticket>& rdy);
-  static void prune(Dir& d);
+  void prune(Dir& d);
   [[nodiscard]] bool own_met(const Seg& g) const;
   [[nodiscard]] bool rev_met(const Seg& g) const;
   void check(Ticket t, std::vector<Ticket>& rdy);
