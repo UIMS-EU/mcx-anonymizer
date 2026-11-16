@@ -55,6 +55,7 @@ add_executable(mcxanon_unit_tests
   unit/tokens_test.cpp
   unit/sip_vocabulary_test.cpp
   unit/sip_harvest_test.cpp
+  unit/sip_harvest_fragment_test.cpp
   unit/hold_queue_test.cpp
   unit/tcp_streams_test.cpp
   unit/fragments_test.cpp
@@ -273,6 +274,11 @@ add_test(NAME sip-report
   COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/integration/test_sip_report.py"
           $<TARGET_FILE:mcxanon_cli> "${CMAKE_BINARY_DIR}/fixtures")
 set_tests_properties(sip-report PROPERTIES LABELS integration FIXTURES_REQUIRED fixtures)
+# Feature 008: the patterns of the first pilot on third-party captures.
+add_test(NAME pilot-fixes
+  COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/integration/test_pilot_fixes.py"
+          $<TARGET_FILE:mcxanon_cli> "${CMAKE_BINARY_DIR}/fixtures")
+set_tests_properties(pilot-fixes PROPERTIES LABELS "integration;integrity" FIXTURES_REQUIRED fixtures)
 # The 256 MiB bound (SC-005) is measured on release builds only; sanitizers multiply RSS.
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
   set(MCXANON_BOUNDS_RSS "")

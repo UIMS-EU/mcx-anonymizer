@@ -130,7 +130,7 @@ void nrb_values(const WalkRecord& r, Collector& c) {
 }  // namespace
 }  // namespace detail
 
-Result<std::vector<Token>> harvest_input(const std::filesystem::path& path) {
+Result<std::vector<Token>> harvest_input(const std::filesystem::path& path, HarvestStats* stats) {
   std::FILE* f = std::fopen(path.c_str(), "rb");
   if (f == nullptr) return fail(ErrorCode::input, "cannot open " + path.filename().string() + " for harvesting");
   detail::Collector c;
@@ -184,6 +184,7 @@ Result<std::vector<Token>> harvest_input(const std::filesystem::path& path) {
   if (err) return fail(ErrorCode::input, "read error while harvesting the input");
   auto tokens = c.take();
   auto sip_tokens = sip.take();
+  if (stats != nullptr) stats->fragments = sip.fragments();
   tokens.insert(tokens.end(), std::make_move_iterator(sip_tokens.begin()), std::make_move_iterator(sip_tokens.end()));
   auto web_tokens = web.take();
   tokens.insert(tokens.end(), std::make_move_iterator(web_tokens.begin()), std::make_move_iterator(web_tokens.end()));

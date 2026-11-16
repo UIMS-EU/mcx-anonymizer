@@ -109,9 +109,15 @@ ScanResult scan_bytes(std::span<const std::uint8_t> data, const Index& index);
 // Deny-list file: UTF-8, one entry per line, '#' comments, entries >= 4 characters.
 Result<std::vector<Token>> load_deny_list(const std::filesystem::path& path);
 
+// Feature 008: what the harvest skipped. fragments: values read up to the end of a TCP payload
+// that were dropped because the next payload of the direction gave the whole value (FR-001).
+struct HarvestStats {
+  std::uint64_t fragments = 0;
+};
+
 // The scanner's own harvest of sensitive values from an input capture: pcapng
 // options and blocks outside its allowlist, comments, name resolution records,
 // and the addresses of the L2-L4 headers its walker recognises.
-Result<std::vector<Token>> harvest_input(const std::filesystem::path& path);
+Result<std::vector<Token>> harvest_input(const std::filesystem::path& path, HarvestStats* stats = nullptr);
 
 }  // namespace mcxanon::scan

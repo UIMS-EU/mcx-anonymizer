@@ -135,13 +135,14 @@ Result<Report> anonymize_file_with_hooks(Project& project, const AnonymizeFileRe
 
   // Independent residual-leak scan of the unpublished output (FR-030..FR-033).
   // The project secret is searched too: it must never appear anywhere.
+  scan::HarvestStats harvest_stats;
   {
     std::vector<scan::Token> tokens = secret_tokens(project.impl().secret);
     const auto append = [&tokens](std::vector<scan::Token>&& more) {
       tokens.insert(tokens.end(), std::make_move_iterator(more.begin()), std::make_move_iterator(more.end()));
     };
     append(mapping_tokens(project.impl().mapping));
-    auto harvested = scan::harvest_input(request.input);
+    auto harvested = scan::harvest_input(request.input, &harvest_stats);
     if (!harvested) return finish_error(harvested.error(), &summary);
     append(std::move(*harvested));
     append(removed_tokens(summary.removed_values));
@@ -154,7 +155,11 @@ Result<Report> anonymize_file_with_hooks(Project& project, const AnonymizeFileRe
   auto scanned = scan::scan_fd(file->fd(), *checker,
                                scan::ScanOptions{request.options.encrypted == EncryptedMode::passthrough});
   if (!scanned) return finish_error(scanned.error(), &summary);
-  rb.scan(to_report_scan(*scanned));
+  {
+    auto report_scan = to_report_scan(*scanned);
+    report_scan.skipped_input_fragments = harvest_stats.fragments;  // feature 008 (FR-001)
+    rb.scan(std::move(report_scan));
+  }
   if (!scanned->hits.empty()) {
     return finish_error(Error{ErrorCode::leak, std::to_string(scanned->hits.size()) +
                                                    " residual leak(s) found; nothing was published "

@@ -26,6 +26,7 @@ import meta  # noqa: E402
 import mikey  # noqa: E402
 import options  # noqa: E402
 import packets  # noqa: E402
+import pilot  # noqa: E402
 import pcap  # noqa: E402
 import pcapng  # noqa: E402
 import sip  # noqa: E402
@@ -85,6 +86,7 @@ SETS = {
     "xml": xmlbodies.gen,
     "mikey": mikey.gen,
     "web": web.gen,
+    "pilot": pilot.gen,
 }
 
 

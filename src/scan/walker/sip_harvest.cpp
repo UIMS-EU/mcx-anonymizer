@@ -11,6 +11,7 @@
 #include <array>
 #include <optional>
 #include <cctype>
+#include <functional>
 
 namespace mcxanon::scan::detail {
 namespace {
@@ -20,6 +21,7 @@ constexpr std::size_t kMaxText = 1024 * 1024;  // per payload
 constexpr std::size_t kMaxDirections = 65536;
 constexpr std::size_t kMaxToken = 256;
 constexpr std::size_t kMaxTokensPerPayload = 1024;
+constexpr std::size_t kMaxFragments = 64;  // pending per payload; more are tokens at once
 
 // Access-network information parameters that carry cell, node or location identities
 // (RFC 7315 §5.4; TS 24.229 §7.2A.4.2).
@@ -127,7 +129,43 @@ std::optional<std::array<std::uint8_t, 16>> v6(std::string_view s) {
 void SipHarvest::add(TokenCategory c, std::string_view v, const char* what) {
   v = trim(v);
   if (v.size() < 4 || v.size() > kMaxToken) return;
+  if (fragment(v, Kind::value, c, v, what)) return;
   add_bytes(c, std::vector<std::uint8_t>(v.begin(), v.end()), what);
+}
+
+bool SipHarvest::fragment(std::string_view src, Kind kind, TokenCategory c, std::string_view value, const char* what) {
+  if (!tcp_ || nested_ || src.empty() || text_.empty()) return false;
+  const std::less<const char*> before;
+  const char* const begin = text_.data();
+  const char* const end = text_.data() + text_.size();
+  if (before(src.data(), begin) || before(end, src.data() + src.size())) return false;  // not read from text_
+  const auto start = static_cast<std::size_t>(src.data() - begin);
+  const bool cut = src.data() + src.size() == end;
+  for (auto& o : old_) {
+    if (o.settled || o.start != start) continue;
+    // Read again from the same position: whole now (dropped, counted when it grew), or still cut
+    // at the new end (the new fragment supersedes it).
+    o.settled = true;
+    if (!cut && start + src.size() > old_end_) ++fragments_;
+  }
+  if (!cut) return false;
+  if (fresh_.size() >= kMaxFragments) return false;
+  for (const auto& f : fresh_) {
+    if (f.start == start && f.kind == kind && f.category == c && f.value == value) return true;
+  }
+  fresh_.push_back(Fragment{kind, c, std::string(value), what, start, false});
+  return true;
+}
+
+void SipHarvest::materialise(const Fragment& f) {
+  const bool tcp = tcp_;
+  tcp_ = false;
+  if (f.kind == Kind::host) {
+    host(f.value);
+  } else {
+    add_bytes(f.category, std::vector<std::uint8_t>(f.value.begin(), f.value.end()), f.what);
+  }
+  tcp_ = tcp;
 }
 
 void SipHarvest::add_bytes(TokenCategory c, const std::vector<std::uint8_t>& v, const char* what) {
@@ -143,6 +181,7 @@ void SipHarvest::add_bytes(TokenCategory c, const std::vector<std::uint8_t>& v, 
 void SipHarvest::host(std::string_view h) {
   h = trim(h);
   if (h.empty() || h.size() > kMaxToken) return;
+  if (fragment(h, Kind::host, TokenCategory::string, h, "host")) return;
   if (auto a = v4(h)) {
     if (!keeps_ipv4(a->data())) add_bytes(TokenCategory::ipv4, {a->begin(), a->end()}, "ipv4");
     return;
@@ -175,6 +214,7 @@ void SipHarvest::uris(std::string_view text) {
         for (char c : u) {
           if (is_digit(c)) digits.push_back(c);
         }
+        if (digits.size() >= 4 && fragment(u, Kind::value, TokenCategory::number, digits, "tel")) continue;
         add(TokenCategory::number, digits, "tel");
         continue;
       }
@@ -447,19 +487,59 @@ void SipHarvest::feed(std::span<const std::uint8_t> payload, const std::vector<s
                       bool tcp) {
   const auto n = std::min(payload.size(), kMaxText);
   std::string text(reinterpret_cast<const char*>(payload.data()), n);
+  std::size_t carried = 0;
   if (tcp) {
-    if (carry_.size() >= kMaxDirections && !carry_.contains(direction)) carry_.clear();
+    if (carry_.size() >= kMaxDirections && !carry_.contains(direction)) {
+      carry_.clear();
+      for (const auto& [d, fs] : pending_) {
+        for (const auto& f : fs) materialise(f);
+      }
+      pending_.clear();
+    }
     auto& c = carry_[direction];
+    carried = c.size();
     text = c + text;
     c = text.size() > kCarry ? text.substr(text.size() - kCarry) : text;
+    // The previous payload ended at `carried` in this text; its fragments start `back` before.
+    if (auto it = pending_.find(direction); it != pending_.end()) {
+      for (auto& f : it->second) {
+        if (f.start > carried) {
+          materialise(f);  // older than the carry: it cannot be read again
+          continue;
+        }
+        f.start = carried - f.start;
+        old_.push_back(std::move(f));
+      }
+      pending_.erase(it);
+    }
   }
   budget_ = tokens_.size() + kMaxTokensPerPayload;
   tcp_ = tcp;
+  text_ = text;
+  old_end_ = carried;
   scan(text);
+  for (const auto& f : old_) {
+    if (!f.settled) materialise(f);
+  }
+  old_.clear();
+  if (!fresh_.empty()) {
+    auto& p = pending_[direction];
+    for (auto& f : fresh_) {
+      f.start = text.size() - f.start;
+      p.push_back(std::move(f));
+    }
+    fresh_.clear();
+  }
+  text_ = {};
+  old_end_ = 0;
   tcp_ = false;
 }
 
 std::vector<Token> SipHarvest::take() {
+  for (const auto& [d, fs] : pending_) {
+    for (const auto& f : fs) materialise(f);
+  }
+  pending_.clear();
   carry_.clear();
   seen_.clear();
   return std::move(tokens_);
