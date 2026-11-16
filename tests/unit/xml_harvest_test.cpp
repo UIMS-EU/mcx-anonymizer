@@ -4,6 +4,7 @@
 // bodies of a SIP payload and harvests their values and unknown names, in raw and unescaped form,
 // except the vocabulary of the XML rule set, short decimal numbers, booleans and XSD date and
 // time forms (P7).
+#include "mcxanon/scan.hpp"
 #include "scan/walker/sip_harvest.hpp"
 #include "scan/walker/xml_harvest.hpp"
 
@@ -230,4 +231,31 @@ TEST_CASE("xml harvest: standard prefixes are vocabulary, declared vendor prefix
     INFO(p);
     CHECK_FALSE(filter.contains(p));
   }
+}
+
+TEST_CASE("xml harvest: decimal values are numbers, matched on digit boundaries only", "[scan][xml]") {
+  // A coordinate of a location report (threebytes) is zeroed in the output. Its 7 digits used to
+  // be searched as a string, so the run failed whenever a cell identity pseudonym (6 decimal
+  // digits of PLMN and 36 binary ones) began with them: a few project keys in a hundred.
+  const std::string payload =
+      "MESSAGE sip:b@example.net SIP/2.0\r\nContent-Type: application/vnd.3gpp.mcptt-location-info+xml\r\n\r\n"
+      "<location-info xmlns=\"urn:3gpp:ns:mcpttLocationInfo:1.0\"><Report><CurrentLocation><CurrentCoordinate>"
+      "<longitude type=\"Normal\"><threebytes>4057871</threebytes></longitude></CurrentCoordinate>"
+      "</CurrentLocation></Report></location-info>";
+  SipHarvest h;
+  const std::vector<std::uint8_t> dir{1};
+  h.feed({reinterpret_cast<const std::uint8_t*>(payload.data()), payload.size()}, dir, false);
+  std::vector<Token> tokens = h.take();
+  const auto coord = std::find_if(tokens.begin(), tokens.end(), [](const Token& t) {
+    return std::string(t.value.begin(), t.value.end()) == "4057871";
+  });
+  REQUIRE(coord != tokens.end());
+  CHECK(coord->category == TokenCategory::number);
+  const Index ix(std::move(tokens));
+  const auto scan = [&ix](std::string_view out) {
+    return scan_bytes({reinterpret_cast<const std::uint8_t*>(out.data()), out.size()}, ix).hits.size();
+  };
+  CHECK(scan("<Ncgi>405787101110101110100110011011010000100100</Ncgi>") == 0);
+  CHECK(scan("<threebytes>4057871</threebytes>") == 1);
+  CHECK(scan("tel:+4057871;phone-context=x") == 1);
 }

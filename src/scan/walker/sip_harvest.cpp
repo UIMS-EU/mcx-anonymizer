@@ -439,7 +439,11 @@ void SipHarvest::scan(std::string_view text) {
   const auto xml = sip ? harvest_xml(text, nested_ ? nullptr : &embedded, tcp_ && !nested_) : std::vector<std::string>{};
   for (const auto& v : xml) {
     if (tokens_.size() >= budget_) break;
-    add(TokenCategory::string, v, "xml");
+    // A value of decimal digits only (a coordinate, a counter) is a number: matched on digit
+    // boundaries, so it is not found inside the digits of a pseudonym (an ECGI or NCGI pseudonym
+    // starts with 6 decimal digits and goes on with binary ones), as a tel: number is not.
+    const bool digits = std::all_of(v.begin(), v.end(), is_digit);
+    add(digits ? TokenCategory::number : TokenCategory::string, v, "xml");
     uris(v);
   }
   // Bodies embedded in entry URIs (R12 item 4): harvested as a SIP body, one level deep.

@@ -59,6 +59,8 @@ std::vector<scan::Token> mapping_tokens(const Mapping& mapping) {
       }
       case Category::imei:
       case Category::sdp_sess:
+      // MCC+MNC digits: as free text they match inside the digits of ECGI and NCGI pseudonyms.
+      case Category::plmn:
         out.push_back({scan::TokenCategory::number, e.original,
                        std::string(to_string(e.category)) + ":" + std::string(e.pseudonym.begin(), e.pseudonym.end())});
         break;

@@ -27,6 +27,11 @@ Fixes from the first run on captures of a third-party MCX system.
   TS 24.379, TS 24.281 or TS 24.282 keeps its text.
 - `<video-pull-url>` and `<video-push-url>` of MCVideo are pseudonymised instead
   of removed.
+- An XML value of decimal digits only (a location coordinate) and a PLMN of the
+  project mapping are searched by the residual-leak scanner as numbers, on digit
+  boundaries. Before, some projects
+  failed on location reports with a false leak, because a cell identity
+  pseudonym began with the same digits.
 
 ## [0.1.0] - 2026-11-16
 

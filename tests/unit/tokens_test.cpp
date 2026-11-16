@@ -37,7 +37,7 @@ TEST_CASE("every new mapping category becomes a scan token", "[tokens][sip]") {
       {Category::cell_id, "234151D0FCE11"},      {Category::digest, "6629fae49393a05397450978507c4ef1"},
       {Category::sdp_sess, "2890844526"},        {Category::boundary, "unique-boundary-1"},
       {Category::msrp_session, "kjhd37s2s20w2a"}, {Category::reg_token, "1234567"},
-      {Category::cname, "a1b2c3d4e5"}};
+      {Category::cname, "a1b2c3d4e5"},           {Category::plmn, "262741"}};
   for (const auto& [c, v] : originals) REQUIRE(p.text(c, v));
   REQUIRE(p.domain("mcx.example.net"));
   REQUIRE(p.tel("+48601234567"));
@@ -52,7 +52,9 @@ TEST_CASE("every new mapping category becomes a scan token", "[tokens][sip]") {
   };
   for (const auto& [c, v] : originals) {
     INFO(to_string(c));
-    const bool numeric = c == Category::imei || c == Category::sdp_sess;
+    // A PLMN (MCC+MNC digits) is a number too: as free text it matched inside the digits of an ECGI
+    // or NCGI pseudonym or a decimal SSRC, and the run failed for some project keys.
+    const bool numeric = c == Category::imei || c == Category::sdp_sess || c == Category::plmn;
     const auto it = find(numeric ? scan::TokenCategory::number : scan::TokenCategory::string, v);
     REQUIRE(it != tokens.end());
     // Labelled with the pseudonym, never with the original.

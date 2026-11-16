@@ -779,13 +779,19 @@ class LocCv:
         the short binary values of 004), so it is a 3-character string canary."""
         return self.text(local, lambda: str(self.r.randrange(lo, hi)))
 
-    def dec(self, local, lo, hi):
-        """A decimal canary, matched on digit boundaries (a number canary)."""
+    def dec(self, local, lo, hi, chance=False):
+        """A decimal canary, matched on digit boundaries (a number canary). With `chance` (an MBMS
+        SAI, 16 bits) it is recorded for rule coverage but not searched: the pseudonyms are drawn
+        from the same 16-bit space, so one of them equals another SAI of the input by chance; the
+        scanner does not search SAIs either."""
         for _ in range(1000):
             v = str(self.r.randrange(lo, hi))
             if v not in self.cv.c._used:
                 self.cv.c._used.add(v)
-                return self.cv.c._add("number", v, None, self.cv.f, self.k(local))
+                out = self.cv.c._add("number", v, None, self.cv.f, self.k(local))
+                if chance:
+                    self.cv.c.items[-1]["chance"] = True
+                return out
         raise RuntimeError("cannot draw a unique location canary")
 
 
@@ -814,8 +820,8 @@ def location_config(lc, svc):
                      El("EnterSpecificPlmn", lc.text("EnterSpecificPlmn", lc.plmn), attrs=t("enter-plmn")),
                      El("ExitSpecificPlmn", lc.text("ExitSpecificPlmn", lc.plmn), attrs=t("exit-plmn"))),
                   El("MbmsSaChange", El("AnyMbmsSaChange", attrs=t("sa")),
-                     El("EnterSpecificMbmsSa", lc.dec("EnterSpecificMbmsSa", 10000, 65535), attrs=t("enter-sa")),
-                     El("ExitSpecificMbmsSa", lc.dec("ExitSpecificMbmsSa", 10000, 65535), attrs=t("exit-sa"))),
+                     El("EnterSpecificMbmsSa", lc.dec("EnterSpecificMbmsSa", 10000, 65535, chance=True), attrs=t("enter-sa")),
+                     El("ExitSpecificMbmsSa", lc.dec("ExitSpecificMbmsSa", 10000, 65535, chance=True), attrs=t("exit-sa"))),
                   El("MbsfnAreaChange",
                      El("EnterSpecificMbsfnArea", lc.short_dec("EnterSpecificMbsfnArea", 100, 255), attrs=t("enter-mbsfn")),
                      El("ExitSpecificMbsfnArea", lc.short_dec("ExitSpecificMbsfnArea", 100, 255), attrs=t("exit-mbsfn")),
@@ -898,7 +904,7 @@ def location_report(lc, svc, rid, encrypted=False, ecgi=None):
     cl = El("CurrentLocation",
             lt("CurrentServingEcgi", "Ecgi", serving),
             lt("NeighbouringEcgi", "Ecgi", lc.ecgi("Ecgi")),
-            lt("MbmsSaId", "SaId", lc.dec("SaId", 10000, 65535)),
+            lt("MbmsSaId", "SaId", lc.dec("SaId", 10000, 65535, chance=True)),
             lt("MbsfnArea", "MbsfnAreaId", lc.short_dec("MbsfnAreaId", 100, 255)),
             El("CurrentCoordinate", coord("longitude", "threebytes", 7), coord("latitude", "threebytes", 7),
                El("anyExt", coord("altitude", "twobytes", 4), coord("horizontalaccuracy", "onebyteunsignedhalfrange", 0),
