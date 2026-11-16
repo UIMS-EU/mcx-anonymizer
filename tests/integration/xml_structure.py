@@ -14,7 +14,8 @@ order are kept by the tool):
     (rule keys xml:<ns>|<parent>|<local>, xml:<ns>|<element>|@<attr ns>|<attr>), or where it is
     inside an element whose local name has such a rule as a container of pseudonymised parts;
   - the markup is the input's minus removed items: the output's tags (names, attribute names,
-    empty-tag form) are a subsequence of the input's.
+    empty-tag form) are a subsequence of the input's, where a prefix may be renamed to ns<k>
+    (feature 008: a prefix that no normative schema declares for its namespace).
 
 Usage: xml_structure.py INPUT OUTPUT CANARIES.json[,CANARIES2.json...] [--types T1,T2,...]
 (several manifests: the rule keys of all of them count, e.g. the demo's and the XML fixtures').
@@ -78,12 +79,28 @@ def skeleton(body):
     return out
 
 
+RENAMED = re.compile(rb"^(xmlns:)?ns[0-9]+(:|$)")
+
+
+def name_fits(a, b):
+    """Output name b is input name a, or a with its prefix renamed to ns<k> (feature 008, FR-004:
+    a non-standard prefix is renamed; the expanded names are compared by the element paths)."""
+    if a == b:
+        return True
+    m = RENAMED.match(b)
+    if not m:
+        return False
+    if m.group(1):
+        return a.startswith(b"xmlns:")
+    return b":" in a and a.split(b":", 1)[1] == b.split(b":", 1)[1]
+
+
 def tag_fits(a, b):
-    """Output tag b is input tag a with attributes possibly removed."""
-    if a[0] != "tag" or b[0] != "tag" or a[1:3] != b[1:3] or a[4] != b[4]:
+    """Output tag b is input tag a with attributes possibly removed (and prefixes renamed)."""
+    if a[0] != "tag" or b[0] != "tag" or a[1] != b[1] or not name_fits(a[2], b[2]) or a[4] != b[4]:
         return False
     it = iter(a[3])
-    return all(x in it for x in b[3])
+    return all(any(name_fits(x, y) for x in it) for y in b[3])
 
 
 def subsequence(inp, out, fits):

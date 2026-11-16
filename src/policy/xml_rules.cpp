@@ -31,6 +31,16 @@ constexpr std::array<std::string_view, 12> kDocuments{
 template <typename T>
 using Names = std::initializer_list<std::pair<std::string_view, T>>;
 
+// Namespaces in XML 1.0 [4] NCName, ASCII subset (the prefixes of the standards are ASCII).
+bool ncname(std::string_view v) {
+  if (v.empty() || v.size() > 64) return false;
+  const auto c0 = static_cast<unsigned char>(v[0]);
+  if (std::isalpha(c0) == 0 && v[0] != '_') return false;
+  return std::all_of(v.begin(), v.end(), [](char ch) {
+    return std::isalnum(static_cast<unsigned char>(ch)) != 0 || ch == '_' || ch == '-' || ch == '.';
+  });
+}
+
 const Names<XmlAction> kActions{{"container", XmlAction::container}, {"keep", XmlAction::keep},
                                 {"pseudonymise", XmlAction::pseudonymise}, {"fixed", XmlAction::fixed},
                                 {"empty", XmlAction::empty}, {"remove", XmlAction::remove},
@@ -421,7 +431,9 @@ class Loader {
   Result<void> namespaces(ryml::ConstNodeRef n) {
     if (!n.is_seq()) return err("'namespaces' must be a list");
     for (const auto s : n.children()) {
-      if (auto r = only_keys(s, {"name", "disposition", "source", "elements", "attributes"}, "namespace"); !r) return r;
+      if (auto r = only_keys(s, {"name", "disposition", "source", "prefixes", "elements", "attributes"}, "namespace"); !r) {
+        return r;
+      }
       auto name = text(s, "name", "namespace");
       if (!name) return std::unexpected(name.error());
       const std::string w = "namespace " + *name;
@@ -436,6 +448,23 @@ class Loader {
         const auto d = lookup(kDispositions, *disp);
         if (!d) return err("unknown disposition '" + *disp + "' of " + w);
         ns.disposition = *d;
+      }
+      if (has(s, "prefixes")) {
+        // Feature 008 (FR-003): NCNames (Namespaces in XML), never the reserved xml and xmlns.
+        if (!child(s, "prefixes").is_seq()) return err("'prefixes' of " + w + " must be a list");
+        for (const auto p : child(s, "prefixes").children()) {
+          if (auto r = only_keys(p, {"name", "source"}, "prefix rule"); !r) return r;
+          auto pname = text(p, "name", "prefix rule of " + w);
+          if (!pname) return std::unexpected(pname.error());
+          const std::string pw = "prefix " + *pname + " of " + w;
+          if (!ncname(*pname) || *pname == "xml" || *pname == "xmlns") return err(pw + ": not a usable NCName");
+          for (const auto& other : ns.prefixes) {
+            if (other.name == *pname) return err(pw + ": duplicate");
+          }
+          auto psrc = source(p, pw);
+          if (!psrc) return std::unexpected(psrc.error());
+          ns.prefixes.push_back(XmlPrefixRule{*pname, *psrc});
+        }
       }
       if (has(s, "elements")) {
         if (!child(s, "elements").is_seq()) return err("'elements' of " + w + " must be a list");
@@ -498,6 +527,10 @@ class Loader {
 };
 
 }  // namespace
+
+bool XmlNamespaceRules::standard_prefix(std::string_view prefix) const {
+  return std::any_of(prefixes.begin(), prefixes.end(), [&](const XmlPrefixRule& p) { return p.name == prefix; });
+}
 
 const XmlElementRule* XmlNamespaceRules::element(std::string_view local, std::string_view parent_local) const {
   const auto it = elements.find(local);

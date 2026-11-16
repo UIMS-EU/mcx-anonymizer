@@ -6,6 +6,9 @@
 
 #include <algorithm>
 #include <cctype>
+#include <map>
+#include <set>
+#include <string>
 #include <utility>
 #include <vector>
 
@@ -52,6 +55,7 @@ class Walker {
   Result<std::vector<Edit>> run() {
     const auto n = doc_.elements.size();
     removed_.assign(n, 0);
+    attr_removed_.assign(doc_.attributes.size(), 0);
     content_replaced_.assign(n, 0);
     verbatim_.assign(n, 0);
     enc_.assign(n, 0);
@@ -94,6 +98,7 @@ class Walker {
         ++(it.kind == ItemKind::comment ? counters_.comments : counters_.processing_instructions);
       }
     }
+    prefixes();
     std::stable_sort(edits_.begin(), edits_.end(), [](const Edit& a, const Edit& b) { return a.span.off < b.span.off; });
     for (std::size_t i = 1; i < edits_.size(); ++i) {
       if (edits_[i].span.off < edits_[i - 1].span.end()) {
@@ -105,7 +110,76 @@ class Walker {
 
  private:
   void remove(Span s) { edits_.push_back(Edit{s, {}}); }
+  void remove_attr(const Attribute& a) {
+    remove(a.span);
+    attr_removed_[static_cast<std::size_t>(&a - doc_.attributes.data())] = 1;
+  }
   void replace(Span s, std::string r) { edits_.push_back(Edit{s, std::move(r)}); }
+
+  // The prefix of a raw QName ("" when it has none).
+  static std::string_view prefix_of(std::string_view raw) {
+    const auto colon = raw.find(':');
+    return colon == std::string_view::npos ? std::string_view() : raw.substr(0, colon);
+  }
+
+  // Feature 008 (FR-003, FR-004): a prefix that the output keeps bound to a namespace whose rules
+  // do not list it as a standard prefix is identity-capable free text. It is renamed to a neutral
+  // ns<k> in every declaration, tag and attribute name the output keeps, so every kept element
+  // and attribute keeps its expanded name. `xml` is reserved and never renamed.
+  void prefixes() {
+    std::set<std::string, std::less<>> declared;
+    std::vector<std::string> order;
+    std::set<std::string, std::less<>> renamed;
+    const auto kept = [&](std::uint32_t e, const Attribute& a) {
+      return !removed_[e] && !attr_removed_[static_cast<std::size_t>(&a - doc_.attributes.data())];
+    };
+    for (std::uint32_t e = 0; e < doc_.elements.size(); ++e) {
+      const auto& el = doc_.elements[e];
+      const auto* attrs = doc_.attrs(el);
+      for (std::uint32_t i = 0; i < el.attr_count; ++i) {
+        const auto& a = attrs[i];
+        if (!a.ns_decl || a.declared_prefix.empty()) continue;
+        declared.insert(a.declared_prefix);
+        if (!kept(e, a) || a.declared_prefix == "xml") continue;
+        const auto* nsr = rules_.ns(a.value);
+        if (nsr != nullptr && nsr->standard_prefix(a.declared_prefix)) continue;
+        if (renamed.insert(a.declared_prefix).second) order.push_back(a.declared_prefix);
+      }
+    }
+    if (order.empty()) return;
+    std::map<std::string, std::string, std::less<>> to;
+    std::size_t k = 1;
+    for (const auto& p : order) {
+      while (declared.contains("ns" + std::to_string(k))) ++k;
+      to.emplace(p, "ns" + std::to_string(k++));
+    }
+    const auto edit = [&](std::size_t off, std::string_view prefix) {
+      const auto it = to.find(prefix);
+      if (it != to.end()) replace(Span{off, prefix.size()}, it->second);
+    };
+    for (std::uint32_t e = 0; e < doc_.elements.size(); ++e) {
+      if (removed_[e]) continue;
+      const auto& el = doc_.elements[e];
+      const auto p = prefix_of(body_.substr(el.name_span.off, el.name_span.len));
+      if (!p.empty()) {
+        edit(el.name_span.off, p);
+        if (el.end_tag) edit(el.end_tag->off + 2, p);  // "</" then the same raw name
+      }
+      const auto* attrs = doc_.attrs(el);
+      for (std::uint32_t i = 0; i < el.attr_count; ++i) {
+        const auto& a = attrs[i];
+        if (!kept(e, a)) continue;
+        if (a.ns_decl) {
+          if (a.declared_prefix.empty() || !to.contains(a.declared_prefix)) continue;
+          edit(a.name_span.off + 6, a.declared_prefix);  // after "xmlns:"
+          ++counters_.prefixes_rewritten[a.value];
+          continue;
+        }
+        const auto ap = prefix_of(body_.substr(a.name_span.off, a.name_span.len));
+        if (!ap.empty()) edit(a.name_span.off, ap);
+      }
+    }
+  }
 
   Span element_span(const Element& el) const {
     const auto end = el.end_tag ? el.end_tag->end() : el.start_tag.end();
@@ -377,7 +451,7 @@ class Walker {
       const auto& a = attrs[i];
       if (a.ns_decl) {
         // A declaration of a namespace without rules is removed, used or not.
-        if (!a.value.empty() && a.value != kXmlNs && rules_.ns(a.value) == nullptr) remove(a.span);
+        if (!a.value.empty() && a.value != kXmlNs && rules_.ns(a.value) == nullptr) remove_attr(a);
         continue;
       }
       const XmlAttributeRule* rule = nullptr;
@@ -386,7 +460,7 @@ class Walker {
       }
       if (rule == nullptr) rule = nsr.attribute(el.name.local, a.name.ns, a.name.local);
       if (rule == nullptr) {
-        remove(a.span);
+        remove_attr(a);
         count_attr(el, a, "unknown");
         continue;
       }
@@ -410,7 +484,7 @@ class Walker {
           if (matches(*r.value, a.value)) {
             count_attr(el, a, "keep");
           } else {
-            remove(a.span);
+            remove_attr(a);
             count_attr(el, a, "malformed");
             if (!core.empty()) mapper_.removed(core);
           }
@@ -423,7 +497,7 @@ class Walker {
           auto mapped = r.embeds_body ? mapper_.map_embedding(*r.category, core, depth_) : mapper_.map(*r.category, core);
           if (!mapped) return std::unexpected(mapped.error());
           if (!*mapped) {
-            remove(a.span);
+            remove_attr(a);
             count_attr(el, a, "malformed");
             mapper_.removed(core);
           } else {
@@ -443,7 +517,7 @@ class Walker {
           break;
         case XmlAction::remove:
         case XmlAction::container:
-          remove(a.span);
+          remove_attr(a);
           count_attr(el, a, "remove");
           if (!core.empty()) mapper_.removed(core);
           break;
@@ -462,6 +536,7 @@ class Walker {
   std::int64_t time_shift_s_ = 0;
   std::vector<Edit> edits_;
   std::vector<std::uint8_t> removed_;
+  std::vector<std::uint8_t> attr_removed_;  // by attribute index (feature 008)
   std::vector<std::uint8_t> verbatim_;  // inside a passthrough EncryptedData: copied as it is
   std::vector<std::uint8_t> enc_;       // inside a kept EncryptedData subtree
   std::vector<std::uint8_t> content_replaced_;

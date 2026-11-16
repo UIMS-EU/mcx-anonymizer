@@ -207,3 +207,27 @@ TEST_CASE("xml harvest: on a TCP segment, items cut at its end are not harvested
   const auto udp = harvest_xml(text, nullptr, false);  // a whole message: lenient
   CHECK(std::find(udp.begin(), udp.end(), "cut-val") != udp.end());
 }
+
+TEST_CASE("xml harvest: standard prefixes are vocabulary, declared vendor prefixes are searched in tag form",
+          "[scan][xml][prefix]") {
+  // Feature 008 (FR-003, FR-004): the anonymiser keeps the prefixes of the normative schemas and
+  // renames every other one; the scanner's own lists agree.
+  const auto pidf = harvest(
+      "<presence xmlns=\"urn:ietf:params:xml:ns:pidf\" xmlns:mcpttPI10=\"urn:3gpp:ns:mcpttPresInfo:1.0\" "
+      "xmlns:acmeVendor7=\"urn:3gpp:ns:mcpttPresInfo:1.0\"><mcpttPI10:p-id>p1</mcpttPI10:p-id></presence>");
+  CHECK(pidf.contains("xmlns:acmeVendor7="));
+  CHECK(pidf.contains("<acmeVendor7:"));
+  CHECK(pidf.contains("</acmeVendor7:"));
+  for (const auto& v : pidf) CHECK(v.find("mcpttPI10") == std::string::npos);
+  // The pilot's source of the tokens: prefix names as attribute values of a filter body.
+  const auto filter = harvest(
+      "<filter-set xmlns=\"urn:ietf:params:xml:ns:simple-filter\"><ns-bindings>"
+      "<ns-binding prefix=\"mcpttPI10\" urn=\"urn:3gpp:ns:mcpttPresInfo:1.0\"/>"
+      "<ns-binding prefix=\"mcdataPI10\" urn=\"urn:3gpp:ns:mcdataPresInfo:1.0\"/>"
+      "<ns-binding prefix=\"mcvideoPI10\" urn=\"urn:3gpp:ns:mcvideoPresInfo:1.0\"/>"
+      "<ns-binding prefix=\"mcs10Set\" urn=\"urn:3gpp:mcsSettings:1.0\"/></ns-bindings></filter-set>");
+  for (const char* p : {"mcpttPI10", "mcdataPI10", "mcvideoPI10", "mcs10Set"}) {
+    INFO(p);
+    CHECK_FALSE(filter.contains(p));
+  }
+}

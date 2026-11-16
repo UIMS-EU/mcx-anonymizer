@@ -48,6 +48,8 @@ documents:
 namespaces:
   - name: "urn:3gpp:mcptt:mcpttUEinitConfig:1.0"
     source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}
+    prefixes:
+      - {name: mcpttiup, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
     elements:
       - {name: App-Server-Info, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
       - {name: C201, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
@@ -162,6 +164,8 @@ namespaces:
       - {element: on-network, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
   - name: "urn:3gpp:mcs:location-user-config:1.0"
     source: {spec: TS 24.484, version: "19.5.0", clause: "7.4.2.3"}
+    prefixes:
+      - {name: mcloc, source: {spec: TS 24.484, version: "19.5.0", clause: "7.4.2.3"}}
     elements:
       - {name: allow-change-location-configuration-of-users, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "7.4.2.3"}}
       - {name: allow-request-location-of-groups, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "7.4.2.3"}}
@@ -176,6 +180,8 @@ namespaces:
       - {element: location-user-configuration-data, name: domain, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "7.4.2.3"}}
   - name: "urn:3gpp:mcptt:mcpttUEConfig:1.0"
     source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}
+    prefixes:
+      - {name: mcpttuep, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
     elements:
       - {name: High-SNR, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
       - {name: IMEI-range, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
@@ -216,6 +222,8 @@ namespaces:
       - {element: on-network, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
   - name: "urn:3gpp:mcptt:user-profile:1.0"
     source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}
+    prefixes:
+      - {name: mcpttup, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
     elements:
       - {name: AllowedFunctionalAliasesForCallTransfer, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
       - {name: AllowedMCPTTIdsForCallTransfer, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
@@ -405,6 +413,8 @@ namespaces:
       - {element: mcptt-user-profile, name: user-profile-index, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
   - name: "urn:3gpp:ns:mcpttServiceConfig:1.0"
     source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}
+    prefixes:
+      - {name: mcpttsc, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
     elements:
       - {name: C17-unmap-group-to-bearer, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
       - {name: C20-floor-granted, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
@@ -496,6 +506,8 @@ namespaces:
       - {element: service-configuration-params, name: domain, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
   - name: "urn:3gpp:mcvideo:mcvideoUEConfig:1.0"
     source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}
+    prefixes:
+      - {name: mcvideouep, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
     elements:
       - {name: High-SNR, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
       - {name: IMEI-range, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
@@ -534,6 +546,8 @@ namespaces:
       - {element: on-network, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
   - name: "urn:3gpp:ns:mcvideo:user-profile:1.0"
     source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}
+    prefixes:
+      - {name: mcvideoup, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
     elements:
       - {name: Center, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
       - {name: Common, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
@@ -699,6 +713,8 @@ namespaces:
       - {element: mcvideo-user-profile, name: user-profile-index, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
   - name: "urn:3gpp:ns:mcvideoServiceConfig:1.0"
     source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}
+    prefixes:
+      - {name: mcvideosc, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
     elements:
       - {name: adhoc-group-call, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
       - {name: allow-adhoc-group-call-support, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
@@ -752,6 +768,8 @@ namespaces:
       - {element: service-configuration-params, name: domain, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
   - name: "urn:3gpp:mcdata:mcdataUEConfig:1.0"
     source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}
+    prefixes:
+      - {name: mcdatauep, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
     elements:
       - {name: Conversation-Presentation-Priority, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
       - {name: Data-Presentation-Priority, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
@@ -799,6 +817,8 @@ namespaces:
       - {element: on-network, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
   - name: "urn:3gpp:ns:mcdata:user-profile:1.0"
     source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}
+    prefixes:
+      - {name: mcdataup, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
     elements:
       - {name: ApplicationLayerGroupID, action: pseudonymise, category: opaque, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
       - {name: Center, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
@@ -974,6 +994,8 @@ namespaces:
       - {element: mcdata-user-profile, name: user-profile-index, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
   - name: "urn:3gpp:ns:mcdataServiceConfig:1.0"
     source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}
+    prefixes:
+      - {name: mcdatasc, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
     elements:
       - {name: adhoc-group-data-comn, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
       - {name: allow-adhoc-group-data-comn-support, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}

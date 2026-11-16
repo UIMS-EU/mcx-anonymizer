@@ -156,6 +156,7 @@ Report ReportBuilder::build(const RunSummary* s, const std::optional<Error>& err
     x.removed.processing_instructions = xs.counters.processing_instructions;
     x.removed.encrypted = xs.counters.encrypted;
     x.embedded = xs.counters.embedded;
+    for (const auto& [ns, n] : xs.counters.prefixes_rewritten) x.prefixes_rewritten[ns_name(ns)] += n;
     r.xml = std::move(x);
     // Feature 005: present when a MIKEY carrier was met. Every key is
     // a fixed word of the schema; nothing from the input appears.

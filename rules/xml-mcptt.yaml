@@ -7,6 +7,8 @@ version: 1.0.0
 namespaces:
   - name: "urn:3gpp:ns:mcpttInfo:1.0"
     source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.2"}
+    prefixes:
+      - {name: mcpttinfo, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.2"}}
     elements:
       - {name: mcpttinfo, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3"}}
       - {name: mcptt-Params, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3"}}
@@ -137,6 +139,8 @@ namespaces:
 
   - name: "urn:3gpp:ns:mcpttFloorRequest:1.0"
     source: {spec: TS 24.379, version: "19.6.0", clause: "F.5.2"}
+    prefixes:
+      - {name: mcpttfloor, source: {spec: TS 24.379, version: "19.6.0", clause: "F.5.2"}}
     elements:
       - {name: mcptt-floor-request, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.5.2"}}
       - {name: floor-type, action: keep, value: {enum: [general, dual]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.5.3"}}
@@ -151,6 +155,8 @@ namespaces:
       - {name: anyExt, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.5.2"}}
   - name: "urn:3gpp:ns:mcpttMbmsUsage:1.0"
     source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.2"}
+    prefixes:
+      - {name: mcpttmbms, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.2"}}
     elements:
       - {name: mcptt-mbms-usage-info, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.3"}}
       - {name: mbms-listening-status, parent: [mcptt-mbms-usage-info], action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.3"}}
@@ -180,6 +186,8 @@ namespaces:
       - {name: group, action: pseudonymise, category: uri, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.3"}}
   - name: "urn:3gpp:ns:mcpttMbsUsage:1.0"
     source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.2"}
+    prefixes:
+      - {name: mcpttmbs, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.2"}}
     elements:
       - {name: mcptt-mbs-usage-info, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.3"}}
       - {name: mbs-listening-status, parent: [mcptt-mbs-usage-info], action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.3"}}

@@ -7,6 +7,8 @@ version: 1.0.0
 namespaces:
   - name: "urn:oma:params:xml:ns:poc:poc-settings"
     source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD RFC4354-poc-settings"}
+    prefixes:
+      - {name: PoC1Set, source: {spec: TS 24.379, version: "19.6.0", clause: "7.4.1.2.2"}}
     elements:
       - {name: poc-settings, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "7.4.1.2.2"}}
       - {name: entity, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "7.4.1.2.2"}}
@@ -25,6 +27,8 @@ namespaces:
       - {element: simultaneous-sessions-support, name: active, action: keep, value: boolean, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD RFC4354-poc-settings"}}
   - name: "urn:3gpp:mcsSettings:1.0"
     source: {spec: TS 24.379, version: "19.6.0", clause: "7.4.1.2.2"}
+    prefixes:
+      - {name: mcs10Set, source: {spec: TS 24.379, version: "19.6.0", clause: "7.4.1.2.2"}}
     elements:
       - {name: selected-user-profile-index, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "7.4.1.2.2"}}
       - {name: user-profile-index, action: keep, value: {int: [0, 18446744073709551615]}, source: {spec: TS 24.379, version: "19.6.0", clause: "7.2.3"}}

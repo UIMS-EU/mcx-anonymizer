@@ -88,6 +88,8 @@ namespaces:
       - {element: SignedKmsResponse, name: Id, action: pseudonymise, category: any-id, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
   - name: "urn:3gpp:ns:mcsecKMSKRR:1.0"
     source: {spec: TS 33.180, version: "20.0.0", clause: "D.4.4"}
+    prefixes:
+      - {name: krr, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD TS33180-mcsecKMSInterface"}}
     elements:
       - {name: ANY, action: remove, reason: free-text, source: {spec: TS 33.180, version: "20.0.0", clause: "D.4.4"}}
       - {name: InitiatorKmsList, action: container, source: {spec: TS 33.180, version: "20.0.0", clause: "D.4.4"}}

@@ -30,6 +30,8 @@ namespaces:
       - {element: entry, name: uri, action: pseudonymise, category: web-uri, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.2"}}
   - name: "urn:3gpp:ns:mcpttGroupInfo:1.0"
     source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}
+    prefixes:
+      - {name: mcpttgi, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
     elements:
       - {name: Center, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
       - {name: Corner, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
@@ -189,6 +191,8 @@ namespaces:
       - {element: on-network-regrouped, name: temporary-MCPTT-group-requestor, action: pseudonymise, category: web-uri, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
   - name: "urn:3gpp:ns:mcpttGMOP:1.0"
     source: {spec: TS 24.481, version: "19.2.0", clause: "7.3.3"}
+    prefixes:
+      - {name: gmop, source: {spec: TS 24.481, version: "19.2.0", clause: "7.3.3"}}
     elements:
       - {name: anyExt, action: keep, value: empty, source: {spec: TS 24.481, version: "19.2.0", clause: "7.3.3"}}
       - {name: command, action: keep, value: empty, source: {spec: TS 24.481, version: "19.2.0", clause: "7.3.3"}}

@@ -8,6 +8,8 @@ namespaces:
   # Appendix C §C.3. The global elements of §D.1.2 (item 11) match wherever they appear (C1).
   - name: "urn:3gpp:ns:mcdataInfo:1.0"
     source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.2"}
+    prefixes:
+      - {name: mcdatainfo, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.2"}}
     elements:
       - {name: mcdatainfo, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3"}}
       - {name: mcdata-Params, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3"}}
@@ -96,6 +98,8 @@ namespaces:
   # under the root; the inner ones of the same name carry the status value (C1, X1).
   - name: "urn:3gpp:ns:mcdataMbmsUsage:1.0"
     source: {spec: TS 24.282, version: "19.6.0", clause: "D.5.2"}
+    prefixes:
+      - {name: mcdatambms, source: {spec: TS 24.282, version: "19.6.0", clause: "D.5.2"}}
     elements:
       - {name: mcdata-mbms-usage-info, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.5.3"}}
       - {name: mbms-listening-status, parent: [mcdata-mbms-usage-info], action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.5.3 item 1"}}
@@ -126,6 +130,8 @@ namespaces:
   # Appendix C §C.8, both Content-Type spellings (X6). Same-name nesting as in §C.5 (C1, X1).
   - name: "urn:3gpp:ns:mvdataMbsUsage:1.0"
     source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.2"}
+    prefixes:
+      - {name: mvdatambs, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.2"}}
     elements:
       - {name: mvdata-mbs-usage-info, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3"}}
       - {name: mbs-listening-status, parent: [mvdata-mbs-usage-info], action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3 item 1"}}
@@ -182,6 +188,8 @@ namespaces:
   # Appendix C §C.7.
   - name: "urn:3gpp:ns:msgstoreControlRequest:1.0"
     source: {spec: TS 24.282, version: "19.6.0", clause: "D.7.2"}
+    prefixes:
+      - {name: mcpttmsgstorectrl, source: {spec: TS 24.282, version: "19.6.0", clause: "D.7.2"}}
     elements:
       - {name: msgstore-ctrl-command-list, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.7.3"}}
       - {name: enable, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.7.3"}}

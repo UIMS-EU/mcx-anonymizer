@@ -1305,3 +1305,57 @@ import xmlmcdata  # noqa: E402
 import xmlmcvideo  # noqa: E402
 
 FIXTURES += xmlmcdata.FIXTURES + xmlmcvideo.FIXTURES
+
+
+# --- fixtures of feature 008 (namespace prefixes, FR-003, FR-004) -------------------------------
+FILTER_NS = "urn:ietf:params:xml:ns:simple-filter"
+
+
+def filter_doc():
+    """An RFC 4661 event filter whose ns-binding values name the standard prefixes: a body without
+    rules (emptied), from which a scanner learns the prefix names as values (the pilot's case)."""
+    binding = lambda p, n: El("ns-binding", attrs=(("prefix", p), ("urn", n)))  # noqa: E731
+    return doc(El("filter-set", El("ns-bindings", binding("pidf", PIDF_NS),
+                                   *(binding(f"{svc}PI10", PRES[svc][0]) for svc in PRES),
+                                   binding("mcs10Set", "urn:3gpp:mcsSettings:1.0")),
+                  ns=(("", FILTER_NS),)))
+
+
+def pidf_affiliation(cv, service, prefix, entity_rule):
+    """A pidf affiliation body (TS 24.379 §9.3.1.2) with the extension namespace under `prefix`."""
+    pns, _ = PRES[service]
+    p = prefix
+    return doc(El("presence",
+                  El("tuple", El("status", El(f"{p}:affiliation",
+                                              attrs=(("group", cv.uri(attr_key(pns, "affiliation", "group"))),
+                                                     ("status", "affiliated")))),
+                     attrs=(("id", "urn:uuid:" + cv.uuid(attr_key(PIDF_NS, "tuple", "id"))),)),
+                  El(f"{p}:p-id", cv.s(el_key(pns, None, "p-id"), "canary")),
+                  attrs=(("entity", cv.uri(entity_rule)),), ns=(("", PIDF_NS), (p, pns))))
+
+
+def xml_prefixes(c, out):
+    """A SUBSCRIBE with the filter, then PUBLISHes with the standard prefixes mcpttPI10, mcdataPI10
+    and mcvideoPI10, one with a vendor prefix (a canary) for the MCPTT namespace, and one declaring
+    the MCPTT namespace under the standard and a vendor prefix."""
+    fname = "xml_prefixes.pcapng"
+    cv = Cv(c, fname)
+    tx = Sender(fname)
+    tx.request("SUBSCRIBE", "application/simple-filter+xml", filter_doc(), extra=[("Event", "presence")])
+    entity = attr_key(PIDF_NS, "presence", "entity")
+    for svc in PRES:
+        tx.request("PUBLISH", "application/pidf+xml", pidf_affiliation(cv, svc, f"{svc}PI10", entity),
+                   extra=[("Event", "presence")])
+    vendor = cv.s("xml-prefix:" + PRES["mcptt"][0], "canary")
+    tx.request("PUBLISH", "application/pidf+xml", pidf_affiliation(cv, "mcptt", vendor, entity),
+               extra=[("Event", "presence")])
+    pns = PRES["mcptt"][0]
+    both = doc(El("presence",
+                  El("tuple", El("status", El("mcpttPI10:affiliation", attrs=(("status", "affiliated"),)),
+                                 El(f"{vendor}:affiliation", attrs=(("status", "deaffiliated"),)))),
+                  attrs=(("entity", cv.uri(entity)),), ns=(("", PIDF_NS), ("mcpttPI10", pns), (vendor, pns))))
+    tx.request("PUBLISH", "application/pidf+xml", both, extra=[("Event", "presence")])
+    tx.write(out)
+
+
+FIXTURES.append(xml_prefixes)

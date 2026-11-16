@@ -118,4 +118,28 @@ with tempfile.TemporaryDirectory() as tmp:
         etg = [header(m.headers, "sip-etag") for m in msgs if header(m.headers, "sip-etag")]
         check(ifm == [old] and etg == [new], f"us5 {pm}: scenario 2, one entity-tag pseudonym in xcap-diff and SIP "
                                             f"({old}/{new} vs {ifm}/{etg})")
+    # Feature 008 (FR-003, FR-004): standard prefixes stay, vendor prefixes are renamed; the filter
+    # body that names the standard prefixes as values does not make the scan fail.
+    inp = fixtures / "xml_prefixes.pcapng"
+    out = tmp / "prefixes.pcapng"
+    r = run(exe, *data, "anonymize", "--project", "i", inp, "-o", out)
+    check(r.returncode == 0, f"prefixes: publishes with a clean scan ({r.stderr.strip()[-300:]})")
+    if r.returncode == 0:
+        for oracle in ("xml_structure.py", "xml_consistency.py"):
+            args = [inp, out] + ([manifest] if oracle == "xml_structure.py" else [])
+            o = run(sys.executable, HERE / oracle, *args)
+            check(o.returncode == 0, f"prefixes: {oracle} ({(o.stdout + o.stderr).strip()[-400:]})")
+        c = run(sys.executable, HERE / "canary_absent.py", manifest, out, "--source", inp.name)
+        check(c.returncode == 0, f"prefixes: the vendor prefix canary is absent ({c.stdout.strip()[:300]})")
+        rep = json.loads(Path(str(out) + ".report.json").read_text())
+        pr = rep["xml"].get("prefixes_rewritten", {})
+        check(pr == {"urn:3gpp:ns:mcpttPresInfo:1.0": 2}, f"prefixes: the renamed declarations are counted ({pr})")
+        pidf = b"".join(p.body for m in messages(str(out)) for p in m.parts if p.content_type == "application/pidf+xml")
+        for svc in ("mcptt", "mcdata", "mcvideo"):
+            check(f"<{svc}PI10:affiliation ".encode() in pidf and f"</{svc}PI10:p-id>".encode() in pidf,
+                  f"prefixes: the standard prefix {svc}PI10 is kept")
+        check(b'xmlns:ns1="urn:3gpp:ns:mcpttPresInfo:1.0"' in pidf and b"<ns1:affiliation" in pidf,
+              "prefixes: the vendor prefix becomes ns1 with the same namespace")
+        s = run(exe, *data, "scan", "--project", "i", out)
+        check(s.returncode == 0, "prefixes: the independent scan is clean")
 sys.exit(1 if failures else 0)

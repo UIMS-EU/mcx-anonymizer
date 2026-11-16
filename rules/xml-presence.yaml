@@ -7,6 +7,8 @@ version: 1.0.0
 namespaces:
   - name: "urn:ietf:params:xml:ns:pidf"
     source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD RFC3863_pdif"}
+    prefixes:
+      - {name: tns, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD RFC3863_pdif"}}
     elements:
       - {name: presence, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "9.3.1.2"}}
       - {name: tuple, action: container, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD RFC3863_pdif"}}
@@ -22,6 +24,8 @@ namespaces:
       - {element: "*", ns: "urn:ietf:params:xml:ns:pidf", name: mustUnderstand, action: keep, value: boolean, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD RFC3863_pdif"}}
   - name: "urn:3gpp:ns:mcpttPresInfo:1.0"
     source: {spec: TS 24.379, version: "19.6.0", clause: "9.3.1.2"}
+    prefixes:
+      - {name: mcpttPI10, source: {spec: TS 24.379, version: "19.6.0", clause: "9.3.1.2"}}
     elements:
       - {name: p-id, action: pseudonymise, category: opaque, source: {spec: TS 24.379, version: "19.6.0", clause: "9.3.1.2"}}
       - {name: groupStatus, action: keep, value: {enum: [in-peril, emergency]}, source: {spec: TS 24.379, version: "19.6.0", clause: "9.3.1.2"}}
@@ -41,6 +45,8 @@ namespaces:
       - {element: functionalAlias, name: expires, action: keep, value: datetime, source: {spec: TS 24.379, version: "19.6.0", clause: "9.3.1.2"}}
   - name: "urn:3gpp:ns:mcdataPresInfo:1.0"
     source: {spec: TS 24.282, version: "19.6.0", clause: "8.4.1.2"}
+    prefixes:
+      - {name: mcdataPI10, source: {spec: TS 24.282, version: "19.6.0", clause: "8.4.1.2"}}
     elements:
       - {name: p-id, action: pseudonymise, category: opaque, source: {spec: TS 24.282, version: "19.6.0", clause: "8.4.1.2"}}
       - {name: affiliation, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "8.4.1.2"}}
@@ -54,6 +60,8 @@ namespaces:
       - {element: functionalAlias, name: expires, action: keep, value: datetime, source: {spec: TS 24.282, version: "19.6.0", clause: "8.4.1.2"}}
   - name: "urn:3gpp:ns:mcvideoPresInfo:1.0"
     source: {spec: TS 24.281, version: "19.5.0", clause: "8.3.1.2"}
+    prefixes:
+      - {name: mcvideoPI10, source: {spec: TS 24.281, version: "19.5.0", clause: "8.3.1.2"}}
     elements:
       - {name: p-id, action: pseudonymise, category: opaque, source: {spec: TS 24.281, version: "19.5.0", clause: "8.3.1.2"}}
       - {name: groupStatus, action: keep, value: {enum: [in-peril, emergency]}, source: {spec: TS 24.281, version: "19.5.0", clause: "8.3.1.2"}}
@@ -73,6 +81,8 @@ namespaces:
       - {element: functionalAlias, name: expires, action: keep, value: datetime, source: {spec: TS 24.281, version: "19.5.0", clause: "8.3.1.2"}}
   - name: "urn:3gpp:ns:mcpttPresInfoFA:1.0"
     source: {spec: TS 24.379, version: "19.6.0", clause: "9A.3.1.2"}
+    prefixes:
+      - {name: mcpttPIFA10, source: {spec: TS 24.379, version: "19.6.0", clause: "9A.3.1.2"}}
     elements:
       - {name: p-id-fa, action: pseudonymise, category: opaque, source: {spec: TS 24.379, version: "19.6.0", clause: "9A.3.1.2"}}
       - {name: functionalAlias, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "9A.3.1.2"}}
@@ -84,6 +94,8 @@ namespaces:
       - {element: functionalAlias, name: expires, action: keep, value: datetime, source: {spec: TS 24.379, version: "19.6.0", clause: "9A.3.1.2"}}
   - name: "urn:3gpp:ns:mcdataPresInfoFA:1.0"
     source: {spec: TS 24.282, version: "19.6.0", clause: "22.3.1.2"}
+    prefixes:
+      - {name: mcdataPIFA10, source: {spec: TS 24.282, version: "19.6.0", clause: "22.3.1.2"}}
     elements:
       - {name: p-id-fa, action: pseudonymise, category: opaque, source: {spec: TS 24.282, version: "19.6.0", clause: "22.3.1.2"}}
       - {name: functionalAlias, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "22.3.1.2"}}
@@ -95,6 +107,8 @@ namespaces:
       - {element: functionalAlias, name: expires, action: keep, value: datetime, source: {spec: TS 24.282, version: "19.6.0", clause: "22.3.1.2"}}
   - name: "urn:3gpp:ns:mcvideoPresInfoFA:1.0"
     source: {spec: TS 24.281, version: "19.5.0", clause: "20.3.1.2"}
+    prefixes:
+      - {name: mcvideoPIFA10, source: {spec: TS 24.281, version: "19.5.0", clause: "20.3.1.2"}}
     elements:
       - {name: p-id-fa, action: pseudonymise, category: opaque, source: {spec: TS 24.281, version: "19.5.0", clause: "20.3.1.2"}}
       - {name: functionalAlias, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "20.3.1.2"}}

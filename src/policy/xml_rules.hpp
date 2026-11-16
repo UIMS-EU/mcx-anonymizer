@@ -105,15 +105,25 @@ struct XmlAttributeRule {
   XmlItemRule rule;
 };
 
+// Feature 008 (FR-003): a namespace prefix that a normative schema or prefix table of the standard
+// declares for the namespace. The output keeps it; any other prefix is renamed.
+struct XmlPrefixRule {
+  std::string name;
+  Source source;
+};
+
 struct XmlNamespaceRules {
   std::string name;
   XmlDisposition disposition = XmlDisposition::rules;
+  std::vector<XmlPrefixRule> prefixes;
   std::map<std::string, std::vector<XmlElementRule>, std::less<>> elements;  // by local name
   std::vector<XmlAttributeRule> attributes;
   Source source;
 
   // The rule whose parent list contains `parent_local`, else the rule without parents.
   [[nodiscard]] const XmlElementRule* element(std::string_view local, std::string_view parent_local) const;
+  // True when `prefix` is a standard prefix of this namespace (exact, case-sensitive).
+  [[nodiscard]] bool standard_prefix(std::string_view prefix) const;
   // The rule for (element, attribute), else for ("*", attribute).
   [[nodiscard]] const XmlAttributeRule* attribute(std::string_view element_local, std::string_view attr_ns,
                                                   std::string_view attr_local) const;

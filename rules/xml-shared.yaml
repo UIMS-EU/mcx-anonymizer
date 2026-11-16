@@ -8,6 +8,8 @@ version: 1.0.0
 namespaces:
   - name: "urn:3gpp:ns:affiliationCommand:1.0"
     source: {spec: TS 24.379, version: "19.6.0", clause: "F.4.2"}
+    prefixes:
+      - {name: mcpttaff, source: {spec: TS 24.379, version: "19.6.0", clause: "F.4.2"}}
     elements:
       - {name: command-list, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.4.3"}}
       - {name: affiliate, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.4.2"}}
@@ -16,6 +18,10 @@ namespaces:
       - {name: anyExt, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.4.2"}}
   - name: "urn:3gpp:ns:preconfiguredRegroup:1.0"
     source: {spec: TS 24.379, version: "19.6.0", clause: "F.7.2"}
+    prefixes:
+      - {name: mcdatargrp, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD TS24282_preconfiguredRegroup"}}
+      - {name: mcpttrgrp, source: {spec: TS 24.379, version: "19.6.0", clause: "F.7.2"}}
+      - {name: mcvideorgrp, source: {spec: TS 24.379, version: "19.6.0", clause: "F.7.2"}}
     elements:
       - {name: mcpttregroup, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.7.2"}}
       - {name: mcdataregroup, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.6.2"}}

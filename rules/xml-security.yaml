@@ -8,11 +8,16 @@ version: 1.0.0
 namespaces:
   - name: "urn:3gpp:ns:mcpttSignedDoc:1.0"
     source: {spec: TS 24.379, version: "19.6.0", clause: "F.6.2"}
+    prefixes:
+      - {name: mcpttsigneddoc, source: {spec: TS 24.379, version: "19.6.0", clause: "F.6.2"}}
     elements:
       - {name: signatures, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.6.3"}}
       - {name: anyExt, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.6.2"}}
   - name: "http://www.w3.org/2000/09/xmldsig#"
     source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD xmldsig-core-schema"}
+    prefixes:
+      - {name: ds, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD xmldsig-core-schema"}}
+      - {name: xmldsig, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD TS24379_mcpttsigneddoc"}}
     elements:
       - {name: Signature, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.6.3"}}
       - {name: SignedInfo, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.6.3 item 2"}}
@@ -51,6 +56,8 @@ namespaces:
   - name: "http://www.w3.org/2001/04/xmlenc#"
     disposition: encrypted_content
     source: {spec: TS 33.180, version: "20.0.0", clause: "9.3.4.2"}
+    prefixes:
+      - {name: xenc, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.2"}}
     elements:
       - {name: EncryptedData, action: container, source: {spec: TS 33.180, version: "20.0.0", clause: "9.3.4.2"}}
       - {name: EncryptionMethod, action: container, source: {spec: TS 33.180, version: "20.0.0", clause: "9.3.4.2"}}
@@ -65,6 +72,9 @@ namespaces:
   # unshifted like every XML datetime.
   - name: "urn:3gpp:ns:mcpttGKTP:1.0"
     source: {spec: TS 24.481, version: "19.2.0", clause: "7.7.4.2"}
+    prefixes:
+      - {name: mgktp, source: {spec: TS 24.481, version: "19.2.0", clause: "7.7.4.2"}}
+      - {name: mvgktp, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD TS24281_mcvideoinfo"}}
     elements:
       - {name: GKTPs, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.7.2"}}
       - {name: GMK-GKTPs, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.7.2"}}
@@ -80,6 +90,8 @@ namespaces:
   # GKTP rules.
   - name: "urn:3gpp:ns:mcvideoGKTP:1.0"
     source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.2"}
+    prefixes:
+      - {name: mvgktp, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.2"}}
     elements:
       - {name: GKTPs, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.7.2"}}
       - {name: GMK-GKTPs, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.7.2"}}

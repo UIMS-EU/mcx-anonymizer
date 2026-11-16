@@ -7,6 +7,8 @@ version: 1.0.0
 namespaces:
   - name: "urn:3gpp:ns:mcpttLocationInfo:1.0"
     source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.2"}
+    prefixes:
+      - {name: mcpttloc, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.2"}}
     elements:
       - {name: location-info, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.2"}}
       - {name: anyExt, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.2"}}
@@ -189,6 +191,8 @@ namespaces:
       - {element: CL_BearingAndSpeed, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
   - name: "urn:3gpp:ns:mcdataLocationInfo:1.0"
     source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.2"}
+    prefixes:
+      - {name: mcdataloc, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.2"}}
     elements:
       - {name: location-info, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.2"}}
       - {name: anyExt, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.2"}}
@@ -371,6 +375,8 @@ namespaces:
       - {element: CL_BearingAndSpeed, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
   - name: "urn:3gpp:ns:mcvideoLocationInfo:1.0"
     source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.2"}
+    prefixes:
+      - {name: mcvideoloc, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.2"}}
     elements:
       - {name: location-info, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.2"}}
       - {name: anyExt, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.2"}}

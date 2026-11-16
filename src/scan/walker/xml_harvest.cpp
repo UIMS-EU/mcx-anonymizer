@@ -306,6 +306,17 @@ class Harvester {
     for (const char* end : {">", " ", "/"}) add(":" + l + end);
   }
 
+  // Feature 008 (FR-004): a declared prefix that is not a standard prefix (vocabulary) is renamed by
+  // the anonymiser; it is searched in the forms a surviving prefix takes in markup: its declaration
+  // as written through "=", and the start of a start and an end tag. A bare "P:" would also match
+  // SIP text (" sip:"), so it is not searched.
+  void prefix(std::string_view p, std::string_view decl) {
+    if (p.empty() || p == "xml" || in_xml_vocabulary(p)) return;
+    add(decl);
+    add("<" + std::string(p) + ":");
+    add("</" + std::string(p) + ":");
+  }
+
   void ns_name(std::string_view raw) {
     const std::string u = unescape(trim(raw));
     if (!u.empty() && !within_xml_vocabulary(u)) {
@@ -437,6 +448,7 @@ class Harvester {
       const auto attr = t_.substr(an, n - an);
       while (n < t_.size() && is_space(t_[n])) ++n;
       if (n >= t_.size() || t_[n] != '=') continue;
+      const auto decl = t_.substr(an, n + 1 - an);  // the attribute name through "=", as written
       ++n;
       while (n < t_.size() && is_space(t_[n])) ++n;
       if (n >= t_.size() || (t_[n] != '"' && t_[n] != '\'')) continue;
@@ -447,6 +459,7 @@ class Harvester {
       // form of quoted SIP header parameters (uri="...", realm="...") (proposal N2).
       if (attr == "xmlns" || attr.starts_with("xmlns:")) {
         ns_name(v);
+        if (attr.starts_with("xmlns:")) prefix(attr.substr(6), decl);
       } else {
         if (!kept_token_field(attr)) value(v);
       }

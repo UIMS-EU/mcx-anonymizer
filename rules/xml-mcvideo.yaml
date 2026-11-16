@@ -7,6 +7,8 @@ version: 1.0.0
 namespaces:
   - name: "urn:3gpp:ns:mcvideoInfo:1.0"
     source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.2"}
+    prefixes:
+      - {name: mcvideoinfo, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.2"}}
     elements:
       - {name: mcvideoinfo, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3"}}
       - {name: mcvideo-Params, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3"}}
@@ -105,6 +107,8 @@ namespaces:
 
   - name: "urn:3gpp:ns:mcvideoMbmsUsage:1.0"
     source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.2"}
+    prefixes:
+      - {name: mcvidmbms, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.2"}}
     elements:
       - {name: mcvideo-mbms-usage-info, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.3"}}
       - {name: mbms-listening-status, parent: [mcvideo-mbms-usage-info], action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.3"}}
@@ -134,6 +138,8 @@ namespaces:
 
   - name: "urn:3gpp:ns:mcvideoMbsUsage:1.0"
     source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.2"}
+    prefixes:
+      - {name: mcvideombs, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.2"}}
     elements:
       - {name: mcvideo-mbs-usage-info, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.3"}}
       - {name: mbs-listening-status, parent: [mcvideo-mbs-usage-info], action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.3 item 1"}}
@@ -189,6 +195,8 @@ namespaces:
 
   - name: "urn:3gpp:ns:transmissionRequest:1.0"
     source: {spec: TS 24.281, version: "19.5.0", clause: "F.5.2"}
+    prefixes:
+      - {name: mcvideotransmission, source: {spec: TS 24.281, version: "19.5.0", clause: "F.5.2"}}
     elements:
       - {name: transmission-request, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.5.3"}}
       - {name: ssrc, action: pseudonymise, category: ssrc, source: {spec: TS 24.281, version: "19.5.0", clause: "F.5.3"}}

@@ -27,6 +27,8 @@ struct Counters {
   std::uint64_t encrypted_passed_through = 0;
   std::uint64_t encrypted_removed_parts = 0;
   Actions embedded;                                                       // outcome -> n
+  // Feature 008 (FR-004): declarations whose non-standard prefix was renamed, by namespace name.
+  std::map<std::string, std::uint64_t> prefixes_rewritten;
 
   void merge(const Counters& o) {
     for (const auto& [k, m] : o.bodies) for (const auto& [a, n] : m) bodies[k][a] += n;
@@ -40,6 +42,7 @@ struct Counters {
     encrypted_passed_through += o.encrypted_passed_through;
     encrypted_removed_parts += o.encrypted_removed_parts;
     for (const auto& [a, n] : o.embedded) embedded[a] += n;
+    for (const auto& [k, n] : o.prefixes_rewritten) prefixes_rewritten[k] += n;
   }
 };
 

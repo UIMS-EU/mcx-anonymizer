@@ -382,6 +382,33 @@ constexpr std::string_view kTerms[] = {
     "xcap-diff", "xcap-root",
 };
 
+// Feature 008 (FR-003): the namespace prefixes that the normative schemas and prefix tables
+// declare for the namespaces of the XML rule set (TS 24.379 §9.3.1.2 mcpttPI10, TS 24.282 §8.4.1.2
+// mcdataPI10, TS 24.281 §8.3.1.2 mcvideoPI10, TS 24.379 §7.4.1.2.2 mcs10Set and PoC1Set, the
+// schemas of TS 24.484, TS 24.481, TS 33.180 and TS 37.579-5). The anonymiser keeps them, so they
+// are not searched. Sorted (byte order).
+constexpr std::string_view kPrefixes[] = {
+    "PoC1Set", "ds", "gmop", "krr", "mcdataConfInfo", "mcdataPI10", "mcdataPIFA10", "mcdatainfo", "mcdataloc",
+    "mcdatambms", "mcdatargrp", "mcdatasc", "mcdatauep", "mcdataup", "mcloc", "mcpttConfInfo", "mcpttPI10",
+    "mcpttPIFA10", "mcpttResLists", "mcpttaff", "mcpttfloor", "mcpttgi", "mcpttinfo", "mcpttiup", "mcpttloc",
+    "mcpttmbms", "mcpttmbs", "mcpttmsgstorectrl", "mcpttrgrp", "mcpttsc", "mcpttsigneddoc", "mcpttuep", "mcpttup",
+    "mcs10Set", "mcvideoConfInfo", "mcvideoPI10", "mcvideoPIFA10", "mcvideoinfo", "mcvideoloc", "mcvideombs",
+    "mcvideorgrp", "mcvideosc", "mcvideotransmission", "mcvideouep", "mcvideoup", "mcvidmbms", "mgktp", "mvdatambs",
+    "mvgktp", "rl", "tns", "xenc", "xmldsig",
+};
+
+// The names, values and prefixes, merged and sorted (byte order).
+const std::vector<std::string_view>& all_terms() {
+  static const std::vector<std::string_view> all = [] {
+    std::vector<std::string_view> v(std::begin(kTerms), std::end(kTerms));
+    v.insert(v.end(), std::begin(kPrefixes), std::end(kPrefixes));
+    std::sort(v.begin(), v.end());
+    v.erase(std::unique(v.begin(), v.end()), v.end());
+    return v;
+  }();
+  return all;
+}
+
 // Sorted; regenerate with the vocabulary when rules change (keep values of a free token grammar
 // or of an integer range beyond 6 digits).
 constexpr std::string_view kKeptFields[] = {
@@ -418,10 +445,11 @@ bool xml_kept_value_field(std::string_view local) {
   return std::binary_search(std::begin(kKeptFields), std::end(kKeptFields), local);
 }
 
-std::span<const std::string_view> xml_vocabulary() { return kTerms; }
+std::span<const std::string_view> xml_vocabulary() { return all_terms(); }
 
 bool in_xml_vocabulary(std::string_view value) {
-  return std::binary_search(std::begin(kTerms), std::end(kTerms), value);
+  const auto& all = all_terms();
+  return std::binary_search(all.begin(), all.end(), value);
 }
 
 bool within_xml_vocabulary(std::string_view value) {
@@ -429,7 +457,7 @@ bool within_xml_vocabulary(std::string_view value) {
   const auto low = [](unsigned char c) { return static_cast<char>(std::tolower(c)); };
   static const std::vector<std::string> lowered = [&] {
     std::vector<std::string> out;
-    for (const auto term : kTerms) {
+    for (const auto term : all_terms()) {
       std::string t(term.size(), '\0');
       std::transform(term.begin(), term.end(), t.begin(), low);
       out.push_back(std::move(t));

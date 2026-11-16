@@ -280,6 +280,9 @@ def _rules(path):
         if line.strip() == "attributes:":
             section = "attributes"
             continue
+        if line.strip() == "prefixes:":
+            section = None  # feature 008: namespace prefixes, no element or attribute rules
+            continue
         m = _RULE_LINE.match(line)
         if m and cur is not None and section:
             f = {k: v.strip() for k, v in _FIELD.findall(m.group(1))}

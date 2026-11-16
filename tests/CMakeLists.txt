@@ -84,6 +84,7 @@ add_executable(mcxanon_unit_tests
   unit/mapping_format4_test.cpp
   unit/xml_rules_test.cpp
   unit/xml_rewrite_test.cpp
+  unit/xml_prefix_test.cpp
   unit/xml_harvest_test.cpp
   unit/xml_vocabulary_test.cpp
   unit/xml_composite_test.cpp

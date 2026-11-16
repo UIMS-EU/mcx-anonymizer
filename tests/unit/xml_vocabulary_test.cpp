@@ -42,6 +42,8 @@ TEST_CASE("the scanner XML vocabulary equals the names and values of the XML rul
         values(e.rule);
       }
     }
+    // Feature 008 (FR-003): the standard prefixes the output keeps.
+    for (const auto& p : ns.prefixes) expected.insert(p.name);
     for (const auto& a : ns.attributes) {
       if (a.element != "*") expected.insert(a.element);
       if (!a.ns.empty()) expected.insert(a.ns);
