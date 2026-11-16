@@ -25,7 +25,10 @@ namespaces:
       - {name: selected-group-change-outcome, action: keep, value: {enum: [success, fail]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19d"}}
       - {name: affiliation-required, action: keep, value: boolean, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19e"}}
       - {name: ambient-viewing-type, action: keep, value: {enum: [remote-init, local-init]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19f"}}
-      - {name: video-push-url, action: remove, reason: structure, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19g"}}
+      # Feature 008 (FR-007): "set to the URL of the video file located in the MCVideo server"
+      # (§F.1.3 items 18b, 19g; xs:anyURI, §F.1.2): an http(s) URL with the host mapped and the path
+      # segments opaque, or a SIP or tel URI with the SIP URI mapping (web-uri).
+      - {name: video-push-url, action: pseudonymise, category: web-uri, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19g; F.1.2"}}
       - {name: emergency-alert-area-ind, action: keep, value: boolean, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19i"}}
       - {name: group-geo-area-ind, action: keep, value: boolean, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19j"}}
       - {name: binding-ind, action: keep, value: boolean, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19k"}}
@@ -75,7 +78,7 @@ namespaces:
       - {name: primary-mcvideo-id, action: container, encryptable: true, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 1, 19x"}}
       - {name: location-of-functional-alias-URI, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19aa"}}
       - {name: mcvideoURI, parent: [mcvideo-request-uri, mcvideo-calling-user-id, mcvideo-called-party-id, mcvideo-calling-group-id, originated-by, functional-alias-URI, partner-mcvideo-id, primary-mcvideo-id, location-of-functional-alias-URI], action: pseudonymise, category: uri, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 2b, 19aa"}}
-      - {name: mcvideoURI, parent: [video-pull-url], action: remove, reason: structure, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 18b"}}
+      - {name: mcvideoURI, parent: [video-pull-url], action: pseudonymise, category: web-uri, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 18b"}}
       - {name: mcvideoString, parent: [mcvideo-access-token], action: remove, reason: credential, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 2c"}}
       - {name: mcvideoString, parent: [mcvideo-client-id], action: pseudonymise, category: instance, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 2c, 17"}}
       - {name: mcvideoString, parent: [req-type], action: keep, value: {enum: [mc-service-authorisation-notify-request, get-userlist-adhoc-group-call-request, adhoc-group-call-add-participants-request, adhoc-group-call-remove-participants-request, adhoc-group-call-release-notification-request, migration-service-deauthorization-notification, migration-service-authorization-request, ad-hoc-emergency-alert-participant-criteria-modification, functional-alias-status-determination, fa-user-status-determination]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 2c, 19u"}}

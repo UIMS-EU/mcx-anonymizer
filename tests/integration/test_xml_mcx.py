@@ -24,7 +24,7 @@ from sip_messages import messages  # noqa: E402
 
 exe, fixtures = sys.argv[1], Path(sys.argv[2])
 failures = []
-FILES = ["xml_mcptt_us4.pcapng", "xml_mcdata.pcapng", "xml_mcvideo.pcapng"]
+FILES = ["xml_mcptt_us4.pcapng", "xml_mcdata.pcapng", "xml_mcvideo.pcapng", "xml_mcvideo_urls.pcapng"]
 
 
 def check(cond, what):
@@ -76,6 +76,25 @@ with tempfile.TemporaryDirectory() as tmp:
                 sig_in = [p.body for m in ins for p in m.parts if p.content_type == "application/vnd.3gpp.mcdata-signalling"]
                 sig_out = [p.body for m in outs for p in m.parts if p.content_type == "application/vnd.3gpp.mcdata-signalling"]
                 check(len(sig_in) == len(sig_out) >= 1, f"{name} ({pm}): scenario 1, the mcdata-signalling part stays")
+            if name in ("xml_mcvideo.pcapng", "xml_mcvideo_urls.pcapng"):
+                # Feature 008 (FR-007): the video URLs are pseudonymised, not removed.
+                el = x["elements"]
+                push = el.get("urn:3gpp:ns:mcvideoInfo:1.0 video-push-url", {})
+                check(push.get("pseudonymise", 0) >= 1, f"{name} ({pm}): video-push-url pseudonymised ({push})")
+                uri = el.get("urn:3gpp:ns:mcvideoInfo:1.0 mcvideoURI", {})
+                check("remove" not in uri, f"{name} ({pm}): no mcvideoURI removed ({uri})")
+            if name == "xml_mcvideo_urls.pcapng":
+                bodies = [p.body.decode() for m in outs for p in m.parts
+                          if p.content_type == "application/vnd.3gpp.mcvideo-info+xml"]
+                pulls = re.findall(r"<video-pull-url[^>]*>\s*<mcvideoURI>([^<]*)</mcvideoURI>", bodies[0])
+                users = re.findall(r"<mcvideo-request-uri[^>]*>\s*<mcvideoURI>sip:[^@<]*@([^<]*)</mcvideoURI>", bodies[0])
+                pushes = re.findall(r"<video-push-url>([^<]*)</video-push-url>", bodies[1])
+                check(len(pulls) == 1 and len(users) == 1 and pulls[0].startswith("https://")
+                      and pulls[0].split("/")[2].endswith("." + users[0]),
+                      f"{name} ({pm}): the URL host takes the domain mapping of the SIP URIs ({pulls} {users})")
+                check(pushes == pulls, f"{name} ({pm}): one URL, one pseudonym in pull and push ({pushes} {pulls})")
+                check(el.get("urn:3gpp:ns:mcvideoInfo:1.0 video-push-url", {}).get("malformed") == 1,
+                      f"{name} ({pm}): a URL with a query is removed as malformed")
             if name == "xml_mcptt_us4.pcapng":
                 mbms = [p.body for m in outs for p in m.parts if p.content_type.endswith("mbms-usage-info+xml")]
                 check(mbms and all(re.search(rb"<TMGI>[^<]+</TMGI>", b) is None and b.count(b"<TMGI></TMGI>") >= 2

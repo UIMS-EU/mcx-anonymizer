@@ -308,4 +308,33 @@ def xml_mcvideo(c, out):
     tx.write(out)
 
 
-FIXTURES = [xml_mcvideo]
+def xml_mcvideo_urls(c, out):
+    """Feature 008 (FR-007), the pilot's shape: one-from-server video pull with <video-pull-url>
+    (TS 24.281 §12.2.2.4, §F.1.3 item 18b), the same URL in <video-push-url> (§F.1.3 item 19g),
+    a SIP URI of the same server domain next to them, and a push URL with a query (removed)."""
+    fname = "xml_mcvideo_urls.pcapng"
+    cv = X.Cv(c, fname)
+    tx = X.Sender(fname)
+    clip = cv.s(vk("mcvideoURI", "video-pull-url"), "canary")
+    url = f"https://mcvideo-server.video.example.net/recordings/{clip}"
+    cv.c.reuse(clip, None, fname, rule=vk("video-push-url"))
+    user = cv.uri(vk("mcvideoURI", "mcvideo-request-uri"), "video.example.net")
+
+    def info(*children):
+        return X.doc(El("mcvideoinfo", El("mcvideo-Params", *children), ns=(("", INFO),)))
+
+    pull = info(El("session-type", "one-from-server video pull"),
+                El("mcvideo-request-uri", El("mcvideoURI", user), attrs=(("type", "Normal"),)),
+                El("video-pull-url", El("mcvideoURI", url), attrs=(("type", "Normal"),)))
+    push = X.doc(El("mcvideoinfo", El("mcvideo-Params", El("session-type", "one-to-server video push")),
+                    El("anyExt", El("video-push-url", url)), ns=(("", INFO),)))
+    query = X.doc(El("mcvideoinfo", El("mcvideo-Params", El("session-type", "one-to-server video push")),
+                     El("anyExt", El("video-push-url", "https://mcvideo-server.video.example.net/r?id="
+                                     + cv.s(vk("video-push-url"), "canary"))), ns=(("", INFO),)))
+    tx.multipart("INVITE", [("application/sdp", X.sdp_offer(), []), (INFO_CT, pull, [])])
+    tx.request("INFO", INFO_CT, push)
+    tx.request("INFO", INFO_CT, query)
+    tx.write(out)
+
+
+FIXTURES = [xml_mcvideo, xml_mcvideo_urls]
