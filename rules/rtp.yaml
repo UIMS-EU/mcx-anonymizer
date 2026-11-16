@@ -1,0 +1,32 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# Media rule set (feature 004). Sources: rules/SOURCES.md § Media plane.
+ruleset: mcxanon-media
+version: 1.0.0
+
+# RTP elements. Every element has exactly
+# one allowed action; the loader rejects a missing element (FR-004 to FR-008, FR-025).
+rtp:
+  - {name: version, action: keep, source: {spec: RFC 3550, version: "2003-07", clause: "5.1"}}
+  - {name: padding-bit, action: keep, source: {spec: RFC 3550, version: "2003-07", clause: "5.1"}}
+  - {name: extension-bit, action: keep, source: {spec: RFC 3550, version: "2003-07", clause: "5.1"}}
+  - {name: csrc-count, action: keep, source: {spec: RFC 3550, version: "2003-07", clause: "5.1"}}
+  - {name: marker, action: keep, source: {spec: RFC 3550, version: "2003-07", clause: "5.1"}}
+  - {name: payload-type, action: keep, source: {spec: RFC 3550, version: "2003-07", clause: "5.1"}}
+  - {name: sequence-number, action: keep, source: {spec: RFC 3550, version: "2003-07", clause: "5.1"}}
+  - {name: timestamp, action: keep, source: {spec: RFC 3550, version: "2003-07", clause: "5.1"}}
+  # FR-005: the project-wide SSRC mapping of 002/FR-021.
+  - {name: ssrc, action: pseudonymise, source: {spec: RFC 3550, version: "2003-07", clause: "5.1"}}
+  - {name: csrc, action: pseudonymise, source: {spec: RFC 3550, version: "2003-07", clause: "5.1"}}
+  # FR-006: the extension keeps its structure; element data is zeroed (no per-URI rules).
+  - {name: extension-profile, action: keep, source: {spec: RFC 3550, version: "2003-07", clause: "5.3.1"}}
+  - {name: extension-length, action: keep, source: {spec: RFC 3550, version: "2003-07", clause: "5.3.1"}}
+  - {name: extension-element-header, action: keep, source: {spec: RFC 5285, version: "2008-07", clause: "4.2"}}
+  - {name: extension-element-data, action: zero, source: {spec: RFC 5285, version: "2008-07", clause: "4.3"}}
+  # FR-007, FR-008: every payload type, telephone-event (RFC 4733) and comfort noise included.
+  - {name: payload, action: zero, source: {spec: RFC 3550, version: "2003-07", clause: "5.1"}}
+  # Clarification P2: the count octet is kept, the other padding octets are zeroed.
+  - {name: padding-count, action: keep, source: {spec: RFC 3550, version: "2003-07", clause: "5.1"}}
+  - {name: padding-octets, action: zero, source: {spec: RFC 3550, version: "2003-07", clause: "5.1"}}
+  # FR-025: encrypted portion, MKI and authentication tag zeroed as one block.
+  - {name: srtp-trailer, action: zero, source: {spec: RFC 3711, version: "2004-03", clause: "3.1"}}

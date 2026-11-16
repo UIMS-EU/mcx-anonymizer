@@ -1,0 +1,84 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# HTTP rule set (feature 007): OAuth 2.0 and OpenID Connect parameters of the identity management
+# server (query strings, form bodies, JSON members) and JWT header members and claims
+# A parameter or member without a rule is removed with its value.
+# Sources: rules/SOURCES.md § HTTP rule set.
+ruleset: mcxanon-http
+version: 1.0.0
+params:
+  # Kept by value grammar.
+  - {name: response_type, action: keep, value: {enum: [code]}, source: {spec: TS 33.180, version: "20.0.0", clause: "B.4.2.2"}}
+  - {name: grant_type, action: keep, value: {enum: [authorization_code, refresh_token, password, "urn:ietf:params:oauth:grant-type:token-exchange", "urn:ietf:params:oauth:grant-type:jwt-bearer"]}, source: {spec: TS 33.180, version: "20.0.0", clause: "B.7.2"}}
+  - {name: token_type, action: keep, value: {enum: [bearer, Bearer]}, source: {spec: RFC 6749, version: "2012-10", clause: "5.1"}}
+  - {name: expires_in, action: keep, value: number, source: {spec: RFC 6749, version: "2012-10", clause: "5.1"}}
+  - {name: scope, action: keep, value: {scope: [openid, "3gpp:mc:ptt_service", "3gpp:mc:ptt_config_management_service", "3gpp:mc:ptt_group_management_service", "3gpp:mc:ptt_key_management_service", "3gpp:mc:video_service", "3gpp:mc:video_config_management_service", "3gpp:mc:video_group_management_service", "3gpp:mc:video_key_management_service", "3gpp:mc:data_service", "3gpp:mc:data_config_management_service", "3gpp:mc:data_group_management_service", "3gpp:mc:data_key_management_service", "3gpp:mc:location_management_service", "3gpp:mc:recording_admin_service", "3gpp:mc:recording_replay_service"]}, source: {spec: TS 33.180, version: "20.0.0", clause: "B.4.2.2"}}
+  - {name: acr_values, action: keep, value: {scope: ["3gpp:acr:password"]}, source: {spec: TS 33.180, version: "20.0.0", clause: "B.4.2.2"}}
+  - {name: code_challenge_method, action: keep, value: {enum: [S256, plain]}, source: {spec: RFC 7636, version: "2015-09", clause: "4.3"}}
+  - {name: token_type_hint, action: keep, value: {enum: [access_token, refresh_token]}, source: {spec: RFC 7009, version: "2013-08", clause: "2.1"}}
+  - {name: subject_token_type, action: keep, value: {enum: ["urn:ietf:params:oauth:token-type:access_token", "urn:ietf:params:oauth:token-type:jwt"]}, source: {spec: TS 33.180, version: "20.0.0", clause: "B.7.2"}}
+  - {name: issued_token_type, action: keep, value: {enum: ["urn:ietf:params:oauth:token-type:access_token", "urn:ietf:params:oauth:token-type:jwt"]}, source: {spec: TS 33.180, version: "20.0.0", clause: "B.7.3"}}
+  - {name: error, action: keep, value: {enum: [invalid_request, unauthorized_client, access_denied, unsupported_response_type, invalid_scope, server_error, temporarily_unavailable, invalid_client, invalid_grant, unsupported_grant_type, invalid_token, insufficient_scope, unsupported_token_type]}, source: {spec: RFC 6749, version: "2012-10", clause: "5.2"}}
+  - {name: active, action: keep, value: boolean, source: {spec: RFC 7662, version: "2015-10", clause: "2.2"}}
+  # Pseudonymised.
+  - {name: client_id, action: pseudonymise, category: opaque, source: {spec: RFC 6749, version: "2012-10", clause: "4.1.1"}}
+  - {name: username, action: pseudonymise, category: identity, source: {spec: RFC 6749, version: "2012-10", clause: "4.3.2"}}
+  - {name: sub, action: pseudonymise, category: identity, source: {spec: RFC 7662, version: "2015-10", clause: "2.2"}}
+  - {name: state, action: pseudonymise, category: opaque, source: {spec: RFC 6749, version: "2012-10", clause: "4.1.1"}}
+  - {name: code_challenge, action: pseudonymise, category: opaque, source: {spec: RFC 7636, version: "2015-09", clause: "4.2"}}
+  - {name: jti, action: pseudonymise, category: opaque, source: {spec: RFC 7662, version: "2015-10", clause: "2.2"}}
+  - {name: redirect_uri, action: uri, source: {spec: RFC 6749, version: "2012-10", clause: "4.1.1"}}
+  - {name: resource, action: uri, source: {spec: TS 33.180, version: "20.0.0", clause: "B.7.2"}}
+  - {name: iss, action: uri, source: {spec: RFC 7662, version: "2015-10", clause: "2.2"}}
+  - {name: aud, action: uri, source: {spec: RFC 7662, version: "2015-10", clause: "2.2"}}
+  - {name: mcptt_id, action: pseudonymise, category: identity, source: {spec: TS 33.180, version: "20.0.0", clause: "B.2.2.3"}}
+  - {name: mcvideo_id, action: pseudonymise, category: identity, source: {spec: TS 33.180, version: "20.0.0", clause: "B.2.2.3"}}
+  - {name: mcdata_id, action: pseudonymise, category: identity, source: {spec: TS 33.180, version: "20.0.0", clause: "B.2.2.3"}}
+  - {name: mcrec_id, action: pseudonymise, category: identity, source: {spec: TS 33.180, version: "20.0.0", clause: "B.2.2.3"}}
+  # Introspection response times (RFC 7662 §2.2) are kept as numbers: they are not identities.
+  - {name: exp, action: keep, value: number, source: {spec: RFC 7662, version: "2015-10", clause: "2.2"}}
+  - {name: iat, action: keep, value: number, source: {spec: RFC 7662, version: "2015-10", clause: "2.2"}}
+  - {name: nbf, action: keep, value: number, source: {spec: RFC 7662, version: "2015-10", clause: "2.2"}}
+  # Tokens.
+  - {name: access_token, action: token, source: {spec: RFC 6749, version: "2012-10", clause: "5.1"}}
+  - {name: id_token, action: token, source: {spec: TS 33.180, version: "20.0.0", clause: "B.4.2.5"}}
+  - {name: token, action: token, source: {spec: RFC 7662, version: "2015-10", clause: "2.1"}}
+  # Credentials (FR-013): the name stays, the value leaves.
+  - {name: password, action: remove, reason: credential, source: {spec: RFC 6749, version: "2012-10", clause: "4.3.2"}}
+  - {name: code, action: remove, reason: credential, source: {spec: RFC 6749, version: "2012-10", clause: "4.1.2"}}
+  - {name: code_verifier, action: remove, reason: credential, source: {spec: RFC 7636, version: "2015-09", clause: "4.5"}}
+  - {name: client_secret, action: remove, reason: credential, source: {spec: RFC 6749, version: "2012-10", clause: "2.3.1"}}
+  - {name: refresh_token, action: remove, reason: credential, source: {spec: RFC 6749, version: "2012-10", clause: "6"}}
+  - {name: subject_token, action: remove, reason: credential, source: {spec: TS 33.180, version: "20.0.0", clause: "B.7.2"}}
+  - {name: assertion, action: remove, reason: credential, source: {spec: TS 33.180, version: "20.0.0", clause: "B.7.4"}}
+  # Free text.
+  - {name: error_description, action: remove, reason: free-text, source: {spec: RFC 6749, version: "2012-10", clause: "5.2"}}
+  - {name: error_uri, action: remove, reason: free-text, source: {spec: RFC 6749, version: "2012-10", clause: "5.2"}}
+jwt:
+  header:
+    - {name: alg, action: keep, value: {enum: [ES256, ES384, ES512, RS256, RS384, RS512, PS256, PS384, PS512, HS256, HS384, HS512, EdDSA, none]}, source: {spec: RFC 7515, version: "2015-05", clause: "4.1.1"}}
+    - {name: typ, action: keep, value: {enum: [JWT, jwt, "at+jwt", "application/jwt"]}, source: {spec: RFC 7515, version: "2015-05", clause: "4.1.9"}}
+    - {name: cty, action: keep, value: {enum: [JWT, jwt]}, source: {spec: RFC 7515, version: "2015-05", clause: "4.1.10"}}
+    - {name: kid, action: pseudonymise, category: opaque, source: {spec: RFC 7515, version: "2015-05", clause: "4.1.4"}}
+    - {name: jku, action: remove, reason: credential, source: {spec: RFC 7515, version: "2015-05", clause: "4.1.2"}}
+    - {name: jwk, action: remove, reason: credential, source: {spec: RFC 7515, version: "2015-05", clause: "4.1.3"}}
+    - {name: x5u, action: remove, reason: credential, source: {spec: RFC 7515, version: "2015-05", clause: "4.1.5"}}
+    - {name: x5c, action: remove, reason: credential, source: {spec: RFC 7515, version: "2015-05", clause: "4.1.6"}}
+    - {name: x5t, action: remove, reason: credential, source: {spec: RFC 7515, version: "2015-05", clause: "4.1.7"}}
+    - {name: "x5t#S256", action: remove, reason: credential, source: {spec: RFC 7515, version: "2015-05", clause: "4.1.8"}}
+  claims:
+    - {name: iss, action: uri, source: {spec: TS 33.180, version: "20.0.0", clause: "B.2.1"}}
+    - {name: sub, action: pseudonymise, category: identity, source: {spec: RFC 7519, version: "2015-05", clause: "4.1.2"}}
+    - {name: aud, action: uri, source: {spec: RFC 7519, version: "2015-05", clause: "4.1.3"}}
+    - {name: exp, action: shift, source: {spec: RFC 7519, version: "2015-05", clause: "4.1.4"}}
+    - {name: nbf, action: shift, source: {spec: RFC 7519, version: "2015-05", clause: "4.1.5"}}
+    - {name: iat, action: shift, source: {spec: RFC 7519, version: "2015-05", clause: "4.1.6"}}
+    - {name: jti, action: pseudonymise, category: opaque, source: {spec: RFC 7519, version: "2015-05", clause: "4.1.7"}}
+    - {name: scope, action: keep, value: {scope: [openid, "3gpp:mc:ptt_service", "3gpp:mc:ptt_config_management_service", "3gpp:mc:ptt_group_management_service", "3gpp:mc:ptt_key_management_service", "3gpp:mc:video_service", "3gpp:mc:video_config_management_service", "3gpp:mc:video_group_management_service", "3gpp:mc:video_key_management_service", "3gpp:mc:data_service", "3gpp:mc:data_config_management_service", "3gpp:mc:data_group_management_service", "3gpp:mc:data_key_management_service", "3gpp:mc:location_management_service", "3gpp:mc:recording_admin_service", "3gpp:mc:recording_replay_service"]}, source: {spec: TS 33.180, version: "20.0.0", clause: "B.2.2"}}
+    - {name: client_id, action: pseudonymise, category: opaque, source: {spec: TS 33.180, version: "20.0.0", clause: "B.2.2"}}
+    - {name: username, action: pseudonymise, category: identity, source: {spec: RFC 7662, version: "2015-10", clause: "2.2"}}
+    - {name: token_type, action: keep, value: {enum: [bearer, Bearer]}, source: {spec: RFC 7662, version: "2015-10", clause: "2.2"}}
+    - {name: mcptt_id, action: pseudonymise, category: identity, source: {spec: TS 33.180, version: "20.0.0", clause: "B.2.1.3"}}
+    - {name: mcvideo_id, action: pseudonymise, category: identity, source: {spec: TS 33.180, version: "20.0.0", clause: "B.2.1.3"}}
+    - {name: mcdata_id, action: pseudonymise, category: identity, source: {spec: TS 33.180, version: "20.0.0", clause: "B.2.1.3"}}
+    - {name: mcrec_id, action: pseudonymise, category: identity, source: {spec: TS 33.180, version: "20.0.0", clause: "B.2.1.3"}}

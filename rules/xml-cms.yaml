@@ -1,0 +1,1029 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# The configuration management documents of the CMS (TS 24.484 clauses 7-10, feature 007 FR-010):
+# MCS UE initial configuration, location user configuration, and the UE
+# configuration, user profile and service configuration documents of MCPTT, MCVideo and MCData.
+# The element and attribute inventory follows the XML schemas of the "XML Schema" clauses; each
+# action follows the schema type (enumerations, booleans, integers, durations and dates kept;
+# anyURI by the web-uri category; display and alias names as display names; identifiers as
+# identities; other strings removed as free text; configured area coordinates removed).
+# The schema of §9.3.2.3 has a typo (an element closed by `/ minOccurs="0">`); the rules follow the
+# evident intent. XML rule set (feature 003).
+ruleset: mcxanon-xml
+version: 1.0.0
+documents:
+  - content_type: application/vnd.3gpp.mcptt-ue-init-config+xml
+    roots: [{ns: "urn:3gpp:mcptt:mcpttUEinitConfig:1.0", name: mcptt-UE-initial-configuration}]
+    source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.5"}
+  - content_type: application/vnd.3gpp.mcs-location-user-config+xml
+    roots: [{ns: "urn:3gpp:mcs:location-user-config:1.0", name: location-user-configuration-data}]
+    source: {spec: TS 24.484, version: "19.5.0", clause: "7.4.2.5"}
+  - content_type: application/vnd.3gpp.mcptt-ue-config+xml
+    roots: [{ns: "urn:3gpp:mcptt:mcpttUEConfig:1.0", name: mcptt-UE-configuration}]
+    source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.5"}
+  - content_type: application/vnd.3gpp.mcptt-user-profile+xml
+    roots: [{ns: "urn:3gpp:mcptt:user-profile:1.0", name: mcptt-user-profile}]
+    source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.5"}
+  - content_type: application/vnd.3gpp.mcptt-service-config+xml
+    roots: [{ns: "urn:3gpp:ns:mcpttServiceConfig:1.0", name: service-configuration-info}]
+    source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.5"}
+  - content_type: application/vnd.3gpp.mcvideo-ue-config+xml
+    roots: [{ns: "urn:3gpp:mcvideo:mcvideoUEConfig:1.0", name: mcvideo-UE-configuration}]
+    source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.5"}
+  - content_type: application/vnd.3gpp.mcvideo-user-profile+xml
+    roots: [{ns: "urn:3gpp:ns:mcvideo:user-profile:1.0", name: mcvideo-user-profile}]
+    source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.5"}
+  - content_type: application/vnd.3gpp.mcvideo-service-config+xml
+    roots: [{ns: "urn:3gpp:ns:mcvideoServiceConfig:1.0", name: service-configuration-info}]
+    source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.5"}
+  - content_type: application/vnd.3gpp.mcdata-ue-config+xml
+    roots: [{ns: "urn:3gpp:mcdata:mcdataUEConfig:1.0", name: mcdata-UE-configuration}]
+    source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.5"}
+  - content_type: application/vnd.3gpp.mcdata-user-profile+xml
+    roots: [{ns: "urn:3gpp:ns:mcdata:user-profile:1.0", name: mcdata-user-profile}]
+    source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.5"}
+  - content_type: application/vnd.3gpp.mcdata-service-config+xml
+    roots: [{ns: "urn:3gpp:ns:mcdataServiceConfig:1.0", name: service-configuration-info}]
+    source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.5"}
+namespaces:
+  - name: "urn:3gpp:mcptt:mcpttUEinitConfig:1.0"
+    source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}
+    elements:
+      - {name: App-Server-Info, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: C201, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: C204, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: C205, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: CFG11, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: CFG12, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: CFP1, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: CFP3, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: CFP4, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: CFP6, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: CMS-XCAP-root-URI, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: Counters, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: Default-user-profile, action: keep, value: empty, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: GMS-URI, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: GMS-XCAP-root-URI, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: HPLMN, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: High-SNR, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: ID, action: pseudonymise, category: any-id, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: IMEI-range, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: IPv6-Required, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: Idm-Client-Id, action: pseudonymise, category: any-id, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: Instance-ID-URN, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: Low-SNR, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: MC-ID-ref-SNSSAI, action: pseudonymise, category: any-id, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: MC-ID-to-con-ref, action: pseudonymise, category: any-id, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: MC-common-core-ref-SNSSAI, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: MC-common-core-to-con-ref, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: MCCommonCore-Service-Details, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: MCData-Service-Details, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: MCData-ref-SNSSAI, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: MCIdM-Service-Details, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: MCPTT-Service-Details, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: MCPTT-ref-SNSSAI, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: MCPTT-to-con-ref, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: MCVideo-Service-Details, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: MCVideo-ref-SNSSAI, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: NSSAA-Server, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: SNR, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: SNR-range, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: SNSSAI, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: Server-URI, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: T100, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: T101, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: T103, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: T104, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: T132, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: T201, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: T203, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: T204, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: T205, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: T230, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: T233, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: TAC, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: TFB1, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: TFB2, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: TFB3, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: TFE1, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: TFE2, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: TFG1, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: TFG11, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: TFG12, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: TFG13, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: TFG14, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: TFG2, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: TFG3, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: TFG4, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: TFG5, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: TFP1, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: TFP2, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: TFP3, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: TFP4, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: TFP5, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: TFP6, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: TFP7, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: Timers, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: VPLMN, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: anyExt, action: keep, value: empty, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: cms, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: confidentiality-protection-enabled, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: credentials, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: gms, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: group-creation-XUI, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: http-proxy, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: idms-auth-endpoint, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: idms-token-endpoint, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: integrity-protection-enabled, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: key, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: kms, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: lms, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: mcServiceUELabel, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: mcptt-UE-id, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: mcptt-UE-initial-configuration, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: mutual-authentication, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: name, action: pseudonymise, category: display-name, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: off-network, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: on-network, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: service, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: tls-tunnel-auth-method, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {name: x509, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+    attributes:
+      - {element: HPLMN, name: PLMN, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {element: IMEI-range, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {element: SNR-range, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {element: SNSSAI, name: SNSSAI, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {element: VPLMN, name: PLMN, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {element: mcptt-UE-id, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {element: mcptt-UE-initial-configuration, name: Instance-ID-URN, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {element: mcptt-UE-initial-configuration, name: XUI-URI, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {element: mcptt-UE-initial-configuration, name: domain, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {element: off-network, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+      - {element: on-network, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "7.2.2.3"}}
+  - name: "urn:3gpp:mcs:location-user-config:1.0"
+    source: {spec: TS 24.484, version: "19.5.0", clause: "7.4.2.3"}
+    elements:
+      - {name: allow-change-location-configuration-of-users, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "7.4.2.3"}}
+      - {name: allow-request-location-of-groups, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "7.4.2.3"}}
+      - {name: allow-request-location-of-users, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "7.4.2.3"}}
+      - {name: allow-subscription-on-location-information, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "7.4.2.3"}}
+      - {name: allow-to-share-location-information, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "7.4.2.3"}}
+      - {name: anyExt, action: keep, value: empty, source: {spec: TS 24.484, version: "19.5.0", clause: "7.4.2.3"}}
+      - {name: default-location-config-URI, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "7.4.2.3"}}
+      - {name: location-user-configuration-data, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "7.4.2.3"}}
+      - {name: mc-service-id, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "7.4.2.3"}}
+    attributes:
+      - {element: location-user-configuration-data, name: domain, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "7.4.2.3"}}
+  - name: "urn:3gpp:mcptt:mcpttUEConfig:1.0"
+    source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}
+    elements:
+      - {name: High-SNR, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+      - {name: IMEI-range, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+      - {name: IPv6Preferred, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+      - {name: Instance-ID-URN, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+      - {name: Low-SNR, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+      - {name: MCPTT-Group-Call, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+      - {name: MCPTT-Group-ID, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+      - {name: MCPTT-Group-Priority, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+      - {name: Max-Simul-Call-N10, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+      - {name: Max-Simul-Call-N4, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+      - {name: Max-Simul-Trans-N5, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+      - {name: Prioritized-MCPTT-Group, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+      - {name: Relay-Service, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+      - {name: Relay-Service-Code, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+      - {name: Relayed-MCPTT-Group, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+      - {name: SNR, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+      - {name: SNR-range, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+      - {name: TAC, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+      - {name: anyExt, action: keep, value: empty, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+      - {name: common, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+      - {name: group-priority-hierarchy, action: keep, value: {int: [0, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+      - {name: mcptt-UE-configuration, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+      - {name: mcptt-UE-id, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+      - {name: name, action: pseudonymise, category: display-name, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+      - {name: on-network, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+      - {name: private-call, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+    attributes:
+      - {element: IMEI-range, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+      - {element: MCPTT-Group-Priority, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+      - {element: Relayed-MCPTT-Group, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+      - {element: SNR-range, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+      - {element: common, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+      - {element: mcptt-UE-configuration, name: Instance-ID-URN, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+      - {element: mcptt-UE-configuration, name: XUI-URI, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+      - {element: mcptt-UE-configuration, name: domain, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+      - {element: mcptt-UE-id, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+      - {element: on-network, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.2.2.3"}}
+  - name: "urn:3gpp:mcptt:user-profile:1.0"
+    source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}
+    elements:
+      - {name: AllowedFunctionalAliasesForCallTransfer, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: AllowedMCPTTIdsForCallTransfer, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: Center, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: Common, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: Corner, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: DiscoveryGroupID, action: pseudonymise, category: opaque, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: EllipsoidArcArea, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: EmergencyAlert, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: EmergencyCall, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: EnterSpecificArea, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: ExitSpecificArea, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: FunctionalAliasList, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: GMS-Serv-Id, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: GroupKMSURI, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: GroupServerInfo, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: Heading, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: IDMS-token-endpoint, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: ImminentPerilCall, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: ImplicitAffiliations, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: IncludedAngle, action: remove, reason: structure, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: IncomingPrivateCallList, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: Latitude, action: remove, reason: structure, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: ListOfActiveFunctionalAliasCriteria, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: ListOfAllowedFAsToBeCalledFrom, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: ListOfAllowedFAsToCall, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: ListOfLocationCriteria, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: LocationCriteriaForActivation, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: LocationCriteriaForDeactivation, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: LocationUserProfileURI, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: Longitude, action: remove, reason: structure, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: MCPTT-group-call, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: MCPTTGroupInfo, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: MCPTTGroupInitiation, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: MCPTTPrivateRecipient, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: MCPTTUserID, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: MaxAffiliationsN2, action: keep, value: {int: [0, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: MaxSimultaneousCallsN6, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: MaxSimultaneousEmergencyGroupCalls, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: MaxSimultaneousTransmissionsN7, action: keep, value: {int: [0, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: MaximumHeading, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: MaximumSpeed, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: MigratablePartnerMCPTTSystemInfo, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: MinimumHeading, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: MinimumSpeed, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: MissionCriticalOrganization, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: Name, action: pseudonymise, category: display-name, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: OffNetwork, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: OffsetAngle, action: remove, reason: structure, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: OnNetwork, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: ParticipantType, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: PartnerMCPTTSystemId, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: PolygonArea, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: Pre-selected-indication, action: keep, value: empty, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: Priority, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: PrivateCall, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: PrivateCallKMSURI, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: PrivateCallList, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: PrivateCallProSeUser, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: PrivateCallURI, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: PrivateEmergencyAlert, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: ProSeUserID-entry, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: ProfileName, action: pseudonymise, category: display-name, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: Radius, action: remove, reason: structure, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: RelativePresentationPriority, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: RemoteGroupSelectionURIList, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: RulesForAffiliation, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: RulesForDeaffiliation, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: Speed, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: Status, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: User-Info-ID, action: pseudonymise, category: opaque, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: UserAlias, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: alias-entry, action: pseudonymise, category: display-name, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-activate-adhoc-group-emergency-alert, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-activate-emergency-alert, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-adhoc-group-call, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-adhoc-group-call-participation, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-automatic-commencement, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-call-forward-manual-input, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-call-forwarding, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-call-transfer, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-call-transfer-to-any-user, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-cancel-adhoc-group-emergency-alert, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-cancel-emergency-alert, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-cancel-group-emergency, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-cancel-imminent-peril, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-cancel-private-call-call-back, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-cancel-private-emergency-call, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-create-delete-user-alias, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-create-group-broadcast-group, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-create-user-broadcast-group, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-emergency-adhoc-group-call, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-emergency-group-call, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-emergency-private-call, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-enable-disable-UE, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-enable-disable-user, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-failure-restriction, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-force-auto-answer, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-functional-alias-binding-with-group, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-imminent-peril-adhoc-group-call, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-imminent-peril-call, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-imminent-peril-change, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-listen-both-overriding-and-overridden, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-location-info-when-talking, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-manual-commencement, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-manual-off-network-switch, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-off-network-group-call-change-to-emergency, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-offnetwork, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-override-of-transmission, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-presence-status, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-private-call, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-private-call-floor-control-protection, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-private-call-media-protection, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-private-call-participation, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-private-call-to-any-user, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-query-availability-for-private-calls, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-query-functional-alias-other-user, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-recommend-to-affiliate-other-users, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-regroup, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-request-affiliated-groups, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-request-first-to-answer-call, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-request-locally-initiated-ambient-listening, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-request-presence, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-request-private-call-call-back, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-request-remote-init-group-call, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-request-remote-init-private-call, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-request-remote-initiated-ambient-listening, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-request-to-affiliate-other-users, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-revoke-transmit, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-takeover-functional-alias-other-user, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-to-modify-adhoc-group-call-participants-info, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-to-receive-non-acknowledged-users-information, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-to-receive-private-call-from-any-user, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-to-recv-adhoc-group-call-participants-info, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-to-recv-adhoc-group-emergency-alert-participants-info, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-to-setup-adhoc-group-call-using-emergency-alert-adhoc-group, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-transmit-during-override, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: allow-trigger-remote-floor-request, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: anyExt, action: keep, value: empty, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: authorized-functional-alias-categories, action: pseudonymise, category: display-name, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: call-forwarding-condition, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: call-forwarding-no-answer-timeout, action: keep, value: duration, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: call-forwarding-on, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: call-forwarding-target, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: display-name, action: pseudonymise, category: display-name, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: entry, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: forward-to-functional-alias, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: manual-deactivation-not-allowed-if-location-criteria-met, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: manual-deaffiliation-not-allowed-if-affiliation-rules-are-met, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: mcptt-user-profile, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: uri-entry, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {name: user-max-simultaneous-authorizations, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+    attributes:
+      - {element: AllowedFunctionalAliasesForCallTransfer, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {element: AllowedMCPTTIdsForCallTransfer, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {element: Common, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {element: FunctionalAliasList, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {element: GMS-Serv-Id, name: entry-info, action: keep, value: {enum: ["UseCurrentlySelectedGroup", "DedicatedGroup", "UsePreConfigured", "LocallyDetermined"]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {element: GMS-Serv-Id, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {element: GroupKMSURI, name: entry-info, action: keep, value: {enum: ["UseCurrentlySelectedGroup", "DedicatedGroup", "UsePreConfigured", "LocallyDetermined"]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {element: GroupKMSURI, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {element: IDMS-token-endpoint, name: entry-info, action: keep, value: {enum: ["UseCurrentlySelectedGroup", "DedicatedGroup", "UsePreConfigured", "LocallyDetermined"]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {element: IDMS-token-endpoint, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {element: ImplicitAffiliations, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {element: IncomingPrivateCallList, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {element: ListOfActiveFunctionalAliasCriteria, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {element: ListOfAllowedFAsToBeCalledFrom, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {element: ListOfAllowedFAsToCall, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {element: MCPTTGroupInfo, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {element: MCPTTUserID, name: entry-info, action: keep, value: {enum: ["UseCurrentlySelectedGroup", "DedicatedGroup", "UsePreConfigured", "LocallyDetermined"]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {element: MCPTTUserID, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {element: OffNetwork, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {element: OnNetwork, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {element: PrivateCallKMSURI, name: entry-info, action: keep, value: {enum: ["UseCurrentlySelectedGroup", "DedicatedGroup", "UsePreConfigured", "LocallyDetermined"]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {element: PrivateCallKMSURI, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {element: PrivateCallList, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {element: PrivateCallProSeUser, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {element: PrivateCallURI, name: entry-info, action: keep, value: {enum: ["UseCurrentlySelectedGroup", "DedicatedGroup", "UsePreConfigured", "LocallyDetermined"]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {element: PrivateCallURI, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {element: ProSeUserID-entry, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {element: RemoteGroupSelectionURIList, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {element: RulesForAffiliation, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {element: RulesForDeaffiliation, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {element: entry, name: entry-info, action: keep, value: {enum: ["UseCurrentlySelectedGroup", "DedicatedGroup", "UsePreConfigured", "LocallyDetermined"]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {element: entry, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {element: mcptt-user-profile, name: XUI-URI, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+      - {element: mcptt-user-profile, name: user-profile-index, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.3.2.3"}}
+  - name: "urn:3gpp:ns:mcpttServiceConfig:1.0"
+    source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}
+    elements:
+      - {name: C17-unmap-group-to-bearer, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: C20-floor-granted, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: C27-unmap-group-from-session-stream, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: C55-connect, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: C56-disconnect, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: C7-floor-idle, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: R18-fc-timers-counters, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: T1-end-of-rtp-media, action: keep, value: duration, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: T11-end-of-RTP-dual, action: keep, value: duration, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: T12-stop-talking-dual, action: keep, value: duration, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: T15-conversation, action: keep, value: duration, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: T16-map-group-to-bearer, action: keep, value: duration, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: T17-unmap-group-to-bearer, action: keep, value: duration, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: T20-floor-granted, action: keep, value: duration, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: T25-mbs-conversation, action: keep, value: duration, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: T26-map-group-to-session-stream, action: keep, value: duration, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: T27-unmap-group-from-session-stream, action: keep, value: duration, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: T3-stop-talking-grace, action: keep, value: duration, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: T55-connect, action: keep, value: duration, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: T56-disconnect, action: keep, value: duration, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: T7-floor-idle, action: keep, value: duration, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: T8-floor-revoke, action: keep, value: duration, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: adhoc-group-call, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: adhoc-multi-talker-control, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: adhoc-multi-talker-max-talkers, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: allow-adhoc-group-call-support, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: allow-floor-control-protection, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: allow-log-metadata, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: allow-signalling-protection, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: allow-takeover, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: anyExt, action: keep, value: empty, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: broadcast-group, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: common, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: confidentiality-protection, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: default-pqi , action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: default-prose-per-packet-priority, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: depth, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: display-name, action: pseudonymise, category: display-name, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: emergency-call, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: emergency-resource-priority, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: entry, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: fc-timers-counters, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: floor-control-queue, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: functional-alias, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: functional-alias-entry, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: functional-alias-list, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: functional-alias-priority, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: group-time-limit, action: keep, value: duration, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: hang-time, action: keep, value: duration, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: hang-time-warning, action: keep, value: duration, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: imminent-peril-resource-priority, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: integrity-protection, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: max-duration-of-call, action: keep, value: duration, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: max-duration-with-floor-control, action: keep, value: duration, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: max-duration-without-floor-control, action: keep, value: duration, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: max-immediate-forwardings, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: max-no-participants, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: max-simultaneous-activations, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: max-simultaneous-authorizations, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: max-user-request-time, action: keep, value: duration, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: mcptt-emergency-private-call-media, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: mcptt-emergency-private-call-signalling, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: mcptt-private-call-media, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: mcptt-private-call-signalling, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: mcptt-user-list, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: min-length-alias, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: normal-resource-priority, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: num-levels-group-hierarchy, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: num-levels-priority-hierarchy, action: keep, value: {int: [4, 256]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: num-levels-user-hierarchy, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: off-network, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: on-network, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: private-call, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: private-cancel-timeout, action: keep, value: duration, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: protection-between-mcptt-servers, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: resource-priority-namespace, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: resource-priority-priority, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: service-configuration-info, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: service-configuration-params, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: signalling-protection, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: time-limit, action: keep, value: duration, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: time-warning, action: keep, value: duration, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: transmit-time, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {name: uri-entry, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+    attributes:
+      - {element: entry, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {element: mcptt-user-list, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+      - {element: service-configuration-params, name: domain, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "8.4.2.3"}}
+  - name: "urn:3gpp:mcvideo:mcvideoUEConfig:1.0"
+    source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}
+    elements:
+      - {name: High-SNR, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
+      - {name: IMEI-range, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
+      - {name: IPv6Preferred, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
+      - {name: Instance-ID-URN, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
+      - {name: Low-SNR, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
+      - {name: MCVIDEO-Group-Call, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
+      - {name: MCVIDEO-Group-ID, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
+      - {name: MCVIDEO-Group-Priority, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
+      - {name: MCVIDEO-Private-Call, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
+      - {name: Max-Simul-Call-Nc10, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
+      - {name: Max-Simul-Call-Nc4, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
+      - {name: Max-Simul-Trans-Nc5, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
+      - {name: Prioritized-MCVIDEO-Group, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
+      - {name: Relay-Service, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
+      - {name: Relay-Service-Code, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
+      - {name: Relayed-MCVIDEO-Group, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
+      - {name: SNR, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
+      - {name: SNR-range, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
+      - {name: TAC, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
+      - {name: anyExt, action: keep, value: empty, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
+      - {name: common, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
+      - {name: group-priority-hierarchy, action: keep, value: {int: [0, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
+      - {name: mcvideo-UE-configuration, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
+      - {name: mcvideo-UE-id, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
+      - {name: name, action: pseudonymise, category: display-name, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
+      - {name: on-network, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
+    attributes:
+      - {element: IMEI-range, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
+      - {element: SNR-range, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
+      - {element: common, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
+      - {element: mcvideo-UE-configuration, name: Instance-ID-URN, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
+      - {element: mcvideo-UE-configuration, name: XUI-URI, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
+      - {element: mcvideo-UE-configuration, name: domain, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
+      - {element: mcvideo-UE-id, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
+      - {element: on-network, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.2.2.3"}}
+  - name: "urn:3gpp:ns:mcvideo:user-profile:1.0"
+    source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}
+    elements:
+      - {name: Center, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: Common, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: Corner, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: DiscoveryGroupID, action: pseudonymise, category: opaque, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: EllipsoidArcArea, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: EmergencyAlert, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: EmergencyCall, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: EnterSpecificArea, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: ExitSpecificArea, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: FunctionalAliasList, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: GMS-Serv-Id, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: GroupKMSURI, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: Heading, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: IdMS-Token-Endpoint, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: ImminentPerilCall, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: ImplicitAffiliations, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: IncludedAngle, action: remove, reason: structure, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: IncomingPrivateCallList, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: Latitude, action: remove, reason: structure, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: ListOfActiveFunctionalAliasCriteria, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: ListOfAllowedFAsToBeCalledFrom, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: ListOfAllowedFAsToCall, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: ListOfLocationCriteria, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: LocationCriteriaForActivation, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: LocationCriteriaForDeactivation, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: LocationUserProfileURI, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: Longitude, action: remove, reason: structure, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: MCVideo-Group-ID, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: MCVideo-group-call, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: MCVideoGroupInfo, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: MCVideoGroupInitiation, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: MCVideoPrivateRecipient, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: MCVideoUserID, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: MaxAffiliationsN2, action: keep, value: {int: [0, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: MaxSimultaneousCallsN6, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: MaxSimultaneousEmergencyGroupCalls, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: MaxSimultaneousVideoStreams, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: MaximumHeading, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: MaximumSpeed, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: MigratablePartnerMCVideoSystemInfo, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: MinimumHeading, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: MinimumSpeed, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: MissionCriticalOrganization, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: Name, action: pseudonymise, category: display-name, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: OffNetwork, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: OffsetAngle, action: remove, reason: structure, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: OnNetwork, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: ParticipantType, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: PartnerMCVideoSystemId, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: PolygonArea, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: Pre-selected-indication, action: keep, value: empty, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: Priority, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: PrivateCall, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: PrivateCallKMSURI, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: PrivateCallList, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: PrivateCallOffNetwork, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: PrivateCallOnNetwork, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: PrivateCallProSeUser, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: PrivateCallURI, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: PrivateEmergencyAlert, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: ProSeUserID-entry, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: ProfileName, action: pseudonymise, category: display-name, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: Radius, action: remove, reason: structure, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: RelativePresentationPriority, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: RemoteGroupSelectionURIList, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: RulesForAffiliation, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: RulesForDeaffiliation, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: Speed, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: Status, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: User-Info-ID, action: pseudonymise, category: opaque, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: UserAlias, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: alias-entry, action: pseudonymise, category: display-name, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-activate-adhoc-group-emergency-alert, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-activate-emergency-alert, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-adhoc-group-call, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-adhoc-group-call-participation, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-automatic-commencement, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-cancel-adhoc-group-emergency-alert, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-cancel-emergency-alert, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-cancel-group-emergency, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-cancel-imminent-peril, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-cancel-private-emergency-call, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-create-group-broadcast-group, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-create-user-broadcast-group, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-emergency-adhoc-group-call, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-emergency-group-call, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-emergency-private-call, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-enable-disable-UE, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-enable-disable-user, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-failure-restriction, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-force-auto-answer, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-functional-alias-binding-with-group, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-imminent-peril-adhoc-group-call, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-imminent-peril-call, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-imminent-peril-change, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-manual-commencement, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-manual-off-network-switch, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-off-network-group-call-change-to-emergency, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-offnetwork, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-presence-status, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-private-call, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-private-call-media-protection, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-private-call-participation, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-private-call-to-any-user, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-query-availability-for-private-calls, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-query-functional-alias-other-user, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-recommend-to-affiliate-other-users, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-regroup, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-request-affiliated-groups, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-request-locally-initiated-ambient-viewing, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-request-presence, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-request-remote-initiated-ambient-viewing, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-request-to-affiliate-other-users, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-revoke-transmit, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-takeover-functional-alias-other-user, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-to-modify-adhoc-group-call-participants-info, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-to-receive-private-call-from-any-user, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-to-recv-adhoc-group-call-participants-info, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-to-recv-adhoc-group-emergency-alert-participants-info, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: allow-to-setup-adhoc-group-call-using-emergency-alert-adhoc-group, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: anyExt, action: keep, value: empty, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: display-name, action: pseudonymise, category: display-name, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: entry, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: manual-deactivation-not-allowed-if-location-criteria-met, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: manual-deaffiliation-not-allowed-if-affiliation-rules-are-met, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: mcvideo-user-profile, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: uri-entry, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {name: user-max-simultaneous-authorizations, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+    attributes:
+      - {element: Common, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {element: FunctionalAliasList, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {element: GMS-Serv-Id, name: entry-info, action: keep, value: {enum: ["UseCurrentlySelectedGroup", "DedicatedGroup", "UsePreConfigured", "LocallyDetermined"]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {element: GMS-Serv-Id, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {element: GroupKMSURI, name: entry-info, action: keep, value: {enum: ["UseCurrentlySelectedGroup", "DedicatedGroup", "UsePreConfigured", "LocallyDetermined"]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {element: GroupKMSURI, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {element: IdMS-Token-Endpoint, name: entry-info, action: keep, value: {enum: ["UseCurrentlySelectedGroup", "DedicatedGroup", "UsePreConfigured", "LocallyDetermined"]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {element: IdMS-Token-Endpoint, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {element: ImplicitAffiliations, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {element: IncomingPrivateCallList, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {element: ListOfActiveFunctionalAliasCriteria, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {element: ListOfAllowedFAsToBeCalledFrom, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {element: ListOfAllowedFAsToCall, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {element: MCVideo-Group-ID, name: entry-info, action: keep, value: {enum: ["UseCurrentlySelectedGroup", "DedicatedGroup", "UsePreConfigured", "LocallyDetermined"]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {element: MCVideo-Group-ID, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {element: MCVideoUserID, name: entry-info, action: keep, value: {enum: ["UseCurrentlySelectedGroup", "DedicatedGroup", "UsePreConfigured", "LocallyDetermined"]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {element: MCVideoUserID, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {element: OffNetwork, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {element: OnNetwork, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {element: PrivateCallKMSURI, name: entry-info, action: keep, value: {enum: ["UseCurrentlySelectedGroup", "DedicatedGroup", "UsePreConfigured", "LocallyDetermined"]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {element: PrivateCallKMSURI, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {element: PrivateCallList, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {element: PrivateCallProSeUser, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {element: PrivateCallURI, name: entry-info, action: keep, value: {enum: ["UseCurrentlySelectedGroup", "DedicatedGroup", "UsePreConfigured", "LocallyDetermined"]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {element: PrivateCallURI, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {element: ProSeUserID-entry, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {element: RemoteGroupSelectionURIList, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {element: RulesForAffiliation, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {element: RulesForDeaffiliation, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {element: entry, name: entry-info, action: keep, value: {enum: ["UseCurrentlySelectedGroup", "DedicatedGroup", "UsePreConfigured", "LocallyDetermined"]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {element: entry, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {element: mcvideo-user-profile, name: XUI-URI, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+      - {element: mcvideo-user-profile, name: user-profile-index, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.3.2.3"}}
+  - name: "urn:3gpp:ns:mcvideoServiceConfig:1.0"
+    source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}
+    elements:
+      - {name: adhoc-group-call, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: allow-adhoc-group-call-support, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: allow-signalling-protection, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: allow-takeover, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: allow-transmission-control-protection, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: anyExt, action: keep, value: empty, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: broadcast-group, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: common, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: confidentiality-protection, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: default-pqi, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: default-prose-per-packet-priority, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: display-name, action: pseudonymise, category: display-name, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: emergency-resource-priority, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: entry, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: functional-alias, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: functional-alias-entry, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: functional-alias-list, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: functional-alias-priority, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: hang-time, action: keep, value: duration, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: imminent-peril-resource-priority, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: integrity-protection, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: max-duration-of-call, action: keep, value: duration, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: max-no-participants, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: max-simultaneous-activations, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: max-simultaneous-authorizations, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: mcvideo-emergency-private-call-media, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: mcvideo-emergency-private-call-signalling, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: mcvideo-max-duration, action: keep, value: duration, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: mcvideo-private-call-media, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: mcvideo-private-call-signalling, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: mcvideo-user-list, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: min-length-alias, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: normal-resource-priority, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: num-levels-group-hierarchy, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: num-levels-priority-hierarchy, action: keep, value: {int: [4, 256]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: num-levels-user-hierarchy, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: off-network, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: on-network, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: private-call, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: protection-between-mcvideo-servers, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: resource-priority-namespace, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: resource-priority-priority, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: service-configuration-info, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: service-configuration-params, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: signalling-protection, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {name: uri-entry, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+    attributes:
+      - {element: entry, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {element: mcvideo-user-list, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+      - {element: service-configuration-params, name: domain, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "9.4.2.3"}}
+  - name: "urn:3gpp:mcdata:mcdataUEConfig:1.0"
+    source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}
+    elements:
+      - {name: Conversation-Presentation-Priority, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {name: Data-Presentation-Priority, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {name: FD-Presentation-Priority, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {name: High-SNR, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {name: IMEI-range, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {name: IPv6Preferred, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {name: Instance-ID-URN, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {name: Low-SNR, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {name: MCData-Group-ID, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {name: MCData-Group-Priority, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {name: Max-Data-Receptions-In-Group-Nc5, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {name: Max-Data-Transmissions-In-Group-Nc5, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {name: Max-Simul-Data-Reception-Nc4, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {name: Max-Simul-Data-Transmissions-Nc4, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {name: Max-Simul-FD-Txns-Nc4, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {name: Max-Simul-SDS-Txns-Nc4, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {name: Relay-Service, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {name: Relay-Service-Code, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {name: Relayed-MCData-Group, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {name: SDS-Presentation-Priority, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {name: SNR, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {name: SNR-range, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {name: TAC, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {name: anyExt, action: keep, value: empty, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {name: common, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {name: conversation-management, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {name: file-distribution, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {name: group-priority-hierarchy, action: keep, value: {int: [0, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {name: mcdata-UE-configuration, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {name: mcdata-UE-id, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {name: name, action: pseudonymise, category: display-name, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {name: on-network, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {name: reception-control, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {name: short-data-service, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {name: transmission-control, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+    attributes:
+      - {element: IMEI-range, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {element: SNR-range, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {element: common, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {element: mcdata-UE-configuration, name: Instance-ID-URN, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {element: mcdata-UE-configuration, name: XUI-URI, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {element: mcdata-UE-configuration, name: domain, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {element: mcdata-UE-id, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+      - {element: on-network, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.2.2.3"}}
+  - name: "urn:3gpp:ns:mcdata:user-profile:1.0"
+    source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}
+    elements:
+      - {name: ApplicationLayerGroupID, action: pseudonymise, category: opaque, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: Center, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: Common, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: ConversationManagement, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: Corner, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: DeliveredDisposition, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: DiscoveryGroupID, action: pseudonymise, category: opaque, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: EllipsoidArcArea, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: EmergencyAlert, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: EmergencyCall, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: EnterSpecificArea, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: ExitSpecificArea, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: FD-Cancel-List-Entry, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: FQDN, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: FileDistribution, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: FunctionalAliasList, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: GMS-App-Serv-Id, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: GroupEmergencyAlert, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: GroupKMSURI, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: Hang-Time, action: keep, value: duration, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: Heading, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: IPInformation, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: IPInformationListEntry, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: IPv4Address, action: pseudonymise, category: ip, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: IPv6Address, action: pseudonymise, category: ip, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: IdMS-Token-Endpoint, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: ImminentPerilCall, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: ImplicitAffiliations, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: IncludedAngle, action: remove, reason: structure, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: IncomingOne-to-OneCommunicationList, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: Latitude, action: remove, reason: structure, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: ListOfActiveFunctionalAliasCriteria, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: ListOfLocationCriteria, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: LocationCriteriaForActivation, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: LocationCriteriaForDeactivation, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: LocationUserProfileURI, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: Longitude, action: remove, reason: structure, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: MCData-Group-ID, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: MCData-ID, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: MCData-ID-KMSURI, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: MCData-group-call, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: MCDataContentServerURI, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: MCDataGroupHangTime, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: MCDataGroupInfo, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: MCDataGroupInitiation, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: MCDataPrivateRecipient, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: MCDataUserID, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: MCDataUserID-KMSURI, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: MaxAffiliationsN2, action: keep, value: {int: [0, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: MaxData1To1, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: MaxSimultaneousCallsN6, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: MaxSimultaneousEmergencyGroupCalls, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: MaxTime1To1, action: keep, value: duration, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: MaximumHeading, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: MaximumSpeed, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: MessageStoreHostname, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: MigratablePartnerMCDataSystemInfo, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: MinimumHeading, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: MinimumSpeed, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: MissionCriticalOrganization, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: Name, action: pseudonymise, category: display-name, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: OffNetwork, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: OffsetAngle, action: remove, reason: structure, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: OnNetwork, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: One-To-One-EmergencyAlert, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: One-to-One-Communication, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: One-to-One-CommunicationListEntry, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: ParticipantType, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: PartnerMCDataSystemId, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: PolygonArea, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: Pre-selected-indication, action: keep, value: empty, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: PresenceStatus, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: Priority, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: ProSeUserID-entry, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: ProfileName, action: pseudonymise, category: display-name, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: Radius, action: remove, reason: structure, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: ReadDisposition, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: RelativePresentationPriority, action: keep, value: {int: [0, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: RemoteGroupChange, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: RulesForAffiliation, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: RulesForDeaffiliation, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: Speed, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: Status, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: TxReleaseList, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: TxRxControl, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: User-Info-ID, action: pseudonymise, category: opaque, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: UserAlias, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: alias-entry, action: pseudonymise, category: display-name, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-activate-adhoc-group-emergency-alert, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-activate-emergency-alert, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-adhoc-group-data-comn, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-adhoc-group-data-comn-participation, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-cancel-adhoc-group-emergency-alert, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-cancel-emergency-alert, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-cancel-emergency-alert-any-user, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-cancel-imminent-peril, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-cancel-private-emergency-call, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-create-delete-user-alias, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-create-group-broadcast-group, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-create-user-broadcast-group, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-emergency-adhoc-group-data-comn, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-emergency-group-call, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-emergency-private-call, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-enable-disable-UE, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-enable-disable-user, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-functional-alias-binding-with-group, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-imminent-peril-adhoc-group-data-comn, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-imminent-peril-call, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-off-network, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-off-network-manual-switch, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-one-to-one-communication-from-any-user, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-presence-status, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-query-functional-alias-other-user, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-recommend-to-affiliate-other-users, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-regroup, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-request-affiliated-groups, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-request-presence, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-request-to-affiliate-other-users, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-store-comms-in-msgstore, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-store-group-comm-in-msgstore, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-store-private-comms-in-msgstore, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-takeover-functional-alias-other-user, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-to-modify-adhoc-group-data-comn-participants-info, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-to-recv-adhoc-group-data-comn-participants-info, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-to-recv-adhoc-group-emergency-alert-participants-info, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-to-setup-data-comn-using-emergency-alert-adhoc-group, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: allow-transmit-data, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: anyExt, action: keep, value: empty, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: display-name, action: pseudonymise, category: display-name, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: entry, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: manual-deactivation-not-allowed-if-location-criteria-met, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: manual-deaffiliation-not-allowed-if-affiliation-rules-are-met, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: mcdata-user-profile, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: uri-entry, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {name: user-max-simultaneous-authorizations, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+    attributes:
+      - {element: Common, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {element: DeliveredDisposition, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {element: FD-Cancel-List-Entry, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {element: FunctionalAliasList, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {element: GMS-App-Serv-Id, name: entry-info, action: keep, value: {enum: ["UseCurrentlySelectedGroup", "DedicatedGroup", "UsePreConfigured", "LocallyDetermined"]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {element: GMS-App-Serv-Id, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {element: GroupKMSURI, name: entry-info, action: keep, value: {enum: ["UseCurrentlySelectedGroup", "DedicatedGroup", "UsePreConfigured", "LocallyDetermined"]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {element: GroupKMSURI, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {element: IdMS-Token-Endpoint, name: entry-info, action: keep, value: {enum: ["UseCurrentlySelectedGroup", "DedicatedGroup", "UsePreConfigured", "LocallyDetermined"]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {element: IdMS-Token-Endpoint, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {element: ImplicitAffiliations, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {element: ListOfActiveFunctionalAliasCriteria, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {element: MCData-Group-ID, name: entry-info, action: keep, value: {enum: ["UseCurrentlySelectedGroup", "DedicatedGroup", "UsePreConfigured", "LocallyDetermined"]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {element: MCData-Group-ID, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {element: MCData-ID, name: entry-info, action: keep, value: {enum: ["UseCurrentlySelectedGroup", "DedicatedGroup", "UsePreConfigured", "LocallyDetermined"]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {element: MCData-ID, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {element: MCData-ID-KMSURI, name: entry-info, action: keep, value: {enum: ["UseCurrentlySelectedGroup", "DedicatedGroup", "UsePreConfigured", "LocallyDetermined"]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {element: MCData-ID-KMSURI, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {element: MCDataUserID, name: entry-info, action: keep, value: {enum: ["UseCurrentlySelectedGroup", "DedicatedGroup", "UsePreConfigured", "LocallyDetermined"]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {element: MCDataUserID, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {element: MCDataUserID-KMSURI, name: entry-info, action: keep, value: {enum: ["UseCurrentlySelectedGroup", "DedicatedGroup", "UsePreConfigured", "LocallyDetermined"]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {element: MCDataUserID-KMSURI, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {element: OffNetwork, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {element: OnNetwork, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {element: One-to-One-CommunicationListEntry, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {element: PresenceStatus, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {element: ProSeUserID-entry, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {element: ReadDisposition, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {element: RemoteGroupChange, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {element: RulesForAffiliation, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {element: RulesForDeaffiliation, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {element: TxReleaseList, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {element: entry, name: entry-info, action: keep, value: {enum: ["UseCurrentlySelectedGroup", "DedicatedGroup", "UsePreConfigured", "LocallyDetermined"]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {element: entry, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {element: mcdata-user-profile, name: XUI-URI, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+      - {element: mcdata-user-profile, name: user-profile-index, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.3.2.3"}}
+  - name: "urn:3gpp:ns:mcdataServiceConfig:1.0"
+    source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}
+    elements:
+      - {name: adhoc-group-data-comn, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: allow-adhoc-group-data-comn-support, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: allow-signalling-protection, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: allow-takeover, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: anyExt, action: keep, value: empty, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: common, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: confidentiality-protection, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: default-file-availability, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: default-pqi, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: default-prose-per-packet-priority, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: display-name, action: pseudonymise, category: display-name, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: emergency-resource-priority, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: entry, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: file-availability, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: functional-alias, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: functional-alias-entry, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: functional-alias-list, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: functional-alias-priority, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: hang-time, action: keep, value: duration, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: imminent-peril-resource-priority, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: integrity-protection, action: keep, value: boolean, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: max-data-size-auto-recv-bytes, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: max-data-size-fd-bytes, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: max-data-size-sds-bytes, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: max-duration-of-data-comn, action: keep, value: duration, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: max-file-availability, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: max-no-participants, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: max-payload-size-sds-cplane-bytes, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: max-simultaneous-activations, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: max-simultaneous-authorizations, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: mcdata-one-to-one-call-media, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: mcdata-one-to-one-call-signalling, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: mcdata-user-list, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: normal-resource-priority, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: notificationserver-hostname-list, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: ns-entry, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: off-network, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: on-network, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: protection-between-mcdata-servers, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: resource-priority-namespace, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: resource-priority-priority, action: remove, reason: free-text, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: service-configuration-info, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: service-configuration-params, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: signalling-protection, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: time-periodic-announcement, action: keep, value: duration, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: time-temp-data-waiting, action: keep, value: duration, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: tx-and-rx-control, action: container, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {name: uri-entry, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+    attributes:
+      - {element: entry, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {element: mcdata-user-list, name: index, action: keep, value: {token: trigger-id}, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}
+      - {element: service-configuration-params, name: domain, action: pseudonymise, category: web-uri, source: {spec: TS 24.484, version: "19.5.0", clause: "10.4.2.3"}}

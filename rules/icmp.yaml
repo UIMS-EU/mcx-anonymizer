@@ -1,0 +1,79 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# ICMP, ICMPv6, Neighbor Discovery.
+# Sources: rules/SOURCES.md. Every field the dissectors emit has exactly one rule.
+ruleset: mcxanon-l2l4
+version: 1.0.0
+rules:
+  - field: icmp.type_code
+    action: keep
+    source: {spec: "RFC 792", version: "1981-09", clause: "Message Formats"}
+  - field: icmp.checksum
+    action: recompute
+    source: {spec: "RFC 792", version: "1981-09", clause: "Message Formats"}
+  - field: icmp.echo
+    action: keep
+    source: {spec: "RFC 792", version: "1981-09", clause: "Echo or Echo Reply Message"}
+  - field: icmp.rest
+    action: keep
+    source: {spec: "RFC 792", version: "1981-09", clause: "Destination Unreachable Message"}
+  - field: icmp.gateway
+    action: pseudonymise
+    category: ipv4
+    source: {spec: "RFC 792", version: "1981-09", clause: "Redirect Message"}
+  - field: icmp.other
+    action: zero
+    source: {spec: "RFC 792", version: "1981-09", clause: "Message Formats"}
+  - field: icmp.embedded.l4.rest
+    action: keep
+    source: {spec: "RFC 792", version: "1981-09", clause: "Destination Unreachable Message"}
+  - field: icmp.embedded.l4.checksum
+    action: zero
+    source: {spec: "RFC 792", version: "1981-09", clause: "Destination Unreachable Message"}
+    note: "covers data not present; a fingerprint of the original addresses"
+  - field: icmpv6.type_code
+    action: keep
+    source: {spec: "RFC 4443", version: "2006-03", clause: "2.1"}
+  - field: icmpv6.checksum
+    action: recompute
+    source: {spec: "RFC 4443", version: "2006-03", clause: "2.3"}
+  - field: icmpv6.echo
+    action: keep
+    source: {spec: "RFC 4443", version: "2006-03", clause: "4.1"}
+  - field: icmpv6.rest
+    action: keep
+    source: {spec: "RFC 4443", version: "2006-03", clause: "3"}
+  - field: ndp.fixed
+    action: keep
+    source: {spec: "RFC 4861", version: "2007-09", clause: "4"}
+  - field: ndp.target
+    action: pseudonymise
+    category: ipv6
+    source: {spec: "RFC 4861", version: "2007-09", clause: "4.3"}
+  - field: ndp.dest
+    action: pseudonymise
+    category: ipv6
+    source: {spec: "RFC 4861", version: "2007-09", clause: "4.5"}
+  - field: ndp.opt.hdr
+    action: keep
+    source: {spec: "RFC 4861", version: "2007-09", clause: "4.6"}
+  - field: ndp.opt.lla
+    action: pseudonymise
+    category: mac
+    source: {spec: "RFC 4861", version: "2007-09", clause: "4.6.1"}
+  - field: ndp.opt.prefix.fixed
+    action: keep
+    source: {spec: "RFC 4861", version: "2007-09", clause: "4.6.2"}
+  - field: ndp.opt.prefix.addr
+    action: pseudonymise
+    category: ipv6
+    source: {spec: "RFC 4861", version: "2007-09", clause: "4.6.2"}
+  - field: ndp.opt.mtu
+    action: keep
+    source: {spec: "RFC 4861", version: "2007-09", clause: "4.6.4"}
+  - field: ndp.opt.other
+    action: zero
+    source: {spec: "RFC 4861", version: "2007-09", clause: "4.6"}
+  - field: icmp.data
+    action: zero
+    source: {spec: "RFC 792", version: "1981-09", clause: "Echo or Echo Reply Message"}

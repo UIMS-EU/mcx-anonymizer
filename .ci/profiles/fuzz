@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Clang 19 with libFuzzer instrumentation plus ASan/UBSan. Only the fuzz targets
+# link the libFuzzer runtime (-fsanitize=fuzzer); everything else is built with
+# -fsanitize=fuzzer-no-link so helper programs keep their own main().
+include(clang19)
+
+[settings]
+build_type=Debug
+
+[conf]
+tools.build:cflags=["-fsanitize=fuzzer-no-link,address,undefined","-fno-omit-frame-pointer","-g"]
+tools.build:cxxflags=["-fsanitize=fuzzer-no-link,address,undefined","-fno-omit-frame-pointer","-g"]
+tools.build:exelinkflags=["-fsanitize=address,undefined"]
+tools.build:sharedlinkflags=["-fsanitize=address,undefined"]

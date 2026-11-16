@@ -1,0 +1,234 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# TS 24.379 Annex F documents except location and the shared namespaces (Appendices A and B).
+# XML rule set (feature 003). Sources: rules/SOURCES.md § MCX XML bodies.
+ruleset: mcxanon-xml
+version: 1.0.0
+namespaces:
+  - name: "urn:3gpp:ns:mcpttInfo:1.0"
+    source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.2"}
+    elements:
+      - {name: mcpttinfo, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3"}}
+      - {name: mcptt-Params, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3"}}
+      - {name: anyExt, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.2"}}
+      - {name: anyExt, parent: [mcptt-access-token], action: remove, reason: credential, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 1"}}
+      - {name: mcptt-access-token, action: container, encryptable: true, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 1"}}
+      - {name: session-type, action: keep, value: {enum: [chat, prearranged, private, first-to-answer, ambient-listening, adhoc]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 2"}}
+      - {name: mcptt-request-uri, action: container, encryptable: true, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 3"}}
+      - {name: mcptt-calling-user-id, action: container, encryptable: true, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 4"}}
+      - {name: mcptt-called-party-id, action: container, encryptable: true, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 5"}}
+      - {name: mcptt-calling-group-id, action: container, encryptable: true, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 6"}}
+      - {name: required, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 7"}}
+      - {name: emergency-ind, action: container, encryptable: true, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 8"}}
+      - {name: alert-ind, action: container, encryptable: true, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 9"}}
+      - {name: imminentperil-ind, action: container, encryptable: true, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 10"}}
+      - {name: broadcast-ind, action: keep, value: boolean, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 11"}}
+      - {name: mc-org, action: remove, reason: free-text, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 12"}}
+      - {name: floor-state, action: keep, value: {enum: [floor-idle, floor-taken]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 13"}}
+      - {name: associated-group-id, action: container, encryptable: true, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 14"}}
+      - {name: originated-by, action: container, encryptable: true, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 15"}}
+      - {name: MKFC-GKTPs, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 16"}}
+      - {name: mcptt-client-id, action: container, encryptable: true, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 17"}}
+      - {name: alert-ind-rcvd, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 18"}}
+      - {name: gw-mcptt-usage, action: keep, value: boolean, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 18a"}}
+      - {name: mcpttURI, action: pseudonymise, category: uri, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 2b"}}
+      - {name: mcpttURI, parent: [mcptt-access-token], action: remove, reason: credential, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 1"}}
+      - {name: mcpttBoolean, action: keep, value: boolean, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 2d"}}
+      - {name: mcpttBoolean, parent: [mcptt-access-token], action: remove, reason: credential, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 1"}}
+      - {name: mcpttString, action: remove, reason: free-text, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.2"}}
+      - {name: mcpttString, parent: [mcptt-access-token], action: remove, reason: credential, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 2c"}}
+      - {name: mcpttString, parent: [mcptt-client-id], action: pseudonymise, category: instance, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 17"}}
+      - {name: mcpttString, parent: [req-type], action: keep, value: {enum: [mc-service-authorisation-notify-request, get-userlist-adhoc-group-call-request, adhoc-group-call-add-participants-request, adhoc-group-call-remove-participants-request, adhoc-group-call-release-notification-request, migration-service-deauthorization-notification, migration-service-authorization-request, fa-user-status-determination, ad-hoc-emergency-alert-participant-criteria-modification, emergency-remote-floor-request-trigger]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item aq"}}
+      - {name: mcpttString, parent: [resp-type], action: keep, value: {enum: [get-userlist-adhoc-group-call-response, migration-service-authorization-response, ad-hoc-emergency-alert-participant-criteria-modification]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item as"}}
+      - {name: ambient-listening-type, action: keep, value: {enum: [remote-init, local-init]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 19a"}}
+      - {name: release-reason, action: keep, value: {enum: [private-call-expiry, administrator-action, "not selected for call", call-request-for-listened-to-client, call-request-initiated-by-listened-to-client, "authentication of the MIKEY-SAKE I_MESSAGE failed"]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 19b"}}
+      - {name: request-type, action: keep, value: {enum: [private-call-call-back-request, private-call-call-back-cancel-request, group-selection-change-request, remotely-initiated-group-call-request, remotely-initiated-private-call-request, transfer-private-call-request, functional-alias-status-determination, forward-private-call-request, forward-private-call-settings-request, forward-private-call-settings-response, fa-group-binding-req]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 19c"}}
+      - {name: req-type, action: container, encryptable: true, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item aq"}}
+      - {name: resp-type, action: container, encryptable: true, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item as"}}
+      - {name: response-type, action: keep, value: {enum: [private-call-call-back-response, private-call-call-back-cancel-response, group-selection-change-response, remotely-initiated-group-call-response, remotely-initiated-private-call-response, transfer-private-call-response, forward-private-call-response]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 19d"}}
+      - {name: urgency-ind, action: keep, value: {enum: [low, normal, high]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 19e"}}
+      - {name: time-of-request, action: keep, value: datetime, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 19f"}}
+      - {name: selected-group-change-outcome, action: keep, value: {enum: [success, fail]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 19g"}}
+      - {name: affiliation-required, action: keep, value: boolean, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 19h"}}
+      - {name: remotely-initiated-call-outcome, action: keep, value: {enum: [success, fail]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 19i"}}
+      - {name: notify-remote-user, action: keep, value: boolean, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 19j"}}
+      - {name: functional-alias-URI, action: container, encryptable: true, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 19k"}}
+      - {name: user-requested-priority, action: keep, value: {int: [0, 18446744073709551615]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item ae"}}
+      - {name: used-priority, action: keep, value: {int: [0, 18446744073709551615]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item be"}}
+      - {name: emergency-alert-area-ind, action: keep, value: boolean, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 19l"}}
+      - {name: group-geo-area-ind, action: keep, value: boolean, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 19m"}}
+      - {name: non-acknowledged-user, action: container, encryptable: true, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 19n"}}
+      - {name: call-to-functional-alias-ind, action: keep, value: boolean, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 19o"}}
+      - {name: emergency-ind-rcvd, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 19p"}}
+      - {name: call-transfer-ind, action: keep, value: boolean, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 19q"}}
+      - {name: multiple-devices-ind, action: container, encryptable: true, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 19y"}}
+      - {name: transfer-call-outcome, action: keep, value: {enum: [success, fail]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 19r"}}
+      - {name: called-functional-alias-URI, action: container, encryptable: true, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 19s"}}
+      - {name: call-forwarding-ind, action: keep, value: boolean, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 19t"}}
+      - {name: forwarding-call-outcome, action: keep, value: {enum: [success, fail]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 19u"}}
+      - {name: forwarding-immediate-list, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 19v"}}
+      - {name: forwarding-other-list, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 19w"}}
+      - {name: adhoc-alert-participant-list, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item av"}}
+      - {name: adhoc-alert-participant-not-ack-list, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item aw"}}
+      - {name: entry, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.2"}}
+      - {name: uri-entry, action: pseudonymise, category: uri, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 items v, w, av, aw"}}
+      - {name: uri-entry, parent: [PrivateCallKMSURI], action: pseudonymise, category: kms-uri, source: {spec: TS 24.379, version: "19.6.0", clause: "6.2.8.3.9"}}
+      - {name: display-name, action: pseudonymise, category: display-name, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.2"}}
+      - {name: forwarding-reason, action: keep, value: {enum: [immediate, no-answer, manual-input, migrated]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 19x"}}
+      - {name: PrivateCallKMSURI, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.2"}}
+      - {name: binding-ind, action: keep, value: boolean, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 19z"}}
+      - {name: binding-fa-uri, action: pseudonymise, category: uri, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item aa"}}
+      - {name: unbinding-fa-uri, action: pseudonymise, category: uri, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item ab"}}
+      - {name: replaces-header-value, action: pseudonymise, category: replaces, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item ad"}}
+      - {name: transfer-announced-ind, action: keep, value: boolean, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item ac"}}
+      - {name: forwarding-sequence-number, action: keep, value: {int: [0, 18446744073709551615]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item af"}}
+      - {name: forwarded-by-mcptt-id, action: pseudonymise, category: uri, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item ag"}}
+      - {name: forwarded-by-functional-alias, action: pseudonymise, category: uri, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item ah"}}
+      - {name: forwarding-target-id, action: pseudonymise, category: uri, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item ai"}}
+      - {name: forwarding-target-is-functional-alias, action: keep, value: boolean, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item aj"}}
+      - {name: ric-app-level-priority, action: keep, value: {token: r-value}, source: {spec: TS 24.379, version: "19.6.0", clause: "11.1.7.2.1"}}
+      - {name: ric-commencement-mode, action: keep, value: {enum: [force-auto-mode, auto-mode, manual-mode]}, source: {spec: TS 24.379, version: "19.6.0", clause: "11.1.7.2.1"}}
+      - {name: remotely-initiated-call-request-ind, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item 2d"}}
+      - {name: forwarding-target-orig-id, action: pseudonymise, category: uri, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item ak"}}
+      - {name: end-to-end-security, action: keep, value: boolean, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item al"}}
+      - {name: call-participants-criterias, action: remove, reason: free-text, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item am"}}
+      - {name: preconfigured-group-id, action: pseudonymise, category: uri, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item an"}}
+      - {name: adhoc-grp-emg-alert-grp-ind, action: keep, value: boolean, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item ao"}}
+      - {name: migration-auth-result, action: container, encryptable: true, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item ao1"}}
+      - {name: partner-mcptt-id, action: container, encryptable: true, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item ao2"}}
+      - {name: selected-user-profile-index, action: container, encryptable: true, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item ap"}}
+      - {name: user-profile-index, action: keep, value: {int: [0, 18446744073709551615]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item ap"}}
+      - {name: primary-mcptt-id, action: container, encryptable: true, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item at"}}
+      - {name: adhoc-emergency-ind, action: keep, value: boolean, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item ax"}}
+      - {name: adhoc-alert-ind, action: keep, value: boolean, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item ay"}}
+      - {name: adhoc-additional-information, action: remove, reason: free-text, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item bb"}}
+      - {name: adhoc-emergency-ind-rcvd, action: keep, value: boolean, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item ba"}}
+      - {name: adhoc-alert-ind-rcvd, action: keep, value: boolean, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item az"}}
+      - {name: location-of-functional-alias-URI, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item bc"}}
+      - {name: connected-functional-alias-URI, action: container, encryptable: true, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 item bd"}}
+    attributes:
+      - {element: mcptt-access-token, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: mcptt-request-uri, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: mcptt-calling-user-id, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: mcptt-called-party-id, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: mcptt-calling-group-id, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: required, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.2"}}
+      - {element: emergency-ind, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: alert-ind, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: imminentperil-ind, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: associated-group-id, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: originated-by, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: mcptt-client-id, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: alert-ind-rcvd, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.2"}}
+      - {element: req-type, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: resp-type, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: functional-alias-URI, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: non-acknowledged-user, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: emergency-ind-rcvd, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.2"}}
+      - {element: multiple-devices-ind, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: called-functional-alias-URI, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: remotely-initiated-call-request-ind, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.2"}}
+      - {element: migration-auth-result, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: partner-mcptt-id, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: primary-mcptt-id, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: location-of-functional-alias-URI, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.2"}}
+      - {element: connected-functional-alias-URI, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: selected-user-profile-index, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.3 items 2a, 3a"}}
+
+  - name: "urn:3gpp:ns:mcpttFloorRequest:1.0"
+    source: {spec: TS 24.379, version: "19.6.0", clause: "F.5.2"}
+    elements:
+      - {name: mcptt-floor-request, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.5.2"}}
+      - {name: floor-type, action: keep, value: {enum: [general, dual]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.5.3"}}
+      - {name: ssrc, action: pseudonymise, category: ssrc, source: {spec: TS 24.379, version: "19.6.0", clause: "F.5.3"}}
+      - {name: floor-priority, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.5.3"}}
+      - {name: user-id, action: pseudonymise, category: uri, source: {spec: TS 24.379, version: "19.6.0", clause: "F.5.3"}}
+      - {name: track-info, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.5.3"}}
+      - {name: queueing-capability, action: keep, value: {int: [-128, 127]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.5.3"}}
+      - {name: participant-type, action: fixed, constant: "unknown", source: {spec: TS 24.379, version: "19.6.0", clause: "F.5.3"}}
+      - {name: floor-participant-reference, action: pseudonymise, category: fc-ref, source: {spec: TS 24.379, version: "19.6.0", clause: "F.5.3"}}
+      - {name: floor-indicator, action: keep, value: {int: [0, 18446744073709551615]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.5.3"}}
+      - {name: anyExt, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.5.2"}}
+  - name: "urn:3gpp:ns:mcpttMbmsUsage:1.0"
+    source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.2"}
+    elements:
+      - {name: mcptt-mbms-usage-info, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.3"}}
+      - {name: mbms-listening-status, parent: [mcptt-mbms-usage-info], action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.3"}}
+      - {name: mbms-listening-status, parent: [mbms-listening-status], action: keep, value: {enum: [listening, not-listening]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.3"}}
+      - {name: session-id, action: pseudonymise, category: uri, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.3"}}
+      - {name: general-purpose, action: keep, value: boolean, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.3"}}
+      - {name: TMGI, action: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.3"}}
+      - {name: anyExt, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.2"}}
+      - {name: mbms-reception-quality, action: keep, value: {int: [0, 5]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.3"}}
+      - {name: mbms-suspension-status, parent: [mcptt-mbms-usage-info], action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.3"}}
+      - {name: mbms-suspension-status, parent: [mbms-suspension-status], action: keep, value: {enum: [suspending, not-suspending]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.3"}}
+      - {name: number-of-reported-bearers, action: keep, value: {token: hex-counter}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.3"}}
+      - {name: suspended-TMGI, action: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.3"}}
+      - {name: other-TMGI, action: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.3"}}
+      - {name: announcement, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.3"}}
+      - {name: QCI, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.3"}}
+      - {name: frequency, action: keep, value: {int: [0, 18446744073709551615]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.3"}}
+      - {name: mbms-service-areas, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.3"}}
+      - {name: mbms-service-area-id, action: pseudonymise, category: mbms-sai-hex, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.3"}}
+      - {name: GPMS, action: keep, value: {int: [1, 4294967295]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.3"}}
+      - {name: report-suspension, action: keep, value: boolean, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.3"}}
+      - {name: mcptt-mbms-rohc, action: keep, value: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.3"}}
+      - {name: max-cid, action: keep, value: {int: [1, 16383]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.3"}}
+      - {name: version, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.3"}}
+      - {name: mbms-defaultMuSiK-download, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.3"}}
+      - {name: mbms-explicitMuSiK-download, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.3"}}
+      - {name: group, action: pseudonymise, category: uri, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.3"}}
+  - name: "urn:3gpp:ns:mcpttMbsUsage:1.0"
+    source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.2"}
+    elements:
+      - {name: mcptt-mbs-usage-info, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.3"}}
+      - {name: mbs-listening-status, parent: [mcptt-mbs-usage-info], action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.3"}}
+      - {name: mbs-listening-status, parent: [mbs-listening-status], action: keep, value: {enum: [listening, not-listening]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.3"}}
+      - {name: unicast-listening-status, action: keep, value: {enum: [listening, not-listening]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.2"}}
+      - {name: session-id, action: pseudonymise, category: uri, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.3"}}
+      - {name: general-purpose, action: keep, value: boolean, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.3"}}
+      - {name: mbs-session-id, action: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.3"}}
+      - {name: anyExt, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.2"}}
+      - {name: mbs-session-de-announcement-status, parent: [mcptt-mbs-usage-info], action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.3"}}
+      - {name: mbs-session-de-announcement-status, parent: [mbs-session-de-announcement-status], action: keep, value: {enum: [deleting, not-deleting]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.3"}}
+      - {name: number-of-reported-sessions, action: keep, value: {token: hex-counter}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.3"}}
+      - {name: deleted-mbs-session-id, action: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.3"}}
+      - {name: other-mbs-session-id, action: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.3"}}
+      - {name: ue-session-join-notification, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.3"}}
+      - {name: mbs-multicast-joining-status, action: keep, value: {enum: [ue-session-join, ue-session-leave]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.3"}}
+      - {name: announcement, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.3"}}
+      - {name: mbs-session-info, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.3"}}
+      - {name: mbs-session-mode, action: keep, value: {enum: [multicast, broadcast]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.3"}}
+      - {name: mc-service-group-id, action: remove, reason: structure, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.3"}}
+      - {name: frequency, action: keep, value: {int: [0, 18446744073709551615]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.3"}}
+      - {name: GPMS, action: keep, value: {int: [1, 4294967295]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.3"}}
+      - {name: mbs-service-areas, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.3"}}
+      - {name: mbs-service-area-id, action: pseudonymise, category: mbms-sai-hex, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.3"}}
+      - {name: report-ue-session-join-notification, action: keep, value: boolean, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.3"}}
+      - {name: multicast-mbs-session-related-info, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.3"}}
+      - {name: PlmnId, action: pseudonymise, category: plmn, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.3"}}
+      - {name: DNN, action: pseudonymise, category: host, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.3"}}
+      - {name: IPInformation, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.3"}}
+      - {name: IPInformationListEntry, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.2"}}
+      - {name: IPv4Address, action: pseudonymise, category: ip, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.2"}}
+      - {name: IPv6Address, action: pseudonymise, category: ip, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.2"}}
+      - {name: FQDN, action: pseudonymise, category: host, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.2"}}
+      - {name: MC-ID-ref-SNSSAI, action: remove, reason: structure, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.3"}}
+      - {name: mbs-fsa-id, action: pseudonymise, category: mbs-fsa, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.3"}}
+      - {name: mbs-session-de-announcement-acknowledgement, action: keep, value: boolean, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.3"}}
+      - {name: eMBMS-bearer-info, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.3"}}
+      - {name: TMGI, action: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.3"}}
+      - {name: Alternative-TMGI, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.3"}}
+      - {name: Alternative-TMGI-id, action: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.2"}}
+      - {name: QCI, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.3"}}
+      - {name: mbms-service-areas, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.3"}}
+      - {name: mbms-service-area-id, action: pseudonymise, category: mbms-sai-hex, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.3"}}
+      - {name: report-suspension, action: keep, value: boolean, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.3"}}
+      - {name: mcptt-mbs-rohc, action: keep, value: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.2"}}
+      - {name: max-cid, action: keep, value: {int: [1, 16383]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.2"}}
+      - {name: version, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.2"}}
+      - {name: mbs-defaultMuSiK-download, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.2"}}
+      - {name: mbs-explicitMuSiK-download, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.2"}}
+      - {name: group, action: pseudonymise, category: uri, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.2"}}
+    attributes:
+      - {element: PlmnId, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.2"}}

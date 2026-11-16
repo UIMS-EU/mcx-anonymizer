@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Enable once per clone:  git config core.hooksPath .githooks
+set -e
+"$(git rev-parse --show-toplevel)/tools/check-no-captures.sh" --staged
+# Optional per-clone checks that are not part of the repository.
+local_hook="$(git rev-parse --git-dir)/hooks-local/pre-commit"
+if [[ -x "$local_hook" ]]; then
+  exec "$local_hook" "$@"
+fi

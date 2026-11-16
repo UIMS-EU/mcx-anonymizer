@@ -1,0 +1,31 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# URI schemes and URI parameters (RFC 3261 §19.1.1, §25.1; RFC 3966 §3). Header parameters are
+# listed with their header in sip-headers.yaml. Sources: rules/SOURCES.md.
+# A URI parameter without a rule is removed and counted; URI headers ("?...") and passwords are
+# always removed (FR-009).
+ruleset: mcxanon-sip
+version: 1.2.0
+uri:
+  schemes: [sip, sips, tel]
+  params:
+    - {name: transport, action: keep, value: token, source: {spec: RFC 3261, version: "2002-06", clause: "19.1.1"}}
+    - {name: user, action: keep, value: token, source: {spec: RFC 3261, version: "2002-06", clause: "19.1.1"}}
+    - {name: method, action: keep, value: token, source: {spec: RFC 3261, version: "2002-06", clause: "19.1.1"}}
+    - {name: ttl, action: keep, value: number, source: {spec: RFC 3261, version: "2002-06", clause: "19.1.1"}}
+    - {name: maddr, action: pseudonymise, category: host, value: host, source: {spec: RFC 3261, version: "2002-06", clause: "19.1.1"}}
+    - {name: lr, action: keep, value: flag, source: {spec: RFC 3261, version: "2002-06", clause: "19.1.1"}}
+    - {name: ob, action: keep, value: flag, source: {spec: RFC 5626, version: "2009-10", clause: "2.1"}}
+    # GRUU: the instance ID of the gr parameter uses the IMEI or UUID mapping.
+    - {name: gr, action: pseudonymise, category: instance, value: any, source: {spec: RFC 5627, version: "2009-10", clause: "7"}}
+    - {name: sos, action: keep, value: flag, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.13"}}
+    - {name: orig, action: keep, value: flag, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.6.2"}}
+    # tel URI parameters (also on SIP URIs with user=phone).
+    - {name: phone-context, action: pseudonymise, category: domain, value: any, source: {spec: RFC 3966, version: "2004-12", clause: "3"}}
+    - {name: cpc, action: keep, value: token, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.12.2"}}
+    - {name: oli, action: keep, value: token, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.12.2"}}
+    - {name: verstat, action: keep, value: token, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.20.2"}}
+  # URIs of other schemes that carry no identity and are kept as written.
+  keep:
+    - {value: "file:///dev/null", source: {spec: TS 24.379, version: "19.6.0", clause: "6.3.2.2.5.2"}}
+    - {value: "urn:alert:", source: {spec: RFC 7462, version: "2015-03", clause: "7"}}

@@ -1,0 +1,48 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+name: Bug report
+description: The tool fails, crashes, rejects a valid capture or writes a broken output.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Do not attach real captures, project mappings or secrets.** If a value survived
+        anonymisation, report it privately instead (see SECURITY.md).
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Output of `mcxanon --version`.
+    validations:
+      required: true
+  - type: dropdown
+    id: install
+    attributes:
+      label: Installed from
+      options: [container image, release binary, built from source]
+    validations:
+      required: true
+  - type: textarea
+    id: command
+    attributes:
+      label: Command
+      description: The command you ran, with names and paths replaced if needed.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened and what you expected
+      description: >
+        Include the exit code and the relevant part of the JSON report (it never contains
+        original values). Describe the protocol and the fields involved.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Synthetic reproduction
+      description: >
+        Optional. A synthetic capture built with made-up values (for example with
+        tools/fixturegen/) that shows the problem.

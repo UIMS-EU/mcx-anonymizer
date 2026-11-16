@@ -1,0 +1,34 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# Payloads: everything above the transport layer and everything not understood.
+# Sources: rules/SOURCES.md. Every field the dissectors emit has exactly one rule.
+ruleset: mcxanon-l2l4
+version: 1.0.0
+rules:
+  - field: payload.l7
+    action: zero
+    source: {spec: "RFC 9293", version: "2022-08", clause: "3.1"}
+    note: "all application data: zeroed or dropped per --payload"
+  - field: payload.sip
+    action: l7
+    source: {spec: "RFC 3261", version: "2002-06", clause: "7"}
+    note: "a SIP request or response: rewritten by the SIP rule set (rules/sip-*.yaml), never copied"
+  - field: payload.media
+    action: l7
+    source: {spec: "RFC 3550", version: "2003-07", clause: "5.1"}
+    note: "RTP, RTCP or MCX RTCP APP on an SDP-announced endpoint: rewritten by the media rule set (rules/rtp.yaml, rules/rtcp*.yaml), never copied"
+  - field: payload.unknown
+    action: zero
+    source: {spec: "RFC 791", version: "1981-09", clause: "3.1"}
+    note: "data of a protocol the tool does not understand"
+  - field: payload.unparsed
+    action: zero
+    source: {spec: "RFC 791", version: "1981-09", clause: "3.1"}
+    note: "bytes after the last header that could be parsed"
+  - field: payload.fragment
+    action: zero
+    source: {spec: "RFC 791", version: "1981-09", clause: "3.2"}
+    note: "non-first fragments carry upper-layer data only"
+  - field: payload.encrypted
+    action: zero
+    source: {spec: "RFC 4303", version: "2005-12", clause: "2.3"}

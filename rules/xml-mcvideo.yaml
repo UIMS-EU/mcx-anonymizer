@@ -1,0 +1,202 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# TS 24.281 Annex F documents except location and the shared namespaces (Appendix D).
+# XML rule set (feature 003). Sources: rules/SOURCES.md § MCX XML bodies.
+ruleset: mcxanon-xml
+version: 1.0.0
+namespaces:
+  - name: "urn:3gpp:ns:mcvideoInfo:1.0"
+    source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.2"}
+    elements:
+      - {name: mcvideoinfo, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3"}}
+      - {name: mcvideo-Params, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3"}}
+      - {name: anyExt, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.2"}}
+      - {name: session-type, action: keep, value: {enum: [chat, prearranged, private, ambient-viewing, pull-from-server, pull-from-user, push-to-server, "one-to-one video push", "one-to-server video push", adhoc, "one-to-one video pull", "one-from-server video pull"]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 2; 12.2.2.1; 12.2.3.1.4"}}
+      - {name: broadcast-ind, action: keep, value: boolean, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 11"}}
+      - {name: mc-org, action: remove, reason: free-text, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 12"}}
+      - {name: associated-group-id, action: pseudonymise, category: uri, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 14"}}
+      - {name: MKFC-GKTPs, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 16"}}
+      - {name: gw-mcvideo-usage, action: keep, value: boolean, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 18e"}}
+      - {name: release-reason, action: keep, value: {enum: [private-call-expiry, administrator-action, "not selected for call", call-request-for-viewed-to-client, call-request-initiated-by-viewed-to-client, "authentication of the MIKEY-SAKE I_MESSAGE failed"]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19a"}}
+      - {name: request-type, action: keep, value: {enum: [group-selection-change-request, fa-group-binding-req]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19b"}}
+      - {name: response-type, action: keep, value: {enum: [group-selection-change-response]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19c"}}
+      - {name: selected-group-change-outcome, action: keep, value: {enum: [success, fail]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19d"}}
+      - {name: affiliation-required, action: keep, value: boolean, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19e"}}
+      - {name: ambient-viewing-type, action: keep, value: {enum: [remote-init, local-init]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19f"}}
+      - {name: video-push-url, action: remove, reason: structure, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19g"}}
+      - {name: emergency-alert-area-ind, action: keep, value: boolean, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19i"}}
+      - {name: group-geo-area-ind, action: keep, value: boolean, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19j"}}
+      - {name: binding-ind, action: keep, value: boolean, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19k"}}
+      - {name: binding-fa-uri, action: pseudonymise, category: uri, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19l"}}
+      - {name: unbinding-fa-uri, action: pseudonymise, category: uri, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19m"}}
+      - {name: call-to-functional-alias-ind, action: keep, value: boolean, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19n"}}
+      - {name: user-requested-priority, action: keep, value: {int: [0, 18446744073709551615]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19o"}}
+      - {name: end-to-end-security, action: keep, value: boolean, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19p"}}
+      - {name: call-participants-criteria, action: remove, reason: free-text, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19q"}}
+      - {name: preconfigured-group-id, action: pseudonymise, category: uri, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19r"}}
+      - {name: adhoc-grp-emg-alert-grp-ind, action: keep, value: boolean, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19s"}}
+      - {name: selected-user-profile-index, action: container, encryptable: true, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 1, 19t"}}
+      - {name: user-profile-index, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 2e, 19t"}}
+      - {name: adhoc-alert-ind, action: keep, value: boolean, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19ab"}}
+      - {name: adhoc-alert-ind-rcvd, action: keep, value: boolean, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19ac"}}
+      - {name: adhoc-emergency-ind, action: keep, value: boolean, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19ad"}}
+      - {name: adhoc-additional-information, action: remove, reason: free-text, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19ae"}}
+      - {name: adhoc-alert-participant-list, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19af"}}
+      - {name: adhoc-alert-participant-not-ack-list, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19ag"}}
+      - {name: entry, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.2"}}
+      - {name: uri-entry, action: pseudonymise, category: uri, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.2"}}
+      - {name: display-name, action: pseudonymise, category: display-name, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.2"}}
+      - {name: forwarding-reason, action: keep, value: {enum: [migrated]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19ah"}}
+      - {name: forwarding-target-id, action: pseudonymise, category: uri, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19ai"}}
+      # Elements of type contentType (F.1.2). Only the child that F.1.3 item 2 (or, for the
+      # non-encryptable ones, the item naming the element; D6) prescribes has a rule; any other
+      # mcvideoURI / mcvideoString / mcvideoBoolean child is unknown (no fallback rule).
+      - {name: mcvideo-access-token, action: container, encryptable: true, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 1"}}
+      - {name: mcvideo-request-uri, action: container, encryptable: true, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 1, 3"}}
+      - {name: mcvideo-calling-user-id, action: container, encryptable: true, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 1, 4"}}
+      - {name: mcvideo-called-party-id, action: container, encryptable: true, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 1, 5"}}
+      - {name: mcvideo-calling-group-id, action: container, encryptable: true, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 1, 6"}}
+      - {name: required, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 7"}}
+      - {name: emergency-ind, action: container, encryptable: true, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 1, 8"}}
+      - {name: alert-ind, action: container, encryptable: true, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 1, 9"}}
+      - {name: imminentperil-ind, action: container, encryptable: true, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 1, 10"}}
+      - {name: originated-by, action: container, encryptable: true, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 1, 15"}}
+      - {name: mcvideo-client-id, action: container, encryptable: true, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 1, 17"}}
+      - {name: alert-ind-rcvd, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 18"}}
+      - {name: multiple-devices-ind, action: container, encryptable: true, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 1, 18a"}}
+      - {name: video-pull-url, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 18b"}}
+      - {name: req-type, action: container, encryptable: true, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 1, 19u"}}
+      - {name: resp-type, action: container, encryptable: true, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 1, 19w"}}
+      - {name: functional-alias-URI, action: container, encryptable: true, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 1, 19h"}}
+      - {name: partner-mcvideo-id, action: container, encryptable: true, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 1, 19s1"}}
+      - {name: migration-auth-result, action: container, encryptable: true, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 1, 19s2"}}
+      - {name: primary-mcvideo-id, action: container, encryptable: true, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 1, 19x"}}
+      - {name: location-of-functional-alias-URI, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 19aa"}}
+      - {name: mcvideoURI, parent: [mcvideo-request-uri, mcvideo-calling-user-id, mcvideo-called-party-id, mcvideo-calling-group-id, originated-by, functional-alias-URI, partner-mcvideo-id, primary-mcvideo-id, location-of-functional-alias-URI], action: pseudonymise, category: uri, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 2b, 19aa"}}
+      - {name: mcvideoURI, parent: [video-pull-url], action: remove, reason: structure, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 18b"}}
+      - {name: mcvideoString, parent: [mcvideo-access-token], action: remove, reason: credential, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 item 2c"}}
+      - {name: mcvideoString, parent: [mcvideo-client-id], action: pseudonymise, category: instance, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 2c, 17"}}
+      - {name: mcvideoString, parent: [req-type], action: keep, value: {enum: [mc-service-authorisation-notify-request, get-userlist-adhoc-group-call-request, adhoc-group-call-add-participants-request, adhoc-group-call-remove-participants-request, adhoc-group-call-release-notification-request, migration-service-deauthorization-notification, migration-service-authorization-request, ad-hoc-emergency-alert-participant-criteria-modification, functional-alias-status-determination, fa-user-status-determination]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 2c, 19u"}}
+      - {name: mcvideoString, parent: [resp-type], action: keep, value: {enum: [get-userlist-adhoc-group-call-response, migration-service-authorization-response, ad-hoc-emergency-alert-participant-criteria-modification]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 2c, 19w"}}
+      - {name: mcvideoBoolean, parent: [required, emergency-ind, alert-ind, imminentperil-ind, alert-ind-rcvd, multiple-devices-ind, migration-auth-result], action: keep, value: boolean, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 2d, 18; 9.2.1.5.2.2"}}
+    attributes:
+      - {element: mcvideo-access-token, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: mcvideo-request-uri, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: mcvideo-calling-user-id, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: mcvideo-called-party-id, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: mcvideo-calling-group-id, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: required, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.2"}}
+      - {element: emergency-ind, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: alert-ind, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: imminentperil-ind, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: originated-by, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: mcvideo-client-id, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: alert-ind-rcvd, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.2"}}
+      - {element: multiple-devices-ind, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: video-pull-url, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.2"}}
+      - {element: req-type, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: resp-type, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: functional-alias-URI, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: partner-mcvideo-id, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: migration-auth-result, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: primary-mcvideo-id, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 2a, 3a"}}
+      - {element: location-of-functional-alias-URI, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.2"}}
+      - {element: selected-user-profile-index, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.3 items 1, 2a, 3a"}}
+
+  - name: "urn:3gpp:ns:mcvideoMbmsUsage:1.0"
+    source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.2"}
+    elements:
+      - {name: mcvideo-mbms-usage-info, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.3"}}
+      - {name: mbms-listening-status, parent: [mcvideo-mbms-usage-info], action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.3"}}
+      - {name: mbms-listening-status, parent: [mbms-listening-status], action: keep, value: {enum: [listening, not-listening]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.3"}}
+      - {name: session-id, action: pseudonymise, category: uri, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.3"}}
+      - {name: general-purpose, action: keep, value: boolean, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.3"}}
+      - {name: TMGI, action: empty, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.3"}}
+      - {name: anyExt, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.2"}}
+      - {name: mbms-suspension-status, parent: [mcvideo-mbms-usage-info], action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.3"}}
+      - {name: mbms-suspension-status, parent: [mbms-suspension-status], action: keep, value: {enum: [suspending, not-suspending]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.3"}}
+      - {name: number-of-reported-bearers, action: keep, value: {int: [-9223372036854775808, 9223372036854775807]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.3"}}
+      - {name: suspended-TMGI, action: empty, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.3"}}
+      - {name: other-TMGI, action: empty, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.3"}}
+      - {name: announcement, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.2"}}
+      - {name: QCI, action: keep, value: {int: [-9223372036854775808, 9223372036854775807]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.3"}}
+      - {name: frequency, action: keep, value: {int: [0, 18446744073709551615]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.3"}}
+      - {name: mbms-service-areas, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.3"}}
+      - {name: mbms-service-area-id, action: pseudonymise, category: mbms-sai-hex, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.3"}}
+      - {name: GPMS, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.3"}}
+      - {name: report-suspension, action: keep, value: boolean, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.3"}}
+      - {name: mcvid-mbms-rohc, parent: [anyExt], action: keep, value: empty, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.2"}}
+      - {name: max-cid, parent: [anyExt], action: keep, value: {int: [1, 16383]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.2"}}
+      - {name: version, action: keep, value: {int: [-9223372036854775808, 9223372036854775807]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.3"}}
+      - {name: mbms-defaultMuSiK-download, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.3"}}
+      - {name: mbms-explicitMuSiK-download, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.3"}}
+      - {name: group, action: pseudonymise, category: uri, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.3"}}
+
+  - name: "urn:3gpp:ns:mcvideoMbsUsage:1.0"
+    source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.2"}
+    elements:
+      - {name: mcvideo-mbs-usage-info, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.3"}}
+      - {name: mbs-listening-status, parent: [mcvideo-mbs-usage-info], action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.3 item 1"}}
+      - {name: mbs-listening-status, parent: [mbs-listening-status], action: keep, value: {enum: [listening, not-listening]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.3 item 1; F.2.3; J.3.3"}}
+      - {name: unicast-listening-status, action: keep, value: {enum: [listening, not-listening]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.2"}}
+      - {name: session-id, action: pseudonymise, category: uri, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.3 items 1, 3c"}}
+      - {name: general-purpose, action: keep, value: boolean, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.3 item 1; F.2.3"}}
+      - {name: mbs-session-id, action: empty, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.3 items 1, 3b, 4a(i)"}}
+      - {name: anyExt, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.2"}}
+      - {name: mbs-session-de-announcement-status, parent: [mcvideo-mbs-usage-info], action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.3 item 2"}}
+      - {name: mbs-session-de-announcement-status, parent: [mbs-session-de-announcement-status], action: keep, value: {enum: [deleting, not-deleting]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.3 item 2a"}}
+      - {name: number-of-reported-sessions, action: keep, value: {token: hex-counter}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.3 item 2b"}}
+      - {name: deleted-mbs-session-id, action: empty, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.3 item 2c"}}
+      - {name: other-mbs-session-id, action: empty, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.3 item 2d"}}
+      - {name: ue-session-join-notification, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.3 item 3"}}
+      - {name: mbs-multicast-joining-status, action: keep, value: {enum: [ue-session-join, ue-session-leave]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.3 item 3a"}}
+      - {name: announcement, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.3 item 4"}}
+      - {name: mbs-session-info, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.3 item 4a"}}
+      - {name: mbs-session-mode, action: keep, value: {enum: [multicast, broadcast]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.3 item 4a(ii)"}}
+      - {name: mc-service-group-id, action: remove, reason: structure, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.3 item 4a(iii)"}}
+      - {name: frequency, action: keep, value: {int: [0, 18446744073709551615]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.3 item 4a(ix)"}}
+      - {name: GPMS, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.3 item 4a(iv)"}}
+      - {name: mbs-service-areas, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.3 item 4a(v)"}}
+      - {name: mbs-service-area-id, action: pseudonymise, category: mbms-sai-hex, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.3 item 4a(v)"}}
+      - {name: report-ue-session-join-notification, action: keep, value: boolean, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.3 item 4a(vi)"}}
+      - {name: multicast-mbs-session-related-info, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.3 item 4a(vii)"}}
+      - {name: PlmnId, action: pseudonymise, category: plmn, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.3 item 4a(vii)"}}
+      - {name: DNN, action: pseudonymise, category: host, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.3 item 4a(vii)"}}
+      - {name: IPInformation, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.3 item 4a(vii)"}}
+      - {name: IPInformationListEntry, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.2"}}
+      - {name: IPv4Address, action: pseudonymise, category: ip, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.2"}}
+      - {name: IPv6Address, action: pseudonymise, category: ip, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.2"}}
+      - {name: FQDN, action: pseudonymise, category: host, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.2"}}
+      - {name: MC-ID-ref-SNSSAI, action: remove, reason: structure, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.3 item 4a(vii)"}}
+      - {name: mbs-fsa-id, action: pseudonymise, category: mbs-fsa, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.3 item 4a(viii)"}}
+      - {name: mbs-session-de-announcement-acknowledgement, action: keep, value: boolean, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.3 item 4a(x)"}}
+      - {name: eMBMS-bearer-info, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.3 item 4b"}}
+      - {name: TMGI, action: empty, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.3; F.2A.3 item 4b"}}
+      - {name: Alternative-TMGI, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.3 item 4b(i)"}}
+      - {name: Alternative-TMGI-id, action: empty, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.3 item 4b(i)"}}
+      - {name: QCI, action: keep, value: {int: [-9223372036854775808, 9223372036854775807]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.3; F.2A.3 item 4b"}}
+      - {name: mbms-service-areas, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.3; F.2A.3 item 4b"}}
+      - {name: mbms-service-area-id, action: pseudonymise, category: mbms-sai-hex, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.3; F.2A.3 item 4b"}}
+      - {name: report-suspension, action: keep, value: boolean, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.3; F.2A.3 item 4b"}}
+      - {name: mcvideo-mbs-rohc, parent: [anyExt], action: keep, value: empty, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.2"}}
+      - {name: max-cid, parent: [anyExt], action: keep, value: {int: [1, 16383]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.2"}}
+      - {name: version, action: keep, value: {int: [-9223372036854775808, 9223372036854775807]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.3; F.2A.3"}}
+      - {name: mbs-defaultMuSiK-download, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.2; F.2.3"}}
+      - {name: mbs-explicitMuSiK-download, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.2; F.2.3"}}
+      - {name: group, action: pseudonymise, category: uri, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.3"}}
+    attributes:
+      - {element: PlmnId, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.3 item 4a(vii)"}}
+
+  - name: "urn:3gpp:ns:transmissionRequest:1.0"
+    source: {spec: TS 24.281, version: "19.5.0", clause: "F.5.2"}
+    elements:
+      - {name: transmission-request, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.5.3"}}
+      - {name: ssrc, action: pseudonymise, category: ssrc, source: {spec: TS 24.281, version: "19.5.0", clause: "F.5.3"}}
+      - {name: transmission-priority, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.5.3"}}
+      - {name: user-id, action: pseudonymise, category: uri, source: {spec: TS 24.281, version: "19.5.0", clause: "F.5.3"}}
+      - {name: track-info, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.5.3"}}
+      - {name: queueing-capability, action: keep, value: {int: [-128, 127]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.5.3"}}
+      - {name: participant-type, action: fixed, constant: "unknown", source: {spec: TS 24.281, version: "19.5.0", clause: "F.5.3"}}
+      - {name: transmission-participant-reference, action: pseudonymise, category: fc-ref, source: {spec: TS 24.281, version: "19.5.0", clause: "F.5.3"}}
+      - {name: transmission-indicator, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.5.3"}}
+      - {name: anyExt, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.5.2"}}

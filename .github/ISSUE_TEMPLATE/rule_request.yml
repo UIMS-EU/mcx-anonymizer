@@ -1,0 +1,38 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+name: Rule or protocol request
+description: A header, parameter, XML element, field or protocol is removed or zeroed but should be kept or pseudonymised.
+labels: [rules]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The tool fails closed: anything without a rule is removed or zeroed. A new rule needs
+        the standard that defines the item. **Do not paste values from a real network.**
+  - type: input
+    id: item
+    attributes:
+      label: Item
+      description: For example `P-Preferred-Service` header, `<mcptt-calling-group-id>` element, RTCP APP field 18.
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Defining document and clause
+      description: For example TS 24.379 V19.5.0 §F.1.3, RFC 3261 §20.
+    validations:
+      required: true
+  - type: dropdown
+    id: action
+    attributes:
+      label: Proposed action
+      options: [keep, pseudonymise, remove, zero, not sure]
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why analysis needs it
+      description: What the item tells an analyst, and whether it can carry an identity.
+    validations:
+      required: true

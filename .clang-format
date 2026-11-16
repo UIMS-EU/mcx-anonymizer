@@ -1,0 +1,24 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+---
+BasedOnStyle: LLVM
+ColumnLimit: 100
+IndentWidth: 2
+PointerAlignment: Left
+DerivePointerAlignment: false
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+BreakBeforeBraces: Attach
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex: '^"mcxanon/'
+    Priority: 1
+  - Regex: '^"'
+    Priority: 2
+  - Regex: '^<(catch2|CLI|nlohmann|ryml|c4|openssl)/'
+    Priority: 3
+  - Regex: '^<'
+    Priority: 4
+NamespaceIndentation: None
+FixNamespaceComments: true
+...

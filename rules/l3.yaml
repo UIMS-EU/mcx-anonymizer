@@ -1,0 +1,169 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# IPv4, IPv6 and extension headers, AH, ESP.
+# Sources: rules/SOURCES.md. Every field the dissectors emit has exactly one rule.
+ruleset: mcxanon-l2l4
+version: 1.0.0
+rules:
+  - field: ipv4.vihl
+    action: keep
+    source: {spec: "RFC 791", version: "1981-09", clause: "3.1"}
+  - field: ipv4.tos
+    action: keep
+    source: {spec: "RFC 791", version: "1981-09", clause: "3.1"}
+  - field: ipv4.totlen
+    action: recompute
+    source: {spec: "RFC 791", version: "1981-09", clause: "3.1"}
+  - field: ipv4.id
+    action: keep
+    source: {spec: "RFC 791", version: "1981-09", clause: "3.1"}
+  - field: ipv4.frag
+    action: keep
+    source: {spec: "RFC 791", version: "1981-09", clause: "3.1"}
+  - field: ipv4.ttl
+    action: keep
+    source: {spec: "RFC 791", version: "1981-09", clause: "3.1"}
+  - field: ipv4.proto
+    action: keep
+    source: {spec: "RFC 791", version: "1981-09", clause: "3.1"}
+  - field: ipv4.checksum
+    action: recompute
+    source: {spec: "RFC 791", version: "1981-09", clause: "3.1"}
+  - field: ipv4.src
+    action: pseudonymise
+    category: ipv4
+    source: {spec: "RFC 791", version: "1981-09", clause: "3.1"}
+  - field: ipv4.dst
+    action: pseudonymise
+    category: ipv4
+    source: {spec: "RFC 791", version: "1981-09", clause: "3.1"}
+  - field: ipv4.opt.nop
+    action: keep
+    source: {spec: "RFC 791", version: "1981-09", clause: "3.1"}
+  - field: ipv4.opt.eol
+    action: keep
+    source: {spec: "RFC 791", version: "1981-09", clause: "3.1"}
+  - field: ipv4.opt.padding
+    action: zero
+    source: {spec: "RFC 791", version: "1981-09", clause: "3.1"}
+  - field: ipv4.opt.route.hdr
+    action: keep
+    source: {spec: "RFC 791", version: "1981-09", clause: "3.1"}
+  - field: ipv4.opt.route.addr
+    action: pseudonymise
+    category: ipv4
+    source: {spec: "RFC 791", version: "1981-09", clause: "3.1"}
+  - field: ipv4.opt.ts.hdr
+    action: keep
+    source: {spec: "RFC 791", version: "1981-09", clause: "3.1"}
+  - field: ipv4.opt.ts.addr
+    action: pseudonymise
+    category: ipv4
+    source: {spec: "RFC 791", version: "1981-09", clause: "3.1"}
+  - field: ipv4.opt.ts.value
+    action: keep
+    source: {spec: "RFC 791", version: "1981-09", clause: "3.1"}
+  - field: ipv4.opt.other
+    action: pad
+    source: {spec: "RFC 791", version: "1981-09", clause: "3.1"}
+    note: "options not on the allowlist become NOPs"
+  - field: ipv4.opt.malformed
+    action: pad
+    source: {spec: "RFC 791", version: "1981-09", clause: "3.1"}
+  - field: ipv6.vtcfl
+    action: keep
+    source: {spec: "RFC 8200", version: "2017-07", clause: "3"}
+  - field: ipv6.plen
+    action: recompute
+    source: {spec: "RFC 8200", version: "2017-07", clause: "3"}
+  - field: ipv6.nh
+    action: keep
+    source: {spec: "RFC 8200", version: "2017-07", clause: "3"}
+  - field: ipv6.hlim
+    action: keep
+    source: {spec: "RFC 8200", version: "2017-07", clause: "3"}
+  - field: ipv6.src
+    action: pseudonymise
+    category: ipv6
+    source: {spec: "RFC 8200", version: "2017-07", clause: "3"}
+  - field: ipv6.dst
+    action: pseudonymise
+    category: ipv6
+    source: {spec: "RFC 8200", version: "2017-07", clause: "3"}
+  - field: ipv6.ext.hdr
+    action: keep
+    source: {spec: "RFC 8200", version: "2017-07", clause: "4"}
+  - field: ipv6.opt.pad1
+    action: keep
+    source: {spec: "RFC 8200", version: "2017-07", clause: "4.2"}
+  - field: ipv6.opt.padn
+    action: pad
+    source: {spec: "RFC 8200", version: "2017-07", clause: "4.2"}
+    note: "PadN contents are normalised to zeros"
+  - field: ipv6.opt.ra
+    action: keep
+    source: {spec: "RFC 2711", version: "1999-10", clause: "2.1"}
+  - field: ipv6.opt.jumbo
+    action: keep
+    source: {spec: "RFC 2675", version: "1999-08", clause: "2"}
+  - field: ipv6.opt.hao.hdr
+    action: keep
+    source: {spec: "RFC 6275", version: "2011-07", clause: "6.3"}
+  - field: ipv6.opt.hao.addr
+    action: pseudonymise
+    category: ipv6
+    source: {spec: "RFC 6275", version: "2011-07", clause: "6.3"}
+  - field: ipv6.opt.other
+    action: pad
+    source: {spec: "RFC 8200", version: "2017-07", clause: "4.2"}
+  - field: ipv6.opt.malformed
+    action: pad
+    source: {spec: "RFC 8200", version: "2017-07", clause: "4.2"}
+  - field: ipv6.rh.fixed
+    action: keep
+    source: {spec: "RFC 8200", version: "2017-07", clause: "4.4"}
+  - field: ipv6.rh.reserved
+    action: keep
+    source: {spec: "RFC 6275", version: "2011-07", clause: "6.4"}
+  - field: ipv6.rh.addr
+    action: pseudonymise
+    category: ipv6
+    source: {spec: "RFC 6275", version: "2011-07", clause: "6.4"}
+  - field: ipv6.srh.fixed
+    action: keep
+    source: {spec: "RFC 8754", version: "2020-03", clause: "2"}
+  - field: ipv6.srh.seg
+    action: pseudonymise
+    category: ipv6
+    source: {spec: "RFC 8754", version: "2020-03", clause: "2"}
+  - field: ipv6.srh.tlv
+    action: zero
+    source: {spec: "RFC 8754", version: "2020-03", clause: "2.1"}
+  - field: ipv6.rh.data
+    action: zero
+    source: {spec: "RFC 8200", version: "2017-07", clause: "4.4"}
+  - field: ipv6.frag
+    action: keep
+    source: {spec: "RFC 8200", version: "2017-07", clause: "4.5"}
+  - field: ah.fixed
+    action: keep
+    source: {spec: "RFC 4302", version: "2005-12", clause: "2"}
+  - field: ah.spi
+    action: pseudonymise
+    category: spi
+    source: {spec: "RFC 4302", version: "2005-12", clause: "2.4"}
+    note: "shares the spi-c/spi-s mapping of Security-Client (feature 002, FR-014); 1-255 reserved, kept"
+  - field: ah.seq
+    action: keep
+    source: {spec: "RFC 4302", version: "2005-12", clause: "2"}
+  - field: ah.icv
+    action: zero
+    source: {spec: "RFC 4302", version: "2005-12", clause: "2.6"}
+  - field: esp.spi
+    action: pseudonymise
+    category: spi
+    source: {spec: "RFC 4303", version: "2005-12", clause: "2.1"}
+    note: "shares the spi-c/spi-s mapping of Security-Client (feature 002, FR-014); 1-255 reserved, kept"
+  - field: esp.seq
+    action: keep
+    source: {spec: "RFC 4303", version: "2005-12", clause: "2"}

@@ -1,0 +1,167 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# TCP, UDP, SCTP.
+# Sources: rules/SOURCES.md. Every field the dissectors emit has exactly one rule.
+ruleset: mcxanon-l2l4
+version: 1.0.0
+rules:
+  - field: tcp.sport
+    action: keep
+    source: {spec: "RFC 9293", version: "2022-08", clause: "3.1"}
+    note: "ephemeral ports pseudonymised with --pseudonymise-ephemeral-ports"
+  - field: tcp.dport
+    action: keep
+    source: {spec: "RFC 9293", version: "2022-08", clause: "3.1"}
+    note: "ephemeral ports pseudonymised with --pseudonymise-ephemeral-ports"
+  - field: tcp.seq
+    action: keep
+    source: {spec: "RFC 9293", version: "2022-08", clause: "3.1"}
+  - field: tcp.ack
+    action: keep
+    source: {spec: "RFC 9293", version: "2022-08", clause: "3.1"}
+  - field: tcp.offflags
+    action: keep
+    source: {spec: "RFC 9293", version: "2022-08", clause: "3.1"}
+  - field: tcp.window
+    action: keep
+    source: {spec: "RFC 9293", version: "2022-08", clause: "3.1"}
+  - field: tcp.checksum
+    action: recompute
+    source: {spec: "RFC 9293", version: "2022-08", clause: "3.1"}
+  - field: tcp.urg
+    action: keep
+    source: {spec: "RFC 9293", version: "2022-08", clause: "3.1"}
+  - field: tcp.opt.nop
+    action: keep
+    source: {spec: "RFC 9293", version: "2022-08", clause: "3.2"}
+  - field: tcp.opt.eol
+    action: keep
+    source: {spec: "RFC 9293", version: "2022-08", clause: "3.2"}
+  - field: tcp.opt.padding
+    action: zero
+    source: {spec: "RFC 9293", version: "2022-08", clause: "3.2"}
+  - field: tcp.opt.mss
+    action: keep
+    source: {spec: "RFC 9293", version: "2022-08", clause: "3.2"}
+  - field: tcp.opt.wscale
+    action: keep
+    source: {spec: "RFC 7323", version: "2014-09", clause: "2.2"}
+  - field: tcp.opt.sackperm
+    action: keep
+    source: {spec: "RFC 2018", version: "1996-10", clause: "2"}
+  - field: tcp.opt.sack
+    action: keep
+    source: {spec: "RFC 2018", version: "1996-10", clause: "3"}
+    note: "replaced by NOPs with --payload drop"
+  - field: tcp.opt.ts
+    action: keep
+    source: {spec: "RFC 7323", version: "2014-09", clause: "3.2"}
+  - field: tcp.opt.md5.hdr
+    action: keep
+    source: {spec: "RFC 2385", version: "1998-08", clause: "3"}
+  - field: tcp.opt.md5.value
+    action: zero
+    source: {spec: "RFC 2385", version: "1998-08", clause: "3"}
+  - field: tcp.opt.ao.hdr
+    action: keep
+    source: {spec: "RFC 5925", version: "2010-06", clause: "2.2"}
+  - field: tcp.opt.ao.value
+    action: zero
+    source: {spec: "RFC 5925", version: "2010-06", clause: "2.2"}
+  - field: tcp.opt.other
+    action: pad
+    source: {spec: "RFC 9293", version: "2022-08", clause: "3.2"}
+  - field: tcp.opt.malformed
+    action: pad
+    source: {spec: "RFC 9293", version: "2022-08", clause: "3.2"}
+  - field: udp.sport
+    action: keep
+    source: {spec: "RFC 768", version: "1980-08", clause: "Format"}
+    note: "ephemeral ports pseudonymised with --pseudonymise-ephemeral-ports"
+  - field: udp.dport
+    action: keep
+    source: {spec: "RFC 768", version: "1980-08", clause: "Format"}
+    note: "ephemeral ports pseudonymised with --pseudonymise-ephemeral-ports"
+  - field: udp.len
+    action: recompute
+    source: {spec: "RFC 768", version: "1980-08", clause: "Format"}
+  - field: udp.checksum
+    action: recompute
+    source: {spec: "RFC 768", version: "1980-08", clause: "Fields"}
+  - field: sctp.sport
+    action: keep
+    source: {spec: "RFC 9260", version: "2022-06", clause: "3.1"}
+  - field: sctp.dport
+    action: keep
+    source: {spec: "RFC 9260", version: "2022-06", clause: "3.1"}
+  - field: sctp.vtag
+    action: keep
+    source: {spec: "RFC 9260", version: "2022-06", clause: "3.1"}
+  - field: sctp.checksum
+    action: recompute
+    source: {spec: "RFC 9260", version: "2022-06", clause: "3.1"}
+  - field: sctp.chunk.hdr
+    action: keep
+    source: {spec: "RFC 9260", version: "2022-06", clause: "3.2"}
+  - field: sctp.chunk.len
+    action: recompute
+    source: {spec: "RFC 9260", version: "2022-06", clause: "3.2"}
+  - field: sctp.data.fixed
+    action: keep
+    source: {spec: "RFC 9260", version: "2022-06", clause: "3.3.1"}
+  - field: sctp.idata.fixed
+    action: keep
+    source: {spec: "RFC 8260", version: "2017-11", clause: "2.1"}
+  - field: sctp.init.fixed
+    action: keep
+    source: {spec: "RFC 9260", version: "2022-06", clause: "3.3.2"}
+  - field: sctp.param.hdr
+    action: keep
+    source: {spec: "RFC 9260", version: "2022-06", clause: "3.2.1"}
+  - field: sctp.param.ipv4
+    action: pseudonymise
+    category: ipv4
+    source: {spec: "RFC 9260", version: "2022-06", clause: "3.3.2.1"}
+  - field: sctp.param.ipv6
+    action: pseudonymise
+    category: ipv6
+    source: {spec: "RFC 9260", version: "2022-06", clause: "3.3.2.1"}
+  - field: sctp.param.keep
+    action: keep
+    source: {spec: "RFC 9260", version: "2022-06", clause: "3.3.2.1"}
+    note: "supported address types, cookie preservative, ECN, Forward-TSN, supported extensions"
+  - field: sctp.param.other
+    action: zero
+    source: {spec: "RFC 9260", version: "2022-06", clause: "3.3.2.1"}
+    note: "host name, state cookie, AUTH random/HMAC lists, error causes, unknown"
+  - field: sctp.asconf.serial
+    action: keep
+    source: {spec: "RFC 5061", version: "2007-09", clause: "4.1.1"}
+  - field: sctp.asconf.corr
+    action: keep
+    source: {spec: "RFC 5061", version: "2007-09", clause: "4.2.1"}
+  - field: sctp.sack.body
+    action: keep
+    source: {spec: "RFC 9260", version: "2022-06", clause: "3.3.4"}
+  - field: sctp.shutdown.body
+    action: keep
+    source: {spec: "RFC 9260", version: "2022-06", clause: "3.3.8"}
+  - field: sctp.ecn.body
+    action: keep
+    source: {spec: "RFC 9260", version: "2022-06", clause: "3.2"}
+    note: "chunk types 12 and 13 are reserved for ECN (Table 1)"
+  - field: sctp.fwdtsn.body
+    action: keep
+    source: {spec: "RFC 3758", version: "2004-05", clause: "3.2"}
+  - field: sctp.auth.fixed
+    action: keep
+    source: {spec: "RFC 4895", version: "2007-08", clause: "5.1"}
+  - field: sctp.auth.hmac
+    action: zero
+    source: {spec: "RFC 4895", version: "2007-08", clause: "5.1"}
+  - field: sctp.chunk.other
+    action: zero
+    source: {spec: "RFC 9260", version: "2022-06", clause: "3.3"}
+  - field: sctp.padding
+    action: zero
+    source: {spec: "RFC 9260", version: "2022-06", clause: "3.2"}

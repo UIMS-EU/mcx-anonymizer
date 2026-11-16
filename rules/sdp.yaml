@@ -1,0 +1,190 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# SDP lines and attributes (RFC 8866 §5, §6 and the attribute RFCs; FR-018, FR-019).
+# Sources: rules/SOURCES.md. Lines and attributes without a rule are removed and counted.
+# RFC 8866 §5 is cited as a whole: the local index holds §5.1-§5.14 as one clause.
+ruleset: mcxanon-sip
+version: 1.2.0
+sdp:
+  lines:
+    - {type: v, action: keep, source: {spec: RFC 8866, version: "2021-01", clause: "5"}}
+    - type: o
+      action: pseudonymise
+      fields:
+        username: {action: pseudonymise, category: sip-user}   # "-" is kept
+        sess-id: {action: pseudonymise, category: sdp-sess}    # sess-version follows (RFC 3264 §8)
+        address: {action: pseudonymise, category: host}
+      source: {spec: RFC 8866, version: "2021-01", clause: "5"}
+    - {type: s, action: blank, value: "-", source: {spec: RFC 8866, version: "2021-01", clause: "5"}}
+    # Decision D1: the three fixed MCX values are kept (TS 24.379 §6.2.1, TS 24.281 §6.2.1).
+    - type: i
+      action: remove
+      keep_values: ["speech", "audio component of MCVideo", "video component of MCVideo"]
+      source: {spec: TS 24.379, version: "19.6.0", clause: "6.2.1"}
+    - {type: u, action: remove, source: {spec: RFC 8866, version: "2021-01", clause: "5"}}
+    - {type: e, action: remove, source: {spec: RFC 8866, version: "2021-01", clause: "5"}}
+    - {type: p, action: remove, source: {spec: RFC 8866, version: "2021-01", clause: "5"}}
+    - type: c
+      action: pseudonymise
+      fields:
+        address: {action: pseudonymise, category: host}  # 0.0.0.0, :: and *.invalid are kept
+      source: {spec: RFC 8866, version: "2021-01", clause: "5"}
+    - {type: b, action: keep, source: {spec: RFC 8866, version: "2021-01", clause: "5"}}
+    - {type: t, action: keep, source: {spec: RFC 8866, version: "2021-01", clause: "5"}}
+    - {type: r, action: keep, source: {spec: RFC 8866, version: "2021-01", clause: "5"}}
+    - {type: z, action: keep, source: {spec: RFC 8866, version: "2021-01", clause: "5"}}
+    - {type: k, action: remove, source: {spec: RFC 8866, version: "2021-01", clause: "5"}}
+    - type: m
+      action: pseudonymise
+      fields:
+        port: {action: pseudonymise, category: port}  # port policy; 0 and 9 are not ephemeral
+      source: {spec: RFC 8866, version: "2021-01", clause: "5"}
+  attributes:
+    # RFC 8866 §6 core attributes.
+    - {name: cat, grammar: opaque, action: remove, source: {spec: RFC 8866, version: "2021-01", clause: "6"}}
+    - {name: keywds, grammar: opaque, action: remove, source: {spec: RFC 8866, version: "2021-01", clause: "6"}}
+    - {name: tool, grammar: opaque, action: remove, source: {spec: RFC 8866, version: "2021-01", clause: "6"}}
+    - {name: ptime, grammar: opaque, action: keep, source: {spec: RFC 8866, version: "2021-01", clause: "6"}}
+    - {name: maxptime, grammar: opaque, action: keep, source: {spec: RFC 8866, version: "2021-01", clause: "6"}}
+    - {name: rtpmap, grammar: opaque, action: keep, source: {spec: RFC 8866, version: "2021-01", clause: "6"}}
+    - {name: recvonly, grammar: flag, action: keep, source: {spec: RFC 8866, version: "2021-01", clause: "6.7"}}
+    - {name: sendrecv, grammar: flag, action: keep, source: {spec: RFC 8866, version: "2021-01", clause: "6.7"}}
+    - {name: sendonly, grammar: flag, action: keep, source: {spec: RFC 8866, version: "2021-01", clause: "6.7"}}
+    - {name: inactive, grammar: flag, action: keep, source: {spec: RFC 8866, version: "2021-01", clause: "6.7"}}
+    - {name: orient, grammar: opaque, action: keep, source: {spec: RFC 8866, version: "2021-01", clause: "6"}}
+    - {name: type, grammar: opaque, action: keep, source: {spec: RFC 8866, version: "2021-01", clause: "6"}}
+    - {name: charset, grammar: opaque, action: keep, source: {spec: RFC 8866, version: "2021-01", clause: "6"}}
+    - {name: sdplang, grammar: opaque, action: keep, source: {spec: RFC 8866, version: "2021-01", clause: "6"}}
+    - {name: lang, grammar: opaque, action: keep, source: {spec: RFC 8866, version: "2021-01", clause: "6"}}
+    - {name: framerate, grammar: opaque, action: keep, source: {spec: RFC 8866, version: "2021-01", clause: "6"}}
+    - {name: quality, grammar: opaque, action: keep, source: {spec: RFC 8866, version: "2021-01", clause: "6"}}
+    # Codec fmtp (a numeric payload format only; other formats need their own rule).
+    - {name: fmtp, grammar: opaque, action: keep, source: {spec: RFC 8866, version: "2021-01", clause: "6"}}
+    # RTP/RTCP, grouping, transport.
+    - name: rtcp
+      grammar: rtcp
+      fields:
+        port: {action: pseudonymise, category: port}
+        address: {action: pseudonymise, category: host}
+      source: {spec: RFC 3605, version: "2003-10", clause: "2.1"}
+    - {name: rtcp-mux, grammar: flag, action: keep, source: {spec: RFC 5761, version: "2010-04", clause: "5.1.1"}}
+    - {name: rtcp-fb, grammar: opaque, action: keep, source: {spec: RFC 4585, version: "2006-07", clause: "4.2"}}
+    - name: ssrc
+      grammar: ssrc
+      fields:
+        ssrc-id: {action: pseudonymise, category: ssrc}        # FR-021: one project-wide mapping
+        cname: {action: pseudonymise, category: cname}         # user@host and host use their mappings
+        previous-ssrc: {action: pseudonymise, category: ssrc}
+        fmtp: {action: keep}
+      source: {spec: RFC 5576, version: "2009-06", clause: "4.1"}
+    - name: ssrc-group
+      grammar: ssrc-group
+      fields:
+        ssrc-id: {action: pseudonymise, category: ssrc}
+      source: {spec: RFC 5576, version: "2009-06", clause: "4.2"}
+    - {name: mid, grammar: opaque, action: keep, source: {spec: RFC 5888, version: "2010-06", clause: "4"}}
+    - {name: group, grammar: opaque, action: keep, source: {spec: RFC 5888, version: "2010-06", clause: "5"}}
+    - {name: setup, grammar: opaque, action: keep, source: {spec: RFC 4145, version: "2005-09", clause: "4"}}
+    - {name: connection, grammar: opaque, action: keep, source: {spec: RFC 4145, version: "2005-09", clause: "4"}}
+    # MSRP (RFC 4975): every URI of a=path is pseudonymised.
+    - name: path
+      grammar: path
+      fields:
+        user: {action: pseudonymise, category: sip-user}
+        host: {action: pseudonymise, category: host}
+        port: {action: pseudonymise, category: port}
+        session-id: {action: pseudonymise, category: msrp-session}  # RFC 4975 §14.1: the session secret
+      source: {spec: RFC 4975, version: "2007-09", clause: "8.2"}
+    - {name: accept-types, grammar: opaque, action: keep, source: {spec: RFC 4975, version: "2007-09", clause: "8.6"}}
+    - {name: accept-wrapped-types, grammar: opaque, action: keep, source: {spec: RFC 4975, version: "2007-09", clause: "8.6"}}
+    - {name: max-size, grammar: opaque, action: keep, source: {spec: RFC 4975, version: "2007-09", clause: "8.6"}}
+    - {name: msrp-cema, grammar: flag, action: keep, source: {spec: RFC 6714, version: "2012-08", clause: "5.2"}}
+    # ICE (RFC 8839).
+    - name: candidate
+      grammar: candidate
+      fields:
+        address: {action: pseudonymise, category: host}  # connection-address and raddr
+        port: {action: pseudonymise, category: port}     # port and rport
+      source: {spec: RFC 8839, version: "2021-01", clause: "5.1"}
+    - name: remote-candidates
+      grammar: remote-candidates
+      fields:
+        address: {action: pseudonymise, category: host}
+        port: {action: pseudonymise, category: port}
+      source: {spec: RFC 8839, version: "2021-01", clause: "5.2"}
+    - {name: ice-lite, grammar: flag, action: keep, source: {spec: RFC 8839, version: "2021-01", clause: "5.3"}}
+    - {name: ice-mismatch, grammar: flag, action: keep, source: {spec: RFC 8839, version: "2021-01", clause: "5.3"}}
+    - {name: ice-ufrag, grammar: opaque, action: remove, source: {spec: RFC 8839, version: "2021-01", clause: "5.4"}}
+    - {name: ice-pwd, grammar: opaque, action: remove, source: {spec: RFC 8839, version: "2021-01", clause: "5.4"}}
+    - {name: ice-pacing, grammar: opaque, action: keep, source: {spec: RFC 8839, version: "2021-01", clause: "5.5"}}
+    - {name: ice-options, grammar: opaque, action: keep, source: {spec: RFC 8839, version: "2021-01", clause: "5.6"}}
+    # Keying. a=key-mgmt with protocol identifier "mikey" goes to the MIKEY rewriter of feature 005
+    # (its identities, TS 33.180 §E.7, take the project pseudonyms); any other identifier, and a MIKEY
+    # message that is not understood, is removed as before (FR-019).
+    - {name: key-mgmt, grammar: key-mgmt, action: pseudonymise, source: {spec: RFC 4567, version: "2006-07", clause: "3.1"}}
+    - {name: crypto, grammar: opaque, action: remove, source: {spec: RFC 4568, version: "2006-07", clause: "9.1"}}
+    - {name: fingerprint, grammar: opaque, action: remove, source: {spec: RFC 8122, version: "2017-03", clause: "5"}}
+    - {name: tls-id, grammar: opaque, action: remove, source: {spec: RFC 8842, version: "2021-01", clause: "4"}}
+    # IMS profile (TS 24.229 Annex A.3.2.2) and the attributes of Appendix B §A.6.
+    - {name: 3ge2ae, grammar: opaque, action: keep, source: {spec: TS 24.229, version: "24229-j70", clause: "7.5.2.2"}}
+    - {name: curr, grammar: opaque, action: keep, source: {spec: RFC 3312, version: "2002-10", clause: "4"}}
+    - {name: des, grammar: opaque, action: keep, source: {spec: RFC 3312, version: "2002-10", clause: "4"}}
+    - {name: conf, grammar: opaque, action: keep, source: {spec: RFC 3312, version: "2002-10", clause: "4"}}
+    - {name: label, grammar: opaque, action: keep, source: {spec: RFC 4574, version: "2006-08", clause: "4"}}
+    - {name: maxprate, grammar: opaque, action: keep, source: {spec: RFC 3890, version: "2004-09", clause: "6.6"}}
+    - {name: rtcp-mux-only, grammar: flag, action: keep, source: {spec: RFC 8858, version: "2021-01", clause: "3"}}
+    - {name: rtcp-rsize, grammar: flag, action: keep, source: {spec: RFC 5506, version: "2009-04", clause: "5"}}
+    - {name: imageattr, grammar: opaque, action: keep, source: {spec: RFC 6236, version: "2011-05", clause: "3.1.1"}}
+    # Kept only with their defined values in the inventory; until value lists are modelled they
+    # are removed (an information loss, not a leak).
+    - {name: content, grammar: opaque, action: remove, source: {spec: RFC 4796, version: "2007-02", clause: "5"}}
+    - {name: rtcp-xr, grammar: opaque, action: remove, source: {spec: RFC 3611, version: "2003-11", clause: "5.1"}}
+    - {name: extmap, grammar: opaque, action: remove, source: {spec: RFC 5285, version: "2008-07", clause: "7"}}
+    - {name: ecn-capable-rtp, grammar: opaque, action: remove, source: {spec: RFC 6679, version: "2012-08", clause: "6.1"}}
+    # File transfer (file name, size, hash and icon URI) and BFCP (user and conference ids).
+    - {name: file-selector, grammar: opaque, action: remove, source: {spec: RFC 5547, version: "2009-05", clause: "6"}}
+    - {name: file-transfer-id, grammar: opaque, action: remove, source: {spec: RFC 5547, version: "2009-05", clause: "6"}}
+    - {name: file-disposition, grammar: opaque, action: remove, source: {spec: RFC 5547, version: "2009-05", clause: "6"}}
+    - {name: file-date, grammar: opaque, action: remove, source: {spec: RFC 5547, version: "2009-05", clause: "6"}}
+    - {name: file-icon, grammar: opaque, action: remove, source: {spec: RFC 5547, version: "2009-05", clause: "6"}}
+    - {name: file-range, grammar: opaque, action: remove, source: {spec: RFC 5547, version: "2009-05", clause: "6"}}
+    - {name: altc, grammar: opaque, action: remove, source: {spec: RFC 6947, version: "2013-05", clause: "4.1"}}
+    - {name: floorctrl, grammar: opaque, action: remove, source: {spec: RFC 4583, version: "2006-11", clause: "4"}}
+    - {name: confid, grammar: opaque, action: remove, source: {spec: RFC 4583, version: "2006-11", clause: "5"}}
+    - {name: userid, grammar: opaque, action: remove, source: {spec: RFC 4583, version: "2006-11", clause: "5"}}
+    - {name: floorid, grammar: opaque, action: remove, source: {spec: RFC 4583, version: "2006-11", clause: "6"}}
+    # MCX formats.
+    - name: fmtp
+      format: MCPTT
+      grammar: fmtp-params
+      separators: [";", ":"]
+      fmtp_params:
+        - {name: mc_queueing, action: keep, value: flag, source: {spec: TS 24.380, version: "19.1.0", clause: "12.1.2.3"}}
+        - {name: mc_priority, action: keep, value: number, source: {spec: TS 24.380, version: "19.1.0", clause: "12.1.2.3"}}
+        - {name: mc_granted, action: keep, value: flag, source: {spec: TS 24.380, version: "19.1.0", clause: "12.1.2.3"}}
+        - {name: mc_implicit_request, action: keep, value: flag, source: {spec: TS 24.380, version: "19.1.0", clause: "12.1.2.3"}}
+        - {name: mc_ssrc, action: pseudonymise, category: ssrc, value: number, source: {spec: TS 24.380, version: "19.1.0", clause: "12.1.2.3"}}
+        - {name: mc_no_floor_ctrl, action: keep, value: flag, source: {spec: TS 24.380, version: "19.1.0", clause: "12.1.2.3"}}
+        - {name: mc_floor_ssrc, action: pseudonymise, category: ssrc, value: number, source: {spec: TS 24.380, version: "19.1.0", clause: "12.1.2.3"}}
+      source: {spec: TS 24.380, version: "19.1.0", clause: "12.1.2.3"}
+    - name: fmtp
+      format: MCVideo
+      grammar: fmtp-params
+      separators: [";", ":"]
+      fmtp_params:
+        - {name: mc_queueing, action: keep, value: flag, source: {spec: TS 24.581, version: "19.1.0", clause: "12.1.2.2"}}
+        - {name: mc_priority, action: keep, value: number, source: {spec: TS 24.581, version: "19.1.0", clause: "12.1.2.2"}}
+        - {name: mc_granted, action: keep, value: flag, source: {spec: TS 24.581, version: "19.1.0", clause: "12.1.2.2"}}
+        - {name: mc_implicit_request, action: keep, value: flag, source: {spec: TS 24.581, version: "19.1.0", clause: "12.1.2.2"}}
+        - {name: mc_reception_priority, action: keep, value: number, source: {spec: TS 24.581, version: "19.1.0", clause: "12.1.2.2"}}
+        - {name: mc_audio_ssrc, action: pseudonymise, category: ssrc, value: number, source: {spec: TS 24.581, version: "19.1.0", clause: "12.1.2.2"}}
+        - {name: mc_video_ssrc, action: pseudonymise, category: ssrc, value: number, source: {spec: TS 24.581, version: "19.1.0", clause: "12.1.2.2"}}
+        - {name: mc_transmission_ssrc, action: pseudonymise, category: ssrc, value: number, source: {spec: TS 24.581, version: "19.1.0", clause: "12.1.2.2"}}
+      source: {spec: TS 24.581, version: "19.1.0", clause: "12.1.2.3"}
+    - name: fmtp
+      format: MCDATA
+      grammar: fmtp-params
+      separators: [";", ":"]
+      fmtp_params:
+        - {name: mcdata-ipconn-s-port, action: pseudonymise, category: port, value: number, source: {spec: TS 24.582, version: "19.0.0", clause: "13.6.2.3"}}
+      source: {spec: TS 24.582, version: "19.0.0", clause: "13.6.2.3"}

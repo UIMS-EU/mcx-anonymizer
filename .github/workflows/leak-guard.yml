@@ -1,0 +1,17 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+name: leak-guard
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  no-captures:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+      - name: Reject captures, mappings and secrets
+        run: tools/check-no-captures.sh --tracked

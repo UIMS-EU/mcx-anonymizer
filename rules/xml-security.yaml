@@ -1,0 +1,93 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# Signed bodies (xmldsig), encrypted content (xenc) and group key transport payloads
+# (Appendix A).
+# XML rule set (feature 003). Sources: rules/SOURCES.md § MCX XML bodies.
+ruleset: mcxanon-xml
+version: 1.0.0
+namespaces:
+  - name: "urn:3gpp:ns:mcpttSignedDoc:1.0"
+    source: {spec: TS 24.379, version: "19.6.0", clause: "F.6.2"}
+    elements:
+      - {name: signatures, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.6.3"}}
+      - {name: anyExt, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.6.2"}}
+  - name: "http://www.w3.org/2000/09/xmldsig#"
+    source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD xmldsig-core-schema"}
+    elements:
+      - {name: Signature, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.6.3"}}
+      - {name: SignedInfo, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.6.3 item 2"}}
+      - {name: CanonicalizationMethod, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.6.3 item 2a"}}
+      - {name: SignatureMethod, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.6.3 item 2b"}}
+      - {name: HMACOutputLength, action: remove, reason: structure, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD xmldsig-core-schema"}}
+      - {name: Reference, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.6.3 item 2c"}}
+      - {name: Transforms, action: remove, reason: structure, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD xmldsig-core-schema"}}
+      - {name: DigestMethod, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.6.3 item 2c ii"}}
+      - {name: DigestValue, action: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.6.3 item 2c iii"}}
+      - {name: SignatureValue, action: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.6.3 item 1"}}
+      - {name: KeyInfo, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.6.3 item 3"}}
+      # Feature 005 (FR-016): the base64 XPK-ID, in EncryptedData and in a signature.
+      - {name: KeyName, action: pseudonymise, category: xpk-id, source: {spec: TS 33.180, version: "20.0.0", clause: "9.3.4.2, 9.3.5"}}
+      - {name: KeyValue, action: remove, reason: credential, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD xmldsig-core-schema"}}
+      - {name: RetrievalMethod, action: remove, reason: structure, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD xmldsig-core-schema"}}
+      - {name: X509Data, action: remove, reason: credential, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD xmldsig-core-schema"}}
+      - {name: PGPData, action: remove, reason: credential, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD xmldsig-core-schema"}}
+      - {name: SPKIData, action: remove, reason: credential, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD xmldsig-core-schema"}}
+      - {name: MgmtData, action: remove, reason: credential, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD xmldsig-core-schema"}}
+      - {name: Object, action: remove, reason: structure, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD xmldsig-core-schema"}}
+    attributes:
+      - {element: CanonicalizationMethod, name: Algorithm, action: keep, value: {std-uri: ["http://www.w3.org/TR/2001/REC-xml-c14n-20010315"]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.6.3 item 2a"}}
+      - {element: SignatureMethod, name: Algorithm, action: keep, value: {std-uri: ["http://www.w3.org/2001/04/xmldsig-more#hmac-sha256"]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.6.3 item 2b"}}
+      - {element: DigestMethod, name: Algorithm, action: keep, value: {std-uri: ["http://www.w3.org/2001/04/xmlenc#sha256"]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.6.3 item 2c"}}
+      - {element: Reference, name: URI, action: pseudonymise, category: cid, source: {spec: TS 24.379, version: "19.6.0", clause: "F.6.3 item 2c i"}}
+      - {element: Reference, name: Id, action: remove, reason: structure, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD xmldsig-core-schema"}}
+      - {element: Reference, name: Type, action: remove, reason: structure, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD xmldsig-core-schema"}}
+      - {element: Signature, name: Id, action: remove, reason: structure, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD xmldsig-core-schema"}}
+      - {element: SignedInfo, name: Id, action: remove, reason: structure, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD xmldsig-core-schema"}}
+      - {element: SignatureValue, name: Id, action: remove, reason: structure, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD xmldsig-core-schema"}}
+      - {element: KeyInfo, name: Id, action: remove, reason: structure, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD xmldsig-core-schema"}}
+  # Feature 005 (FR-016): EncryptedData under an encryptable element, or as the whole
+  # body, keeps its allowlisted structure and its cipher value in ciphertext mode and is copied as
+  # it is in passthrough mode; anywhere else it is removed and counted.
+  - name: "http://www.w3.org/2001/04/xmlenc#"
+    disposition: encrypted_content
+    source: {spec: TS 33.180, version: "20.0.0", clause: "9.3.4.2"}
+    elements:
+      - {name: EncryptedData, action: container, source: {spec: TS 33.180, version: "20.0.0", clause: "9.3.4.2"}}
+      - {name: EncryptionMethod, action: container, source: {spec: TS 33.180, version: "20.0.0", clause: "9.3.4.2"}}
+      - {name: CipherData, action: container, source: {spec: TS 33.180, version: "20.0.0", clause: "9.3.4.2"}}
+      - {name: CipherValue, action: keep, value: base64, source: {spec: TS 33.180, version: "20.0.0", clause: "9.3.4.2"}}
+    attributes:
+      - {element: EncryptedData, name: Type, action: keep, value: {std-uri: ["http://www.w3.org/2001/04/xmlenc#Content", "http://www.w3.org/2001/04/xmlenc#EncryptedKey"]}, source: {spec: TS 33.180, version: "20.0.0", clause: "9.3.4.2"}}
+      - {element: EncryptionMethod, name: Algorithm, action: keep, value: {std-uri: ["http://www.w3.org/2009/xmlenc11#aes128-gcm", "http://www.w3.org/2001/04/xmlenc#kw-aes256"]}, source: {spec: TS 33.180, version: "20.0.0", clause: "9.3.4.2"}}
+  # Feature 005: group key transport payloads. Each <GKTP> holds the hexBinary of a
+  # MIKEY-SAKKE I_MESSAGE (TS 24.481 §7.4.2, §7.7.4.2), rewritten by rules/mikey.yaml; one the
+  # MIKEY carrier cannot rewrite is removed as a credential (FR-020 c). activationtime is kept
+  # unshifted like every XML datetime.
+  - name: "urn:3gpp:ns:mcpttGKTP:1.0"
+    source: {spec: TS 24.481, version: "19.2.0", clause: "7.7.4.2"}
+    elements:
+      - {name: GKTPs, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.7.2"}}
+      - {name: GMK-GKTPs, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.7.2"}}
+      - {name: MKFC-GKTPs, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.7.2"}}
+      - {name: on-network-regrouped-GKTPs, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.7.2"}}
+      - {name: GKTP, action: pseudonymise, category: mikey-hex, source: {spec: TS 24.481, version: "19.2.0", clause: "7.7.4.2"}}
+      - {name: anyExt, action: remove, reason: structure, source: {spec: TS 24.481, version: "19.2.0", clause: "7.7.4.2"}}
+    attributes:
+      - {element: GKTP, name: id, action: pseudonymise, category: opaque, source: {spec: TS 24.481, version: "19.2.0", clause: "7.7.4.2"}}
+      - {element: GKTP, name: activationtime, action: keep, value: datetime, source: {spec: TS 24.481, version: "19.2.0", clause: "7.7.4.2"}}
+      - {element: on-network-regrouped-GKTPs, name: temporary-MCPTT-group-ID, action: pseudonymise, category: uri, source: {spec: TS 24.481, version: "19.2.0", clause: "7.7.4.2"}}
+  # Imported by TS 24.281 §F.1.2 under the prefix mvgktp but defined nowhere (003 D3): the MCPTT
+  # GKTP rules.
+  - name: "urn:3gpp:ns:mcvideoGKTP:1.0"
+    source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.2"}
+    elements:
+      - {name: GKTPs, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.7.2"}}
+      - {name: GMK-GKTPs, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.7.2"}}
+      - {name: MKFC-GKTPs, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.7.2"}}
+      - {name: on-network-regrouped-GKTPs, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.7.2"}}
+      - {name: GKTP, action: pseudonymise, category: mikey-hex, source: {spec: TS 24.481, version: "19.2.0", clause: "7.7.4.2"}}
+      - {name: anyExt, action: remove, reason: structure, source: {spec: TS 24.481, version: "19.2.0", clause: "7.7.4.2"}}
+    attributes:
+      - {element: GKTP, name: id, action: pseudonymise, category: opaque, source: {spec: TS 24.481, version: "19.2.0", clause: "7.7.4.2"}}
+      - {element: GKTP, name: activationtime, action: keep, value: datetime, source: {spec: TS 24.481, version: "19.2.0", clause: "7.7.4.2"}}
+      - {element: on-network-regrouped-GKTPs, name: temporary-MCPTT-group-ID, action: pseudonymise, category: uri, source: {spec: TS 24.481, version: "19.2.0", clause: "7.7.4.2"}}

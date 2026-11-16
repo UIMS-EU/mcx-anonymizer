@@ -1,0 +1,204 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# The MCS group document of the group management server (TS 24.481 §7.2, feature 007 FR-010)
+# and the GMOP document (§7.3). The group document is the OMA list-service document
+# (OMA-TS-XDM_Group, not in the standards corpus) with the elements TS 24.481 §7.2.2 names and the
+# MCS extensions of the §7.2.4.2 schema. The OMA elements that §7.2.2 does not name have no rule
+# and are removed. XML rule set (feature 003).
+ruleset: mcxanon-xml
+version: 1.0.0
+documents:
+  - content_type: application/vnd.oma.poc.groups+xml
+    roots: [{ns: "urn:oma:xml:poc:list-service", name: group}]
+    source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.6"}
+  - content_type: application/vnd.3gpp.gmop+xml
+    roots: [{ns: "urn:3gpp:ns:mcpttGMOP:1.0", name: document}]
+    source: {spec: TS 24.481, version: "19.2.0", clause: "7.3.2"}
+namespaces:
+  - name: "urn:oma:xml:poc:list-service"
+    source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.2"}
+    elements:
+      - {name: group, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.2"}}
+      - {name: list-service, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.2"}}
+      - {name: display-name, action: pseudonymise, category: display-name, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.2"}}
+      - {name: list, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.2"}}
+      - {name: entry, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.2"}}
+      - {name: supported-services, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.2"}}
+      - {name: ruleset, action: remove, reason: structure, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.2"}}
+    attributes:
+      - {element: list-service, name: uri, action: pseudonymise, category: web-uri, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.2"}}
+      - {element: entry, name: uri, action: pseudonymise, category: web-uri, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.2"}}
+  - name: "urn:3gpp:ns:mcpttGroupInfo:1.0"
+    source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}
+    elements:
+      - {name: Center, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: Corner, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: EllipsoidArcArea, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: IncludedAngle, action: remove, reason: structure, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: Latitude, action: remove, reason: structure, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: Longitude, action: remove, reason: structure, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: OffsetAngle, action: remove, reason: structure, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: PolygonArea, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: Radius, action: remove, reason: structure, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: allow-MCPTT-emergency-alert, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: allow-MCPTT-emergency-call, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: allow-imminent-peril-call, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: anyExt, action: keep, value: empty, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: audio-mixing-entity, action: remove, reason: free-text, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: audio-mixing-performed-in-the-network, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: constituent-MCPTT-group-ID, action: pseudonymise, category: web-uri, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: constituent-MCPTT-group-IDs, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: description, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: display-name, action: pseudonymise, category: display-name, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: encoding, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: entry, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: forbidden-deaffiliation-FAs, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: forbidden-deaffiliation-if-last-FAs, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: id, action: keep, value: {int: [0, 18446744073709551615]}, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: langText, action: remove, reason: free-text, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: langType, action: remove, reason: free-text, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: level-within-group-hierarchy, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: level-within-user-hierarchy, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mandatory-geographic-area, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: max-number-simultaneous-talkers, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcdata-allow-conversation-management, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcdata-allow-emergency-alert, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcdata-allow-enhanced-status, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcdata-allow-file-distribution, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcdata-allow-rx-control, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcdata-allow-short-data-service, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcdata-allow-transmit-data-in-this-group, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcdata-allow-tx-control, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcdata-default-charset, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcdata-enhanced-status-operational-values, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcdata-max-data-in-single-request, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcdata-max-time-in-single-request, action: keep, value: duration, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcdata-mcdata-id, action: remove, reason: structure, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcdata-off-network-ProSe-media-PPPP, action: pseudonymise, category: opaque, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcdata-off-network-ProSe-media-PQI, action: pseudonymise, category: opaque, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcdata-off-network-ProSe-signalling-PPPP, action: pseudonymise, category: opaque, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcdata-off-network-ProSe-signalling-PQI, action: pseudonymise, category: opaque, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcdata-on-network-allow-getting-affiliation-list, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcdata-on-network-group-priority, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcdata-on-network-max-data-size-auto-recv, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcdata-on-network-max-data-size-for-FD, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcdata-on-network-max-data-size-for-SDS, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcdata-protect-media, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcdata-protect-transmission-control, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcptt-on-network-audio-cut-in, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcptt-speech, action: remove, reason: structure, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-active-real-time-video-mode, action: remove, reason: free-text, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-allow-emergency-alert, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-allow-emergency-call, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-allow-imminent-peril-call, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-maximum-simultaneous-mcvideo-transmitting-group-members, action: keep, value: {int: [0, 18446744073709551615]}, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-mcvideo-id, action: remove, reason: structure, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-non-real-time-video-mode, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-non-urgent-real-time-video-mode, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-off-network-ProSe-emergency-call-media-PPPP, action: pseudonymise, category: opaque, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-off-network-ProSe-emergency-call-media-PQI, action: pseudonymise, category: opaque, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-off-network-ProSe-emergency-call-signalling-PPPP, action: pseudonymise, category: opaque, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-off-network-ProSe-emergency-call-signalling-PQI, action: pseudonymise, category: opaque, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-off-network-ProSe-imminent-peril-call-media-PPPP, action: pseudonymise, category: opaque, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-off-network-ProSe-imminent-peril-call-media-PQI, action: pseudonymise, category: opaque, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-off-network-ProSe-imminent-peril-call-signalling-PPPP, action: pseudonymise, category: opaque, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-off-network-ProSe-imminent-peril-call-signalling-PQI, action: pseudonymise, category: opaque, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-off-network-ProSe-media-PPPP, action: pseudonymise, category: opaque, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-off-network-ProSe-media-PQI, action: pseudonymise, category: opaque, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-off-network-ProSe-signalling-PPPP, action: pseudonymise, category: opaque, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-off-network-ProSe-signalling-PQI, action: pseudonymise, category: opaque, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-off-network-arbitration-approach, action: remove, reason: free-text, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-off-network-in-progress-emergency-state-cancellation-timeout, action: keep, value: duration, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-off-network-in-progress-imminent-peril-state-cancellation-timeout, action: keep, value: duration, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-off-network-maximum-duration, action: keep, value: duration, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-off-network-maximum-simultaneous-transmissions, action: keep, value: {int: [0, 18446744073709551615]}, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-on-network-allow-conference-state, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-on-network-allow-getting-affiliation-list, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-on-network-group-priority, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-on-network-invite-members, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-on-network-maximum-duration, action: keep, value: duration, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-on-network-minimum-number-to-start, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-on-network-required, action: keep, value: empty, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-preferred-audio-encodings, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-preferred-video-encodings, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-preferred-video-frame-rate, action: remove, reason: free-text, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-preferred-video-resolutions, action: remove, reason: free-text, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-protect-media, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-protect-transmission-control, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-urgent-real-time-video-mode, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: mcvideo-video-media, action: remove, reason: structure, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: multi-talker-allowed, action: keep, value: empty, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: multi-talker-control, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: off-network-IP-multicast-address, action: pseudonymise, category: ip, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: off-network-PDN-type, action: remove, reason: free-text, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: off-network-ProSe-emergency-call-media-PPPP, action: pseudonymise, category: opaque, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: off-network-ProSe-emergency-call-media-PQI, action: pseudonymise, category: opaque, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: off-network-ProSe-emergency-call-signalling-PPPP, action: pseudonymise, category: opaque, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: off-network-ProSe-emergency-call-signalling-PQI, action: pseudonymise, category: opaque, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: off-network-ProSe-imminent-peril-call-media-PPPP, action: pseudonymise, category: opaque, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: off-network-ProSe-imminent-peril-call-media-PQI, action: pseudonymise, category: opaque, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: off-network-ProSe-imminent-peril-call-signalling-PPPP, action: pseudonymise, category: opaque, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: off-network-ProSe-imminent-peril-call-signalling-PQI, action: pseudonymise, category: opaque, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: off-network-ProSe-layer-2-group-id, action: pseudonymise, category: opaque, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: off-network-ProSe-media-PPPP, action: pseudonymise, category: opaque, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: off-network-ProSe-media-PQI, action: pseudonymise, category: opaque, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: off-network-ProSe-relay-service-code, action: pseudonymise, category: opaque, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: off-network-ProSe-signalling-PPPP, action: pseudonymise, category: opaque, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: off-network-ProSe-signalling-PQI, action: pseudonymise, category: opaque, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: off-network-hang-timer, action: keep, value: duration, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: off-network-in-progress-emergency-state-cancellation-timeout, action: keep, value: duration, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: off-network-in-progress-imminent-peril-state-cancellation-timeout, action: keep, value: duration, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: off-network-maximum-duration, action: keep, value: duration, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: off-network-queue-usage, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: on-network-action-upon-expiration-of-timeout-for-acknowledgement-of-required-members, action: remove, reason: free-text, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: on-network-affiliation-to-group-required, action: keep, value: empty, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: on-network-allow-conference-state, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: on-network-allow-getting-affiliation-list, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: on-network-allow-getting-member-list, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: on-network-disabled, action: keep, value: empty, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: on-network-group-priority, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: on-network-hang-timer, action: keep, value: duration, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: on-network-in-progress-emergency-state-cancellation-timeout, action: keep, value: duration, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: on-network-in-progress-imminent-peril-state-cancellation-timeout, action: keep, value: duration, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: on-network-invite-members, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: on-network-max-participant-count, action: keep, value: {int: [0, 18446744073709551615]}, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: on-network-maximum-duration, action: keep, value: duration, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: on-network-minimum-number-of-affiliated-members, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: on-network-minimum-number-to-start, action: keep, value: {int: [0, 65535]}, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: on-network-recvonly, action: keep, value: empty, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: on-network-regrouped, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: on-network-required, action: keep, value: empty, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: on-network-temporary, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: on-network-timeout-for-acknowledgement-of-required-members, action: keep, value: duration, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: owner, action: remove, reason: free-text, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: participant-type, action: remove, reason: free-text, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: permitted-geographic-area, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: preconfigured-group-use-only, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: preferred-voice-encodings, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: protect-floor-control-signalling, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: protect-media, action: keep, value: boolean, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: require-multicast-floor-control-signalling, action: keep, value: empty, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: shortText, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: status, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: uri-entry, action: pseudonymise, category: web-uri, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: user-priority, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {name: user-reception-priority, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+    attributes:
+      - {element: encoding, name: name, action: pseudonymise, category: display-name, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {element: on-network-regrouped, name: temporary-MCPTT-group-ID, action: pseudonymise, category: web-uri, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+      - {element: on-network-regrouped, name: temporary-MCPTT-group-requestor, action: pseudonymise, category: web-uri, source: {spec: TS 24.481, version: "19.2.0", clause: "7.2.4.2"}}
+  - name: "urn:3gpp:ns:mcpttGMOP:1.0"
+    source: {spec: TS 24.481, version: "19.2.0", clause: "7.3.3"}
+    elements:
+      - {name: anyExt, action: keep, value: empty, source: {spec: TS 24.481, version: "19.2.0", clause: "7.3.3"}}
+      - {name: command, action: keep, value: empty, source: {spec: TS 24.481, version: "19.2.0", clause: "7.3.3"}}
+      - {name: document, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.3.3"}}
+      - {name: get-excluding-memberlist, action: keep, value: empty, source: {spec: TS 24.481, version: "19.2.0", clause: "7.3.3"}}
+      - {name: group-regroup-check, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.3.3"}}
+      - {name: group-regroup-creation, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.3.3"}}
+      - {name: group-regroup-creation-response, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.3.3"}}
+      - {name: group-regroup-notification, action: container, source: {spec: TS 24.481, version: "19.2.0", clause: "7.3.3"}}
+      - {name: indication, action: keep, value: empty, source: {spec: TS 24.481, version: "19.2.0", clause: "7.3.3"}}
+      - {name: request, action: keep, value: empty, source: {spec: TS 24.481, version: "19.2.0", clause: "7.3.3"}}
+      - {name: response, action: keep, value: empty, source: {spec: TS 24.481, version: "19.2.0", clause: "7.3.3"}}
+      - {name: temporary-group-document-ETag, action: remove, reason: free-text, source: {spec: TS 24.481, version: "19.2.0", clause: "7.3.3"}}

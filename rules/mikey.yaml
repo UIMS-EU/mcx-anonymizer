@@ -1,0 +1,132 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# MIKEY rule set (feature 005).
+# Sources: rules/SOURCES.md § MIKEY rule set. A MIKEY message is rewritten only when it is
+# MIKEY-SAKKE (data type 26) and every payload of its chain has a rule below; anything else falls
+# back as a whole to the carrier's previous handling (spec FR-003, FR-020).
+ruleset: mcxanon-mikey
+version: 1.0.0
+
+message:
+  data_type: {value: 26, source: {spec: RFC 6509, version: "2012-01", clause: "4.1"}}
+  version: {value: 1, source: {spec: RFC 3830, version: "2004-08", clause: "6.1"}}
+  v_flag: {value: 0, source: {spec: TS 33.180, version: "20.0.0", clause: "E.1.2"}}
+  sign_s_type: {value: 2, source: {spec: TS 33.180, version: "20.0.0", clause: "E.1.2"}}
+  mandatory: {payloads: [T, RAND, IDR, SAKKE, SIGN], source: {spec: TS 33.180, version: "20.0.0", clause: "E.1.2"}}
+  limits: {size: 65535, payloads: 64, id_data: 1024, source: {spec: TS 24.380, version: "19.1.0", clause: "8.1.3"}}
+
+# The payload allowlist, keyed on the next-payload value that announces the payload
+# (RFC 3830 Table 6.1.b, RFC 6043, RFC 6509 Table 2).
+payloads:
+  - {next: 5, name: T, action: shift, source: {spec: RFC 3830, version: "2004-08", clause: "6.6"}}
+  - {next: 11, name: RAND, action: nonce, source: {spec: RFC 3830, version: "2004-08", clause: "6.11"}}
+  - {next: 14, name: IDR, action: rewrite, source: {spec: RFC 6043, version: "2011-03", clause: "6.6"}}
+  - {next: 10, name: SP, action: rewrite, source: {spec: RFC 3830, version: "2004-08", clause: "6.10"}}
+  - {next: 26, name: SAKKE, action: sakke, source: {spec: RFC 6509, version: "2012-01", clause: "4.2"}}
+  - {next: 21, name: General Extension, action: rewrite, source: {spec: RFC 3830, version: "2004-08", clause: "6.15"}}
+  - {next: 4, name: SIGN, action: zero, source: {spec: RFC 6509, version: "2012-01", clause: "4.3"}}
+  # Not part of MIKEY-SAKKE (TS 33.180 §E.1.2): the whole message falls back.
+  - {next: 1, name: KEMAC, action: fallback, source: {spec: RFC 3830, version: "2004-08", clause: "6.2"}}
+  - {next: 2, name: PKE, action: fallback, source: {spec: RFC 3830, version: "2004-08", clause: "6.3"}}
+  - {next: 3, name: DH, action: fallback, source: {spec: RFC 3830, version: "2004-08", clause: "6.4"}}
+  - {next: 6, name: ID, action: fallback, source: {spec: RFC 3830, version: "2004-08", clause: "6.7"}}
+  - {next: 7, name: CERT, action: fallback, source: {spec: RFC 3830, version: "2004-08", clause: "6.7"}}
+  - {next: 8, name: CHASH, action: fallback, source: {spec: RFC 3830, version: "2004-08", clause: "6.8"}}
+  - {next: 9, name: V, action: fallback, source: {spec: RFC 3830, version: "2004-08", clause: "6.9"}}
+  - {next: 12, name: ERR, action: fallback, source: {spec: RFC 3830, version: "2004-08", clause: "6.12"}}
+  - {next: 20, name: Key data, action: fallback, source: {spec: RFC 3830, version: "2004-08", clause: "6.13"}}
+
+# T payload TS types (RFC 3830 Table 6.6); MIKEY-SAKKE uses NTP-UTC (TS 33.180 §E.1.2).
+ts_types:
+  - {value: 0, name: NTP-UTC, action: shift, source: {spec: RFC 3830, version: "2004-08", clause: "6.6"}}
+  - {value: 1, name: NTP, action: shift, source: {spec: RFC 3830, version: "2004-08", clause: "6.6"}}
+  - {value: 2, name: COUNTER, action: keep, source: {spec: RFC 3830, version: "2004-08", clause: "6.6"}}
+
+# IDR role x ID type (RFC 6043 Table 6.11, RFC 6509 Table 7, TS 33.180 §E.7, TS 24.481 §7.5.2).
+# ID types: 0 NAI, 1 URI (RFC 3830 Table 6.7.a), 2 byte string (RFC 6043 Table 6.10). A pair
+# without a rule has its ID data zeroed and is counted (unknown-identity).
+id_roles:
+  - {role: 1, name: IDRi, types: [0, 1], action: identity, source: {spec: RFC 6043, version: "2011-03", clause: "6.6"}}
+  - {role: 2, name: IDRr, types: [0, 1], action: identity, source: {spec: RFC 6043, version: "2011-03", clause: "6.6"}}
+  - {role: 3, name: IDRkms, types: [0, 1], action: kms, source: {spec: RFC 6043, version: "2011-03", clause: "6.6"}}
+  - {role: 6, name: IDRkmsi, types: [0, 1], action: kms, source: {spec: RFC 6509, version: "2012-01", clause: "4.4"}}
+  - {role: 7, name: IDRkmsr, types: [0, 1], action: kms, source: {spec: RFC 6509, version: "2012-01", clause: "4.4"}}
+  - {role: 8, name: IDRuidi, types: [1, 2], action: uid, source: {spec: TS 33.180, version: "20.0.0", clause: "E.7"}}
+  - {role: 9, name: IDRuidr, types: [1, 2], action: uid, source: {spec: TS 33.180, version: "20.0.0", clause: "E.7"}}
+  - {role: 241, name: hashed initiator (private use), types: [1, 2], action: uid, source: {spec: TS 24.481, version: "19.2.0", clause: "7.5.2"}}
+  - {role: 240, name: hashed responder (private use), types: [1, 2], action: uid, source: {spec: TS 24.481, version: "19.2.0", clause: "7.5.2"}}
+  # Not part of MIKEY-SAKKE: pre-shared key and application identities.
+  - {role: 4, name: IDRpsk, types: [0, 1, 2], action: fallback, source: {spec: RFC 6043, version: "2011-03", clause: "6.6"}}
+  - {role: 5, name: IDRapp, types: [0, 1, 2], action: fallback, source: {spec: RFC 6043, version: "2011-03", clause: "6.6"}}
+
+# General extension types (RFC 3830 Table 6.15, TS 33.180 §E.5, §E.6.1).
+extensions:
+  - {type: 6, name: SAKKE-to-self, action: sakke, source: {spec: TS 33.180, version: "20.0.0", clause: "E.5"}}
+  - {type: 7, name: 3GPP key parameters, action: key-parameters, source: {spec: TS 33.180, version: "20.0.0", clause: "E.6.1"}}
+  - {type: 0, name: Vendor ID, action: zero, source: {spec: RFC 3830, version: "2004-08", clause: "6.15"}}
+  - {type: 1, name: SDP IDs, action: zero, source: {spec: RFC 3830, version: "2004-08", clause: "6.15"}}
+
+# Security policy parameters per protocol type (RFC 3830 §6.10.1; TS 33.180 Table E.2.2-1).
+# A parameter type without a rule keeps its type and length and has its value zeroed.
+sp:
+  - prot_type: 0
+    name: SRTP
+    source: {spec: RFC 3830, version: "2004-08", clause: "6.10.1"}
+    params:
+      - {type: 0, name: Encryption algorithm, action: keep, source: {spec: RFC 3830, version: "2004-08", clause: "6.10.1"}}
+      - {type: 1, name: Session Encr. key length, action: keep, source: {spec: RFC 3830, version: "2004-08", clause: "6.10.1"}}
+      - {type: 2, name: Authentication algorithm, action: keep, source: {spec: RFC 3830, version: "2004-08", clause: "6.10.1"}}
+      - {type: 3, name: Session Auth. key length, action: keep, source: {spec: RFC 3830, version: "2004-08", clause: "6.10.1"}}
+      - {type: 4, name: Session Salt key length, action: keep, source: {spec: RFC 3830, version: "2004-08", clause: "6.10.1"}}
+      - {type: 5, name: SRTP Pseudo Random Function, action: keep, source: {spec: RFC 3830, version: "2004-08", clause: "6.10.1"}}
+      - {type: 6, name: Key derivation rate, action: keep, source: {spec: RFC 3830, version: "2004-08", clause: "6.10.1"}}
+      - {type: 7, name: SRTP encryption off/on, action: keep, source: {spec: RFC 3830, version: "2004-08", clause: "6.10.1"}}
+      - {type: 8, name: SRTCP encryption off/on, action: keep, source: {spec: RFC 3830, version: "2004-08", clause: "6.10.1"}}
+      - {type: 9, name: sender's FEC order, action: keep, source: {spec: RFC 3830, version: "2004-08", clause: "6.10.1"}}
+      - {type: 10, name: SRTP authentication off/on, action: keep, source: {spec: RFC 3830, version: "2004-08", clause: "6.10.1"}}
+      - {type: 11, name: Authentication tag length, action: keep, source: {spec: RFC 3830, version: "2004-08", clause: "6.10.1"}}
+      - {type: 12, name: SRTP prefix length, action: keep, source: {spec: RFC 3830, version: "2004-08", clause: "6.10.1"}}
+      - {type: 13, name: ROC transmission rate, action: keep, source: {spec: TS 33.180, version: "20.0.0", clause: "E.2.2"}}
+      - {type: 18, name: SRTP Authentication tag length, action: keep, source: {spec: TS 33.180, version: "20.0.0", clause: "E.2.2"}}
+      - {type: 19, name: SRTCP Authentication tag length, action: keep, source: {spec: TS 33.180, version: "20.0.0", clause: "E.2.2"}}
+      - {type: 20, name: AEAD authentication tag length, action: keep, source: {spec: TS 33.180, version: "20.0.0", clause: "E.2.2"}}
+
+# Crypto session identifiers (TS 33.180 Table E.1.3-1), for the report.
+cs_ids:
+  - {cs_id: 0, name: "Initiator's MCPTT Private Call", source: {spec: TS 33.180, version: "20.0.0", clause: "E.1.3"}}
+  - {cs_id: 1, name: "Receiver's MCPTT Private Call", source: {spec: TS 33.180, version: "20.0.0", clause: "E.1.3"}}
+  - {cs_id: 2, name: "Initiator's MCVideo Private Call", source: {spec: TS 33.180, version: "20.0.0", clause: "E.1.3"}}
+  - {cs_id: 3, name: "Receiver's MCVideo Private Call", source: {spec: TS 33.180, version: "20.0.0", clause: "E.1.3"}}
+  - {cs_id: 4, name: "MCPTT Group Call", source: {spec: TS 33.180, version: "20.0.0", clause: "E.1.3"}}
+  - {cs_id: 5, name: "MCVideo Group Call", source: {spec: TS 33.180, version: "20.0.0", clause: "E.1.3"}}
+  - {cs_id: 6, name: "CSK SRTCP protection for MCPTT", source: {spec: TS 33.180, version: "20.0.0", clause: "E.1.3"}}
+  - {cs_id: 7, name: "MuSiK SRTCP protection for MCPTT", source: {spec: TS 33.180, version: "20.0.0", clause: "E.1.3"}}
+  - {cs_id: 8, name: "CSK SRTCP protection for MCVideo", source: {spec: TS 33.180, version: "20.0.0", clause: "E.1.3"}}
+  - {cs_id: 9, name: "MuSiK SRTCP protection for MCVideo", source: {spec: TS 33.180, version: "20.0.0", clause: "E.1.3"}}
+
+# Key identifier purpose tags (TS 33.180 Table G-1); values 7-15 are not defined.
+purpose_tags:
+  - {tag: 0, name: GMK, source: {spec: TS 33.180, version: "20.0.0", clause: "G"}}
+  - {tag: 1, name: PCK, source: {spec: TS 33.180, version: "20.0.0", clause: "G"}}
+  - {tag: 2, name: CSK, source: {spec: TS 33.180, version: "20.0.0", clause: "G"}}
+  - {tag: 3, name: SPK, source: {spec: TS 33.180, version: "20.0.0", clause: "G"}}
+  - {tag: 4, name: MKFC, source: {spec: TS 33.180, version: "20.0.0", clause: "G"}}
+  - {tag: 5, name: MSCCK, source: {spec: TS 33.180, version: "20.0.0", clause: "G"}}
+  - {tag: 6, name: MuSiK, source: {spec: TS 33.180, version: "20.0.0", clause: "G"}}
+
+# The SRTP authentication tag octets that follow the MKI under each default profile (research
+# R11): GMK uses RCCm3 with a 4-octet tag for the ROC; PCK, CSK and MuSiK use AES-GCM, whose AEAD
+# tag is part of the encrypted portion.
+default_trailer:
+  - {key: GMK, tag_octets: 4, source: {spec: TS 33.180, version: "20.0.0", clause: "E.2.2"}}
+  - {key: PCK, tag_octets: 0, source: {spec: TS 33.180, version: "20.0.0", clause: "E.3.2"}}
+  - {key: CSK, tag_octets: 0, source: {spec: TS 33.180, version: "20.0.0", clause: "E.4.2"}}
+  - {key: MuSiK, tag_octets: 0, source: {spec: TS 33.180, version: "20.0.0", clause: "E.4.2"}}
+
+# The requests that carry an application/mikey body (spec FR-004 b). A body in any other request,
+# or in a response, is rewritten the same way and counted as unexpected-carrier.
+body_methods:
+  - {method: REGISTER, source: {spec: TS 24.379, version: "19.6.0", clause: "7.2.1, 7A.2.1"}}
+  - {method: PUBLISH, source: {spec: TS 24.379, version: "19.6.0", clause: "7.2.2"}}
+  - {method: MESSAGE, source: {spec: TS 24.379, version: "19.6.0", clause: "7.3.7, 14.2.2.5"}}
+  - {method: SUBSCRIBE, source: {spec: TS 24.481, version: "19.2.0", clause: "6.3.13.2.1"}}

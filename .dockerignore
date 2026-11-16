@@ -1,0 +1,16 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Allowlist: only the sources the build needs enter the image build context.
+*
+!.ci/
+!CMakeLists.txt
+!conanfile.py
+!cmake/
+!include/
+!src/
+!rules/
+!schemas/
+!tests/
+!tools/
+!LICENSE
+!README.md
+**/__pycache__

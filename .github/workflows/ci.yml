@@ -1,0 +1,107 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+name: ci
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "17 3 * * *"   # nightly: longer fuzzing
+
+permissions:
+  contents: read
+
+jobs:
+  image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+      - name: Build the CI image
+        run: docker build -t mcxanon-ci .ci
+      - name: Save image
+        run: docker save mcxanon-ci | gzip > /tmp/mcxanon-ci.tar.gz
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        with:
+          name: ci-image
+          path: /tmp/mcxanon-ci.tar.gz
+          retention-days: 1
+
+  build-test:
+    needs: image
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        profile: [gcc14, clang19, asan]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4.3.0
+        with:
+          name: ci-image
+          path: /tmp
+      - run: gunzip -c /tmp/mcxanon-ci.tar.gz | docker load
+      - name: Build and test (${{ matrix.profile }})
+        run: >
+          docker run --rm -e MCXANON_REQUIRE_TSHARK=1 -v "$PWD:/work" -w /work mcxanon-ci
+          bash .ci/build.sh ${{ matrix.profile }} test
+
+  licenses:
+    needs: image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4.3.0
+        with:
+          name: ci-image
+          path: /tmp
+      - run: gunzip -c /tmp/mcxanon-ci.tar.gz | docker load
+      - name: Dependency licences are permissive
+        run: >
+          docker run --rm -v "$PWD:/work" -w /work mcxanon-ci bash -c
+          'conan profile detect --force >/dev/null 2>&1 || true;
+           python3 tools/check-licenses.py --project . '
+
+  gates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+      - name: Scanner independence
+        run: bash tools/check-scan-independence.sh
+      - name: Public headers
+        run: bash tools/check-public-headers.sh
+      - name: SPDX headers
+        run: bash tools/check-spdx.sh
+      - name: Captures, mappings and secrets
+        run: tools/check-no-captures.sh --tracked
+
+  fuzz:
+    needs: image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4.3.0
+        with:
+          name: ci-image
+          path: /tmp
+      - run: gunzip -c /tmp/mcxanon-ci.tar.gz | docker load
+      - name: Fuzz every target
+        run: >
+          docker run --rm -v "$PWD:/work" -w /work mcxanon-ci bash -c
+          'bash .ci/build.sh fuzz &&
+           bash tools/run-fuzzers.sh ${{ github.event_name == 'schedule' && '600' || '60' }} build/Debug'
+
+  offline:
+    needs: image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4.3.0
+        with:
+          name: ci-image
+          path: /tmp
+      - run: gunzip -c /tmp/mcxanon-ci.tar.gz | docker load
+      - name: Build (with network for the package manager)
+        run: docker run --rm -v "$PWD:/work" -w /work mcxanon-ci bash .ci/build.sh gcc14
+      - name: No network access at run time
+        run: >
+          docker run --rm --network none -v "$PWD:/work" -w /work mcxanon-ci
+          bash tests/integration/test_offline.sh build/Release/src/cli/mcxanon

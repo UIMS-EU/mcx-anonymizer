@@ -1,0 +1,2400 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:mcxanon:report:5",
+  "title": "mcxanon run report (format 6)",
+  "description": "Contains no original values, no secret, no absolute paths and no wall-clock time. Format 2 adds the sip object and the sip_ruleset (feature 002); format 3 adds the media object and the media_ruleset (feature 004); format 4 adds the xml object and the xml_ruleset (feature 003). Format 5 (feature 005): options.encrypted, the mikey_ruleset and mikey objects, scan.warnings and the MIKEY statements. Format 6 (feature 007): the http_ruleset, http, tls_ruleset and tls objects and the web statements.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "command",
+    "tool",
+    "ruleset",
+    "options",
+    "files",
+    "status",
+    "counters",
+    "pcapng_removed",
+    "unknown_protocols",
+    "checksums",
+    "scan",
+    "not_anonymised"
+  ],
+  "properties": {
+    "format": {
+      "const": 6
+    },
+    "command": {
+      "enum": [
+        "anonymize",
+        "scan"
+      ]
+    },
+    "tool": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version"
+      ],
+      "properties": {
+        "version": {
+          "type": "string"
+        }
+      }
+    },
+    "ruleset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "version",
+        "digest"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "options": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "payload": {
+          "enum": [
+            "zero",
+            "drop"
+          ]
+        },
+        "format": {
+          "enum": [
+            "same",
+            "pcap",
+            "pcapng"
+          ]
+        },
+        "pseudonymise_vlan": {
+          "type": "boolean"
+        },
+        "pseudonymise_ephemeral_ports": {
+          "type": "boolean"
+        },
+        "ephemeral_range": {
+          "type": "string"
+        },
+        "prefix_preserving": {
+          "type": "boolean"
+        },
+        "time_shift_ns": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "deny_list_entries": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "strict": {
+          "type": "boolean"
+        },
+        "encrypted": {
+          "enum": [
+            "ciphertext",
+            "passthrough"
+          ]
+        }
+      }
+    },
+    "files": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "input"
+      ],
+      "properties": {
+        "input": {
+          "type": "string",
+          "description": "base name only"
+        },
+        "output": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "base name only; null when not published"
+        },
+        "input_format": {
+          "enum": [
+            "pcap",
+            "pcapng"
+          ]
+        },
+        "output_format": {
+          "enum": [
+            "pcap",
+            "pcapng",
+            null
+          ]
+        },
+        "frames": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "truncated_tail_bytes": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "status": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "exit_code",
+        "result"
+      ],
+      "properties": {
+        "exit_code": {
+          "enum": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            70
+          ]
+        },
+        "result": {
+          "enum": [
+            "published",
+            "clean",
+            "leak_found",
+            "usage_error",
+            "input_error",
+            "pseudonym_collision",
+            "project_busy",
+            "internal_failure"
+          ]
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "counters": {
+      "description": "Keyed by FieldId; each value counts decisions by action (l7: handed to the SIP layer).",
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "keep": {
+            "type": "integer"
+          },
+          "pseudonymise": {
+            "type": "integer"
+          },
+          "zero": {
+            "type": "integer"
+          },
+          "pad": {
+            "type": "integer"
+          },
+          "remove": {
+            "type": "integer"
+          },
+          "recompute": {
+            "type": "integer"
+          },
+          "l7": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "unclassified": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "mapping": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "new_entries": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer"
+          }
+        },
+        "reused_entries": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer"
+          }
+        },
+        "collisions_resolved": {
+          "type": "integer"
+        }
+      }
+    },
+    "pcapng_removed": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "blocks": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "description": "key: block type as 0x-prefixed hex"
+        },
+        "options": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "description": "key: <block type hex>/<option code>"
+        }
+      }
+    },
+    "unknown_protocols": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "id",
+          "count"
+        ],
+        "properties": {
+          "kind": {
+            "enum": [
+              "linktype",
+              "ethertype",
+              "ip_proto",
+              "ipv6_nh",
+              "gre_proto",
+              "gtpu_ext",
+              "sctp_chunk",
+              "tcp_option",
+              "ipv4_option",
+              "ipv6_option",
+              "ndp_option",
+              "parse_failure"
+            ]
+          },
+          "id": {
+            "type": "integer"
+          },
+          "count": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "checksums": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "valid_kept_valid": {
+          "type": "integer"
+        },
+        "invalid_kept_invalid": {
+          "type": "integer"
+        },
+        "unverifiable_recomputed": {
+          "type": "integer"
+        },
+        "udp_zero_kept": {
+          "type": "integer"
+        }
+      }
+    },
+    "sip": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "messages",
+        "headers",
+        "sdp",
+        "bodies",
+        "tcp",
+        "fragments",
+        "limits"
+      ],
+      "properties": {
+        "messages": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "requests",
+            "responses",
+            "malformed"
+          ],
+          "properties": {
+            "requests": {
+              "type": "object",
+              "propertyNames": {
+                "pattern": "^[!%*+.0-9A-Z_`a-z~-]{1,64}$|^\\(invalid-name\\)$"
+              },
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "responses": {
+              "type": "object",
+              "propertyNames": {
+                "enum": [
+                  "1xx",
+                  "2xx",
+                  "3xx",
+                  "4xx",
+                  "5xx",
+                  "6xx"
+                ]
+              },
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "malformed": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "headers": {
+          "type": "object",
+          "description": "key: header rule name",
+          "propertyNames": {
+            "pattern": "^[!%*+.0-9A-Z_`a-z~-]{1,64}$|^\\(invalid-name\\)$"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "keep": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "pseudonymise": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "blank": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "remove": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "zero": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "malformed": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        },
+        "malformed_headers": {
+          "type": "object",
+          "propertyNames": {
+            "pattern": "^[!%*+.0-9A-Z_`a-z~-]{1,64}$|^\\(invalid-name\\)$"
+          },
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "removed_unknown": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "sip-header": {
+              "type": "object",
+              "propertyNames": {
+                "pattern": "^[!%*+.0-9A-Z_`a-z~-]{1,64}$|^\\(invalid-name\\)$"
+              },
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "sip-param": {
+              "type": "object",
+              "propertyNames": {
+                "pattern": "^[!%*+.0-9A-Z_`a-z~-]{1,64}$|^\\(invalid-name\\)$"
+              },
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "sdp-attribute": {
+              "type": "object",
+              "propertyNames": {
+                "pattern": "^[!%*+.0-9A-Z_`a-z~-]{1,64}$|^\\(invalid-name\\)$"
+              },
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "content-type": {
+              "type": "object",
+              "propertyNames": {
+                "pattern": "^[!#$&^_.+0-9A-Za-z-]{1,64}/[!#$&^_.+0-9A-Za-z-]{1,64}$|^\\(invalid-name\\)$"
+              },
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        },
+        "sdp": {
+          "type": "object",
+          "description": "key: SDP line type (o=, c=, ...) or attribute (a=rtcp, a=fmtp:MCPTT, ...)",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "keep": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "pseudonymise": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "blank": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "remove": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "zero": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "malformed": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        },
+        "bodies": {
+          "type": "object",
+          "description": "key: Content-Type of a known rule",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "sdp": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "multipart": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "emptied": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "xml": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "mikey": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        },
+        "tcp": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "streams_sip": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "bytes_unframable": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "retransmissions_replayed": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "retransmissions_zeroed": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "directions_evicted": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "fragments": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "datagrams_rewritten": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "datagrams_zeroed": {
+              "type": "object",
+              "propertyNames": {
+                "enum": [
+                  "missing",
+                  "ambiguous",
+                  "bound",
+                  "timeout",
+                  "not-sip"
+                ]
+              },
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        },
+        "limits": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "max_message_bytes": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "max_tcp_directions": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "max_held_bytes": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "pending_timeout_ms": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "retrans_cache_bytes": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "max_offset_breakpoints": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "max_pending_datagrams": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        }
+      }
+    },
+    "scan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "performed",
+        "tokens",
+        "hits"
+      ],
+      "properties": {
+        "performed": {
+          "type": "boolean"
+        },
+        "tokens": {
+          "type": "integer"
+        },
+        "patterns": {
+          "type": "integer"
+        },
+        "unscannable_tokens": {
+          "type": "integer"
+        },
+        "suppressed_chance_matches": {
+          "type": "integer"
+        },
+        "hits": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "frame",
+              "offset",
+              "encoding",
+              "category",
+              "label"
+            ],
+            "properties": {
+              "frame": {
+                "type": "integer"
+              },
+              "offset": {
+                "type": "integer"
+              },
+              "encoding": {
+                "type": "string"
+              },
+              "category": {
+                "enum": [
+                  "mac",
+                  "ipv4",
+                  "ipv6",
+                  "string",
+                  "number",
+                  "binary",
+                  "deny",
+                  "key",
+                  "bytes"
+                ]
+              },
+              "label": {
+                "type": "string",
+                "description": "pseudonym, removed:<cat>#n, input:<cat>#n or deny#<line>; never an original"
+              }
+            }
+          }
+        },
+        "unscannable_by_category": {
+          "type": "object",
+          "description": "key: <category>/<reason>, reason = short or vocabulary, or degenerate (one repeated octet, feature 005)",
+          "propertyNames": {
+            "pattern": "^[a-z0-9-]+/(short|vocabulary|degenerate)$"
+          },
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "description": "passthrough only (feature 005, FR-018): hits wholly inside a passthrough element",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "frame",
+              "offset",
+              "carrier",
+              "category"
+            ],
+            "properties": {
+              "frame": {
+                "type": "integer"
+              },
+              "offset": {
+                "type": "integer"
+              },
+              "carrier": {
+                "enum": [
+                  "sdp",
+                  "body",
+                  "gktp",
+                  "mcpc",
+                  "encrypted-xml"
+                ]
+              },
+              "category": {
+                "enum": [
+                  "mac",
+                  "ipv4",
+                  "ipv6",
+                  "string",
+                  "number",
+                  "binary",
+                  "deny",
+                  "key",
+                  "bytes"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "not_anonymised": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Fixed statements, e.g. packet sizes, timing, ordering, ports unless pseudonymised, VLAN IDs unless pseudonymised."
+    },
+    "sip_ruleset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "version",
+        "digest"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "description": "The embedded SIP/SDP/body rule set."
+    },
+    "media_ruleset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "version",
+        "digest"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "description": "The embedded media rule set: RTP, RTCP, MCX RTCP APP and MSRP (feature 004)."
+    },
+    "media": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "announcements",
+        "rtp",
+        "rtcp",
+        "app",
+        "msrp",
+        "limits"
+      ],
+      "properties": {
+        "announcements": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "endpoints",
+            "skipped"
+          ],
+          "properties": {
+            "endpoints": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "propertyNames": {
+                "pattern": "^(rtp|rtcp|mux|fc|tc|msrp)$"
+              }
+            },
+            "skipped": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "propertyNames": {
+                "pattern": "^(fqdn|unspecified|multicast|tls|rejected|unsupported|malformed)$"
+              }
+            }
+          }
+        },
+        "rtp": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "packets",
+            "by_payload_type",
+            "streams",
+            "by_stream",
+            "zeroed"
+          ],
+          "properties": {
+            "packets": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "by_payload_type": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "propertyNames": {
+                "pattern": "^[0-9]{1,3}$"
+              }
+            },
+            "streams": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "by_stream": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "propertyNames": {
+                "pattern": "^[0-9a-f]{8}$"
+              }
+            },
+            "zeroed": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "propertyNames": {
+                "pattern": "^[a-z][a-z0-9-]{0,31}$"
+              }
+            }
+          }
+        },
+        "rtcp": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "by_packet_type",
+            "feedback",
+            "xr_blocks",
+            "sdes_removed",
+            "srtcp_view",
+            "zeroed"
+          ],
+          "properties": {
+            "by_packet_type": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "propertyNames": {
+                "pattern": "^([0-9]{1,3}|other)$"
+              }
+            },
+            "feedback": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "propertyNames": {
+                  "enum": [
+                    "keep",
+                    "pseudonymise",
+                    "remove",
+                    "zero",
+                    "malformed"
+                  ]
+                }
+              },
+              "propertyNames": {
+                "pattern": "^[0-9]{1,3}/[0-9]{1,2}$"
+              }
+            },
+            "xr_blocks": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "propertyNames": {
+                  "enum": [
+                    "keep",
+                    "pseudonymise",
+                    "remove",
+                    "zero",
+                    "malformed"
+                  ]
+                }
+              },
+              "propertyNames": {
+                "pattern": "^([0-9]{1,3}|other)$"
+              }
+            },
+            "sdes_removed": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "propertyNames": {
+                "pattern": "^[A-Z]{3,5}$|^unknown$"
+              }
+            },
+            "srtcp_view": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "propertyNames": {
+                "pattern": "^(secure|undecodable)$"
+              }
+            },
+            "zeroed": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "propertyNames": {
+                "pattern": "^malformed$"
+              }
+            }
+          }
+        },
+        "app": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "messages",
+            "fields",
+            "unknown"
+          ],
+          "properties": {
+            "messages": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "propertyNames": {
+                "pattern": "^[A-Z0-9]{4}/[0-9]{1,2}$"
+              }
+            },
+            "fields": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "propertyNames": {
+                  "enum": [
+                    "keep",
+                    "pseudonymise",
+                    "remove",
+                    "zero",
+                    "malformed"
+                  ]
+                }
+              },
+              "propertyNames": {
+                "pattern": "^[a-z0-9-]{1,16}/[0-9]{1,3}$"
+              }
+            },
+            "unknown": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "propertyNames": {
+                "pattern": "^[a-z][a-z0-9-]{0,31}$"
+              }
+            }
+          }
+        },
+        "msrp": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "requests",
+            "responses",
+            "headers",
+            "zeroed"
+          ],
+          "properties": {
+            "requests": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "propertyNames": {
+                "pattern": "^(SEND|REPORT|other)$"
+              }
+            },
+            "responses": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "propertyNames": {
+                "pattern": "^[1-6]xx$"
+              }
+            },
+            "headers": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "propertyNames": {
+                  "enum": [
+                    "keep",
+                    "pseudonymise",
+                    "remove",
+                    "zero",
+                    "malformed"
+                  ]
+                }
+              },
+              "propertyNames": {
+                "pattern": "^([A-Za-z][A-Za-z0-9-]{0,63}|other)$"
+              }
+            },
+            "zeroed": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "propertyNames": {
+                "pattern": "^[a-z][a-z0-9-]{0,31}$"
+              }
+            }
+          }
+        },
+        "limits": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "max_endpoints",
+            "endpoints_evicted"
+          ],
+          "properties": {
+            "max_endpoints": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "endpoints_evicted": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        }
+      },
+      "description": "The media layer's counts (feature 004). Keys are packet types, APP names and subtypes, rule names, pseudonymised SSRCs or fixed reason words, never input values."
+    },
+    "xml_ruleset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "version",
+        "digest"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "description": "The embedded XML rule set: MCX XML bodies (feature 003)."
+    },
+    "xml": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bodies",
+        "elements",
+        "attributes",
+        "removed",
+        "embedded",
+        "limits"
+      ],
+      "description": "The XML layer (feature 003). Names without rules pass the report-name check.",
+      "properties": {
+        "bodies": {
+          "type": "object",
+          "description": "key: Content-Type of an XML document rule",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "rewritten": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "malformed": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "encoding": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "limit": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "dtd": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "root": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "encrypted": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        },
+        "elements": {
+          "type": "object",
+          "description": "key: '<namespace> <local name>'",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "container": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "keep": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "pseudonymise": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "fixed": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "empty": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "remove": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "unknown": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "malformed": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "zero": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        },
+        "attributes": {
+          "type": "object",
+          "description": "key: '<namespace> <element> @<attribute namespace> <attribute>'",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "container": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "keep": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "pseudonymise": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "fixed": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "empty": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "remove": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "unknown": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "malformed": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "zero": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        },
+        "removed": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "namespaces",
+            "comments",
+            "processing_instructions",
+            "encrypted"
+          ],
+          "properties": {
+            "namespaces": {
+              "type": "object",
+              "description": "key: a namespace name without rules, after the report-name check",
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "comments": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "processing_instructions": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "encrypted": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "embedded": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "rewritten": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "undecodable": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "unknown-type": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "nested": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "malformed": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "encoding": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "dtd": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "root": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "encrypted": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "limits": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "max_depth",
+            "max_elements",
+            "max_attributes",
+            "max_name_bytes",
+            "max_value_bytes",
+            "max_body_bytes",
+            "max_embed_depth"
+          ],
+          "properties": {
+            "max_depth": {
+              "const": 32
+            },
+            "max_elements": {
+              "const": 10000
+            },
+            "max_attributes": {
+              "const": 64
+            },
+            "max_name_bytes": {
+              "const": 256
+            },
+            "max_value_bytes": {
+              "const": 65536
+            },
+            "max_body_bytes": {
+              "const": 1048576
+            },
+            "max_embed_depth": {
+              "const": 1
+            }
+          }
+        }
+      }
+    },
+    "mikey_ruleset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "version",
+        "digest"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "description": "The embedded MIKEY rule set (feature 005)."
+    },
+    "mikey": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Key management and encrypted content (feature 005).",
+      "required": [
+        "carriers",
+        "unexpected_carrier",
+        "payloads",
+        "incomplete",
+        "uids",
+        "key_ids",
+        "cs_ids",
+        "mki",
+        "encrypted_xml",
+        "encrypted_uri",
+        "limits"
+      ],
+      "properties": {
+        "carriers": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "sdp": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "rewritten",
+                "passed_through",
+                "fallback"
+              ],
+              "properties": {
+                "rewritten": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "passed_through": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "fallback": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "not-sakke": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "malformed": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "unknown-payload": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "limit": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "encoding": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  }
+                }
+              }
+            },
+            "body": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "rewritten",
+                "passed_through",
+                "fallback"
+              ],
+              "properties": {
+                "rewritten": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "passed_through": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "fallback": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "not-sakke": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "malformed": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "unknown-payload": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "limit": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "encoding": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  }
+                }
+              }
+            },
+            "gktp": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "rewritten",
+                "passed_through",
+                "fallback"
+              ],
+              "properties": {
+                "rewritten": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "passed_through": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "fallback": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "not-sakke": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "malformed": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "unknown-payload": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "limit": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "encoding": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  }
+                }
+              }
+            },
+            "mcpc": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "rewritten",
+                "passed_through",
+                "fallback"
+              ],
+              "properties": {
+                "rewritten": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "passed_through": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "fallback": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "not-sakke": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "malformed": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "unknown-payload": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "limit": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "encoding": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "unexpected_carrier": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "payloads": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "HDR": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "shifted": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "kept": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "pseudonymised": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "identity": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "kms": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "uid": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "unknown-identity": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "zeroed": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "rewritten": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "undelimited": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "invalidated": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "T": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "shifted": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "kept": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "pseudonymised": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "identity": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "kms": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "uid": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "unknown-identity": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "zeroed": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "rewritten": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "undelimited": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "invalidated": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "RAND": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "shifted": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "kept": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "pseudonymised": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "identity": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "kms": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "uid": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "unknown-identity": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "zeroed": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "rewritten": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "undelimited": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "invalidated": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "IDR": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "shifted": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "kept": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "pseudonymised": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "identity": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "kms": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "uid": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "unknown-identity": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "zeroed": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "rewritten": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "undelimited": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "invalidated": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "SP": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "shifted": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "kept": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "pseudonymised": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "identity": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "kms": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "uid": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "unknown-identity": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "zeroed": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "rewritten": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "undelimited": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "invalidated": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "SAKKE": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "shifted": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "kept": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "pseudonymised": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "identity": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "kms": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "uid": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "unknown-identity": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "zeroed": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "rewritten": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "undelimited": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "invalidated": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "SAKKE-to-self": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "shifted": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "kept": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "pseudonymised": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "identity": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "kms": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "uid": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "unknown-identity": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "zeroed": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "rewritten": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "undelimited": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "invalidated": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "key-parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "shifted": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "kept": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "pseudonymised": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "identity": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "kms": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "uid": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "unknown-identity": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "zeroed": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "rewritten": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "undelimited": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "invalidated": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "unknown-extension": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "shifted": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "kept": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "pseudonymised": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "identity": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "kms": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "uid": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "unknown-identity": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "zeroed": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "rewritten": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "undelimited": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "invalidated": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "SIGN": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "shifted": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "kept": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "pseudonymised": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "identity": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "kms": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "uid": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "unknown-identity": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "zeroed": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "rewritten": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "undelimited": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "invalidated": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            }
+          }
+        },
+        "incomplete": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "uids": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "resolved",
+            "unresolved"
+          ],
+          "properties": {
+            "resolved": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "unresolved": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "key_ids": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "GMK": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "PCK": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "CSK": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "SPK": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "MKFC": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "MSCCK": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "MuSiK": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "undefined-purpose": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "cs_ids": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "undefined-cs-id": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "mki": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "pseudonymised",
+            "unmatched",
+            "ambiguous"
+          ],
+          "properties": {
+            "pseudonymised": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "unmatched": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "ambiguous": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "encrypted_xml": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kept",
+            "passed_through",
+            "removed_parts"
+          ],
+          "properties": {
+            "kept": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "passed_through": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "removed_parts": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "encrypted_uri": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "structured",
+            "whole_user_part"
+          ],
+          "properties": {
+            "structured": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "whole_user_part": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "limits": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "max_message_bytes",
+            "max_payloads",
+            "max_id_bytes"
+          ],
+          "properties": {
+            "max_message_bytes": {
+              "const": 65535
+            },
+            "max_payloads": {
+              "const": 64
+            },
+            "max_id_bytes": {
+              "const": 1024
+            }
+          }
+        }
+      }
+    },
+    "http_ruleset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "version",
+        "digest"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "tls_ruleset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "version",
+        "digest"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "http": {
+      "type": "object",
+      "description": "HTTP in the clear (feature 007): counts only; map keys are protocol vocabulary or \"(invalid)\".",
+      "additionalProperties": {
+        "oneOf": [
+          {
+            "type": "integer",
+            "minimum": 0
+          },
+          {
+            "type": "object",
+            "additionalProperties": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        ]
+      }
+    },
+    "tls": {
+      "type": "object",
+      "description": "TLS handshakes (feature 007): counts only.",
+      "additionalProperties": {
+        "oneOf": [
+          {
+            "type": "integer",
+            "minimum": 0
+          },
+          {
+            "type": "object",
+            "additionalProperties": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

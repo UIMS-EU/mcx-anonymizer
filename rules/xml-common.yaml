@@ -1,0 +1,105 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# The XML documents of feature 003: which Content-Type has which allowed root elements
+# and the attributes of the xml namespace (Appendix E §E.9).
+# XML rule set (feature 003). Sources: rules/SOURCES.md § MCX XML bodies.
+ruleset: mcxanon-xml
+version: 1.0.0
+documents:
+  - content_type: application/vnd.3gpp.mcptt-info+xml
+    roots: [{ns: "urn:3gpp:ns:mcpttInfo:1.0", name: mcpttinfo}]
+    source: {spec: TS 24.379, version: "19.6.0", clause: "F.1.4"}
+  - content_type: application/vnd.3gpp.mcptt-floor-request+xml
+    roots: [{ns: "urn:3gpp:ns:mcpttFloorRequest:1.0", name: mcptt-floor-request}]
+    source: {spec: TS 24.379, version: "19.6.0", clause: "F.5.4"}
+  - content_type: application/vnd.3gpp.mcptt-signed+xml
+    roots: [{ns: "urn:3gpp:ns:mcpttSignedDoc:1.0", name: signatures}]
+    source: {spec: TS 24.379, version: "19.6.0", clause: "F.6.4"}
+  - content_type: application/vnd.3gpp.mcptt-regroup+xml
+    roots: [{ns: "urn:3gpp:ns:preconfiguredRegroup:1.0", name: mcpttregroup}]
+    source: {spec: TS 24.379, version: "19.6.0", clause: "F.7.4"}
+  - content_type: application/vnd.3gpp.mcptt-location-info+xml
+    roots: [{ns: "urn:3gpp:ns:mcpttLocationInfo:1.0", name: location-info}]
+    source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.4"}
+  - content_type: application/vnd.3gpp.mcptt-mbms-usage-info+xml
+    roots: [{ns: "urn:3gpp:ns:mcpttMbmsUsage:1.0", name: mcptt-mbms-usage-info}]
+    source: {spec: TS 24.379, version: "19.6.0", clause: "F.2.4"}
+  - content_type: application/vnd.3gpp.mcptt-mbs-usage-info+xml
+    roots: [{ns: "urn:3gpp:ns:mcpttMbsUsage:1.0", name: mcptt-mbs-usage-info}]
+    source: {spec: TS 24.379, version: "19.6.0", clause: "F.2A.4"}
+  - content_type: application/vnd.3gpp.mcptt-affiliation-command+xml
+    roots: [{ns: "urn:3gpp:ns:affiliationCommand:1.0", name: command-list}]
+    source: {spec: TS 24.379, version: "19.6.0", clause: "F.4.4"}
+  - content_type: application/vnd.3gpp.mcdata-info+xml
+    roots: [{ns: "urn:3gpp:ns:mcdataInfo:1.0", name: mcdatainfo}]
+    source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.4"}
+  - content_type: application/vnd.3gpp.mcdata-affiliation-command+xml
+    roots: [{ns: "urn:3gpp:ns:affiliationCommand:1.0", name: command-list}]
+    source: {spec: TS 24.282, version: "19.6.0", clause: "D.3.4"}
+  - content_type: application/vnd.3gpp.mcdata-location-info+xml
+    roots: [{ns: "urn:3gpp:ns:mcdataLocationInfo:1.0", name: location-info}]
+    source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.4"}
+  - content_type: application/vnd.3gpp.mcdata-mbms-usage-info+xml
+    roots: [{ns: "urn:3gpp:ns:mcdataMbmsUsage:1.0", name: mcdata-mbms-usage-info}]
+    source: {spec: TS 24.282, version: "19.6.0", clause: "D.5.4"}
+  - content_type: application/vnd.3gpp.mcdata-regroup+xml
+    roots: [{ns: "urn:3gpp:ns:preconfiguredRegroup:1.0", name: mcdataregroup}]
+    source: {spec: TS 24.282, version: "19.6.0", clause: "D.6.4"}
+  - content_type: application/vnd.3gpp.mcdata-msgstore-ctrl-request+xml
+    roots: [{ns: "urn:3gpp:ns:msgstoreControlRequest:1.0", name: msgstore-ctrl-command-list}]
+    source: {spec: TS 24.282, version: "19.6.0", clause: "D.7.4"}
+  - content_type: application/vnd.3gpp.mvdata-mbs-usage-info+xml
+    roots: [{ns: "urn:3gpp:ns:mvdataMbsUsage:1.0", name: mvdata-mbs-usage-info}]
+    source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.4"}
+  - content_type: application/vnd.3gpp.mcdata-mbs-usage-info+xml
+    roots: [{ns: "urn:3gpp:ns:mvdataMbsUsage:1.0", name: mvdata-mbs-usage-info}]
+    source: {spec: TS 24.282, version: "19.6.0", clause: "6.5.3.1"}
+  - content_type: application/vnd.3gpp.mcvideo-info+xml
+    roots: [{ns: "urn:3gpp:ns:mcvideoInfo:1.0", name: mcvideoinfo}]
+    source: {spec: TS 24.281, version: "19.5.0", clause: "F.1.4"}
+  - content_type: application/vnd.3gpp.mcvideo-mbms-usage-info+xml
+    roots: [{ns: "urn:3gpp:ns:mcvideoMbmsUsage:1.0", name: mcvideo-mbms-usage-info}]
+    source: {spec: TS 24.281, version: "19.5.0", clause: "F.2.4"}
+  - content_type: application/vnd.3gpp.mcvideo-mbs-usage-info+xml
+    roots: [{ns: "urn:3gpp:ns:mcvideoMbsUsage:1.0", name: mcvideo-mbs-usage-info}]
+    source: {spec: TS 24.281, version: "19.5.0", clause: "F.2A.4"}
+  - content_type: application/vnd.3gpp.mcvideo-location-info+xml
+    roots: [{ns: "urn:3gpp:ns:mcvideoLocationInfo:1.0", name: location-info}]
+    source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.4"}
+  - content_type: application/vnd.3gpp.location-info+xml
+    roots: [{ns: "urn:3gpp:ns:mcpttLocationInfo:1.0", name: location-info}, {ns: "urn:3gpp:ns:mcdataLocationInfo:1.0", name: location-info}, {ns: "urn:3gpp:ns:mcvideoLocationInfo:1.0", name: location-info}]
+    source: {spec: TS 24.281, version: "19.5.0", clause: "6.2.9.1"}
+  - content_type: application/vnd.3gpp.mcvideo-affiliation-command+xml
+    roots: [{ns: "urn:3gpp:ns:affiliationCommand:1.0", name: command-list}]
+    source: {spec: TS 24.281, version: "19.5.0", clause: "F.4.4"}
+  - content_type: application/vnd.3gpp.mcvideo-transmission-request+xml
+    roots: [{ns: "urn:3gpp:ns:transmissionRequest:1.0", name: transmission-request}]
+    source: {spec: TS 24.281, version: "19.5.0", clause: "F.5.4"}
+  - content_type: application/vnd.3gpp.mcvideo-regroup+xml
+    roots: [{ns: "urn:3gpp:ns:preconfiguredRegroup:1.0", name: mcvideoregroup}]
+    source: {spec: TS 24.281, version: "19.5.0", clause: "F.6.4"}
+  - content_type: application/pidf+xml
+    roots: [{ns: "urn:ietf:params:xml:ns:pidf", name: presence}]
+    source: {spec: TS 24.379, version: "19.6.0", clause: "9.3.1.2"}
+  - content_type: application/resource-lists+xml
+    roots: [{ns: "urn:ietf:params:xml:ns:resource-lists", name: resource-lists}]
+    source: {spec: TS 24.379, version: "19.6.0", clause: "4.8"}
+  - content_type: application/reginfo+xml
+    roots: [{ns: "urn:ietf:params:xml:ns:reginfo", name: reginfo}]
+    source: {spec: TS 24.229, version: "24229-j70", clause: "5.4.2.1.2"}
+  - content_type: application/conference-info+xml
+    roots: [{ns: "urn:ietf:params:xml:ns:conference-info", name: conference-info}]
+    source: {spec: TS 24.379, version: "19.6.0", clause: "10.1.3.2"}
+  - content_type: application/xcap-diff+xml
+    roots: [{ns: "urn:ietf:params:xml:ns:xcap-diff", name: xcap-diff}]
+    source: {spec: RFC 5875, version: "2010-05", clause: "4.6"}
+  - content_type: application/poc-settings+xml
+    roots: [{ns: "urn:oma:params:xml:ns:poc:poc-settings", name: poc-settings}]
+    source: {spec: TS 24.379, version: "19.6.0", clause: "7.4.1.2.2"}
+namespaces:
+  - name: "http://www.w3.org/XML/1998/namespace"
+    source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD xml"}
+    attributes:
+      - {element: "*", ns: "http://www.w3.org/XML/1998/namespace", name: lang, action: keep, value: lang, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD xml"}}
+      - {element: "*", ns: "http://www.w3.org/XML/1998/namespace", name: space, action: keep, value: {enum: [default, preserve]}, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD xml"}}
+      - {element: "*", ns: "http://www.w3.org/XML/1998/namespace", name: base, action: remove, reason: structure, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD xml"}}

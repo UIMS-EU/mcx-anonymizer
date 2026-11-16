@@ -1,0 +1,169 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# TLS rule set (feature 007): record content types, handshake message types, hello extensions,
+# the key exchange family of each cipher suite (from the suite definitions), and the X.509 name
+# attributes, certificate extensions and public key algorithms. Everything
+# without a rule is zeroed. Sources: rules/SOURCES.md § TLS rule set.
+ruleset: mcxanon-tls
+version: 1.0.0
+versions:
+  - {value: 0x0301, name: "TLS 1.0", source: {spec: RFC 5246, version: "2008-08", clause: "E.1"}}
+  - {value: 0x0302, name: "TLS 1.1", source: {spec: RFC 5246, version: "2008-08", clause: "E.1"}}
+  - {value: 0x0303, name: "TLS 1.2", source: {spec: RFC 5246, version: "2008-08", clause: "6.2.1"}}
+  - {value: 0x0304, name: "TLS 1.3", source: {spec: RFC 8446, version: "2018-08", clause: "4.2.1"}}
+records:
+  - {type: 20, name: change_cipher_spec, action: keep, source: {spec: RFC 5246, version: "2008-08", clause: "7.1"}}
+  - {type: 21, name: alert, action: keep, source: {spec: RFC 8446, version: "2018-08", clause: "6"}}
+  - {type: 22, name: handshake, action: parse, source: {spec: RFC 8446, version: "2018-08", clause: "5.1"}}
+  - {type: 23, name: application_data, action: zero, source: {spec: RFC 8446, version: "2018-08", clause: "5.2"}}
+  - {type: 24, name: heartbeat, action: zero, source: {spec: RFC 6520, version: "2012-02", clause: "3"}}
+handshakes:
+  - {type: 0, name: hello_request, action: keep, source: {spec: RFC 5246, version: "2008-08", clause: "7.4.1.1"}}
+  - {type: 1, name: client_hello, action: hello, source: {spec: RFC 8446, version: "2018-08", clause: "4.1.2"}}
+  - {type: 2, name: server_hello, action: hello, source: {spec: RFC 8446, version: "2018-08", clause: "4.1.3"}}
+  - {type: 4, name: new_session_ticket, action: new-session-ticket, source: {spec: RFC 5077, version: "2008-01", clause: "3.3"}}
+  - {type: 11, name: certificate, action: certificate, source: {spec: RFC 5246, version: "2008-08", clause: "7.4.2"}}
+  - {type: 12, name: server_key_exchange, action: server-key-exchange, source: {spec: RFC 5246, version: "2008-08", clause: "7.4.3"}}
+  - {type: 13, name: certificate_request, action: certificate-request, source: {spec: RFC 5246, version: "2008-08", clause: "7.4.4"}}
+  - {type: 14, name: server_hello_done, action: keep, source: {spec: RFC 5246, version: "2008-08", clause: "7.4.5"}}
+  - {type: 15, name: certificate_verify, action: certificate-verify, source: {spec: RFC 5246, version: "2008-08", clause: "7.4.8"}}
+  - {type: 16, name: client_key_exchange, action: client-key-exchange, source: {spec: RFC 5246, version: "2008-08", clause: "7.4.7"}}
+  - {type: 20, name: finished, action: zero-body, source: {spec: RFC 5246, version: "2008-08", clause: "7.4.9"}}
+  - {type: 22, name: certificate_status, action: zero-body, source: {spec: RFC 6066, version: "2011-01", clause: "8"}}
+extensions:
+  - {type: 0, name: server_name, action: server-name, source: {spec: RFC 6066, version: "2011-01", clause: "3"}}
+  - {type: 1, name: max_fragment_length, action: keep, source: {spec: RFC 6066, version: "2011-01", clause: "4"}}
+  - {type: 5, name: status_request, action: status-request, source: {spec: RFC 6066, version: "2011-01", clause: "8"}}
+  - {type: 10, name: supported_groups, action: keep, source: {spec: RFC 8446, version: "2018-08", clause: "4.2.7"}}
+  - {type: 11, name: ec_point_formats, action: keep, source: {spec: RFC 8422, version: "2018-08", clause: "5.1.2"}}
+  - {type: 13, name: signature_algorithms, action: keep, source: {spec: RFC 8446, version: "2018-08", clause: "4.2.3"}}
+  - {type: 15, name: heartbeat, action: keep, source: {spec: RFC 6520, version: "2012-02", clause: "2"}}
+  - {type: 16, name: application_layer_protocol_negotiation, action: alpn, values: [h2, "http/1.1"], source: {spec: RFC 7301, version: "2014-07", clause: "3.1"}}
+  - {type: 21, name: padding, action: zero, source: {spec: RFC 7685, version: "2015-10", clause: "3"}}
+  - {type: 22, name: encrypt_then_mac, action: keep, source: {spec: RFC 7366, version: "2014-09", clause: "2"}}
+  - {type: 23, name: extended_master_secret, action: keep, source: {spec: RFC 7627, version: "2015-09", clause: "5.1"}}
+  - {type: 28, name: record_size_limit, action: keep, source: {spec: RFC 8449, version: "2018-08", clause: "4"}}
+  - {type: 35, name: session_ticket, action: zero, source: {spec: RFC 5077, version: "2008-01", clause: "3.2"}}
+  - {type: 41, name: pre_shared_key, action: pre-shared-key, source: {spec: RFC 8446, version: "2018-08", clause: "4.2.11"}}
+  - {type: 42, name: early_data, action: keep, source: {spec: RFC 8446, version: "2018-08", clause: "4.2.10"}}
+  - {type: 43, name: supported_versions, action: keep, source: {spec: RFC 8446, version: "2018-08", clause: "4.2.1"}}
+  - {type: 44, name: cookie, action: zero, source: {spec: RFC 8446, version: "2018-08", clause: "4.2.2"}}
+  - {type: 45, name: psk_key_exchange_modes, action: keep, source: {spec: RFC 8446, version: "2018-08", clause: "4.2.9"}}
+  - {type: 47, name: certificate_authorities, action: certificate-authorities, source: {spec: RFC 8446, version: "2018-08", clause: "4.2.4"}}
+  - {type: 49, name: post_handshake_auth, action: keep, source: {spec: RFC 8446, version: "2018-08", clause: "4.2.6"}}
+  - {type: 50, name: signature_algorithms_cert, action: keep, source: {spec: RFC 8446, version: "2018-08", clause: "4.2.3"}}
+  - {type: 51, name: key_share, action: key-share, source: {spec: RFC 8446, version: "2018-08", clause: "4.2.8"}}
+  - {type: 65281, name: renegotiation_info, action: renegotiation-info, source: {spec: RFC 5746, version: "2010-02", clause: "3.2"}}
+key_exchange:
+  - {suite: 0x0001, family: rsa, source: {spec: RFC 5246, version: "2008-08", clause: "A.5"}}
+  - {suite: 0x0002, family: rsa, source: {spec: RFC 5246, version: "2008-08", clause: "A.5"}}
+  - {suite: 0x0004, family: rsa, source: {spec: RFC 5246, version: "2008-08", clause: "A.5"}}
+  - {suite: 0x0005, family: rsa, source: {spec: RFC 5246, version: "2008-08", clause: "A.5"}}
+  - {suite: 0x000A, family: rsa, source: {spec: RFC 5246, version: "2008-08", clause: "A.5"}}
+  - {suite: 0x0013, family: dhe, source: {spec: RFC 5246, version: "2008-08", clause: "A.5"}}
+  - {suite: 0x0016, family: dhe, source: {spec: RFC 5246, version: "2008-08", clause: "A.5"}}
+  - {suite: 0x002F, family: rsa, source: {spec: RFC 5246, version: "2008-08", clause: "A.5"}}
+  - {suite: 0x0032, family: dhe, source: {spec: RFC 5246, version: "2008-08", clause: "A.5"}}
+  - {suite: 0x0033, family: dhe, source: {spec: RFC 5246, version: "2008-08", clause: "A.5"}}
+  - {suite: 0x0035, family: rsa, source: {spec: RFC 5246, version: "2008-08", clause: "A.5"}}
+  - {suite: 0x0038, family: dhe, source: {spec: RFC 5246, version: "2008-08", clause: "A.5"}}
+  - {suite: 0x0039, family: dhe, source: {spec: RFC 5246, version: "2008-08", clause: "A.5"}}
+  - {suite: 0x003B, family: rsa, source: {spec: RFC 5246, version: "2008-08", clause: "A.5"}}
+  - {suite: 0x003C, family: rsa, source: {spec: RFC 5246, version: "2008-08", clause: "A.5"}}
+  - {suite: 0x003D, family: rsa, source: {spec: RFC 5246, version: "2008-08", clause: "A.5"}}
+  - {suite: 0x0040, family: dhe, source: {spec: RFC 5246, version: "2008-08", clause: "A.5"}}
+  - {suite: 0x0067, family: dhe, source: {spec: RFC 5246, version: "2008-08", clause: "A.5"}}
+  - {suite: 0x006A, family: dhe, source: {spec: RFC 5246, version: "2008-08", clause: "A.5"}}
+  - {suite: 0x006B, family: dhe, source: {spec: RFC 5246, version: "2008-08", clause: "A.5"}}
+  - {suite: 0x008A, family: psk, source: {spec: RFC 4279, version: "2005-12", clause: "6"}}
+  - {suite: 0x008B, family: psk, source: {spec: RFC 4279, version: "2005-12", clause: "6"}}
+  - {suite: 0x008C, family: psk, source: {spec: RFC 4279, version: "2005-12", clause: "6"}}
+  - {suite: 0x008D, family: psk, source: {spec: RFC 4279, version: "2005-12", clause: "6"}}
+  - {suite: 0x008E, family: dhe-psk, source: {spec: RFC 4279, version: "2005-12", clause: "6"}}
+  - {suite: 0x008F, family: dhe-psk, source: {spec: RFC 4279, version: "2005-12", clause: "6"}}
+  - {suite: 0x0090, family: dhe-psk, source: {spec: RFC 4279, version: "2005-12", clause: "6"}}
+  - {suite: 0x0091, family: dhe-psk, source: {spec: RFC 4279, version: "2005-12", clause: "6"}}
+  - {suite: 0x0092, family: rsa-psk, source: {spec: RFC 4279, version: "2005-12", clause: "6"}}
+  - {suite: 0x0093, family: rsa-psk, source: {spec: RFC 4279, version: "2005-12", clause: "6"}}
+  - {suite: 0x0094, family: rsa-psk, source: {spec: RFC 4279, version: "2005-12", clause: "6"}}
+  - {suite: 0x0095, family: rsa-psk, source: {spec: RFC 4279, version: "2005-12", clause: "6"}}
+  - {suite: 0x009C, family: rsa, source: {spec: RFC 5288, version: "2008-08", clause: "3"}}
+  - {suite: 0x009D, family: rsa, source: {spec: RFC 5288, version: "2008-08", clause: "3"}}
+  - {suite: 0x009E, family: dhe, source: {spec: RFC 5288, version: "2008-08", clause: "3"}}
+  - {suite: 0x009F, family: dhe, source: {spec: RFC 5288, version: "2008-08", clause: "3"}}
+  - {suite: 0x00A2, family: dhe, source: {spec: RFC 5288, version: "2008-08", clause: "3"}}
+  - {suite: 0x00A3, family: dhe, source: {spec: RFC 5288, version: "2008-08", clause: "3"}}
+  - {suite: 0x1301, family: tls13, source: {spec: RFC 8446, version: "2018-08", clause: "B.4"}}
+  - {suite: 0x1302, family: tls13, source: {spec: RFC 8446, version: "2018-08", clause: "B.4"}}
+  - {suite: 0x1303, family: tls13, source: {spec: RFC 8446, version: "2018-08", clause: "B.4"}}
+  - {suite: 0x1304, family: tls13, source: {spec: RFC 8446, version: "2018-08", clause: "B.4"}}
+  - {suite: 0x1305, family: tls13, source: {spec: RFC 8446, version: "2018-08", clause: "B.4"}}
+  - {suite: 0xC006, family: ecdhe, source: {spec: RFC 8422, version: "2018-08", clause: "6"}}
+  - {suite: 0xC008, family: ecdhe, source: {spec: RFC 8422, version: "2018-08", clause: "6"}}
+  - {suite: 0xC009, family: ecdhe, source: {spec: RFC 8422, version: "2018-08", clause: "6"}}
+  - {suite: 0xC00A, family: ecdhe, source: {spec: RFC 8422, version: "2018-08", clause: "6"}}
+  - {suite: 0xC010, family: ecdhe, source: {spec: RFC 8422, version: "2018-08", clause: "6"}}
+  - {suite: 0xC012, family: ecdhe, source: {spec: RFC 8422, version: "2018-08", clause: "6"}}
+  - {suite: 0xC013, family: ecdhe, source: {spec: RFC 8422, version: "2018-08", clause: "6"}}
+  - {suite: 0xC014, family: ecdhe, source: {spec: RFC 8422, version: "2018-08", clause: "6"}}
+  - {suite: 0xC023, family: ecdhe, source: {spec: RFC 5289, version: "2008-08", clause: "3.1"}}
+  - {suite: 0xC024, family: ecdhe, source: {spec: RFC 5289, version: "2008-08", clause: "3.1"}}
+  - {suite: 0xC027, family: ecdhe, source: {spec: RFC 5289, version: "2008-08", clause: "3.1"}}
+  - {suite: 0xC028, family: ecdhe, source: {spec: RFC 5289, version: "2008-08", clause: "3.1"}}
+  - {suite: 0xC02B, family: ecdhe, source: {spec: RFC 5289, version: "2008-08", clause: "3.2"}}
+  - {suite: 0xC02C, family: ecdhe, source: {spec: RFC 5289, version: "2008-08", clause: "3.2"}}
+  - {suite: 0xC02F, family: ecdhe, source: {spec: RFC 5289, version: "2008-08", clause: "3.2"}}
+  - {suite: 0xC030, family: ecdhe, source: {spec: RFC 5289, version: "2008-08", clause: "3.2"}}
+  - {suite: 0xC033, family: ecdhe-psk, source: {spec: RFC 5489, version: "2009-03", clause: "3.1"}}
+  - {suite: 0xC034, family: ecdhe-psk, source: {spec: RFC 5489, version: "2009-03", clause: "3.1"}}
+  - {suite: 0xC035, family: ecdhe-psk, source: {spec: RFC 5489, version: "2009-03", clause: "3.1"}}
+  - {suite: 0xC036, family: ecdhe-psk, source: {spec: RFC 5489, version: "2009-03", clause: "3.1"}}
+  - {suite: 0xC037, family: ecdhe-psk, source: {spec: RFC 5489, version: "2009-03", clause: "3.2"}}
+  - {suite: 0xC038, family: ecdhe-psk, source: {spec: RFC 5489, version: "2009-03", clause: "3.2"}}
+  - {suite: 0xC039, family: ecdhe-psk, source: {spec: RFC 5489, version: "2009-03", clause: "4.1"}}
+  - {suite: 0xC03A, family: ecdhe-psk, source: {spec: RFC 5489, version: "2009-03", clause: "4.2"}}
+  - {suite: 0xC03B, family: ecdhe-psk, source: {spec: RFC 5489, version: "2009-03", clause: "4.2"}}
+  - {suite: 0xCCA8, family: ecdhe, source: {spec: RFC 7905, version: "2016-06", clause: "2"}}
+  - {suite: 0xCCA9, family: ecdhe, source: {spec: RFC 7905, version: "2016-06", clause: "2"}}
+  - {suite: 0xCCAA, family: dhe, source: {spec: RFC 7905, version: "2016-06", clause: "2"}}
+  - {suite: 0xCCAB, family: psk, source: {spec: RFC 7905, version: "2016-06", clause: "2"}}
+  - {suite: 0xCCAC, family: ecdhe-psk, source: {spec: RFC 7905, version: "2016-06", clause: "2"}}
+  - {suite: 0xCCAD, family: dhe-psk, source: {spec: RFC 7905, version: "2016-06", clause: "2"}}
+  - {suite: 0xCCAE, family: rsa-psk, source: {spec: RFC 7905, version: "2016-06", clause: "2"}}
+x509:
+  attributes:
+    - {oid: 2.5.4.6, name: countryName, action: keep, source: {spec: RFC 5280, version: "2008-05", clause: "A.1"}}
+    - {oid: 2.5.4.3, name: commonName, action: identity, source: {spec: RFC 5280, version: "2008-05", clause: "A.1"}}
+    - {oid: 2.5.4.4, name: surname, action: opaque, source: {spec: RFC 5280, version: "2008-05", clause: "A.1"}}
+    - {oid: 2.5.4.5, name: serialNumber, action: opaque, source: {spec: RFC 5280, version: "2008-05", clause: "A.1"}}
+    - {oid: 2.5.4.7, name: localityName, action: opaque, source: {spec: RFC 5280, version: "2008-05", clause: "A.1"}}
+    - {oid: 2.5.4.8, name: stateOrProvinceName, action: opaque, source: {spec: RFC 5280, version: "2008-05", clause: "A.1"}}
+    - {oid: 2.5.4.10, name: organizationName, action: opaque, source: {spec: RFC 5280, version: "2008-05", clause: "A.1"}}
+    - {oid: 2.5.4.11, name: organizationalUnitName, action: opaque, source: {spec: RFC 5280, version: "2008-05", clause: "A.1"}}
+    - {oid: 2.5.4.12, name: title, action: opaque, source: {spec: RFC 5280, version: "2008-05", clause: "A.1"}}
+    - {oid: 2.5.4.41, name: name, action: opaque, source: {spec: RFC 5280, version: "2008-05", clause: "A.1"}}
+    - {oid: 2.5.4.42, name: givenName, action: opaque, source: {spec: RFC 5280, version: "2008-05", clause: "A.1"}}
+    - {oid: 2.5.4.43, name: initials, action: opaque, source: {spec: RFC 5280, version: "2008-05", clause: "A.1"}}
+    - {oid: 2.5.4.44, name: generationQualifier, action: opaque, source: {spec: RFC 5280, version: "2008-05", clause: "A.1"}}
+    - {oid: 2.5.4.46, name: dnQualifier, action: opaque, source: {spec: RFC 5280, version: "2008-05", clause: "A.1"}}
+    - {oid: 2.5.4.65, name: pseudonym, action: opaque, source: {spec: RFC 5280, version: "2008-05", clause: "A.1"}}
+    - {oid: 0.9.2342.19200300.100.1.25, name: domainComponent, action: domain-label, source: {spec: RFC 5280, version: "2008-05", clause: "A.1"}}
+    - {oid: 1.2.840.113549.1.9.1, name: emailAddress, action: email, source: {spec: RFC 5280, version: "2008-05", clause: "A.1"}}
+  extensions:
+    - {oid: 2.5.29.35, name: authorityKeyIdentifier, action: authority-key-identifier, source: {spec: RFC 5280, version: "2008-05", clause: "4.2.1.1"}}
+    - {oid: 2.5.29.14, name: subjectKeyIdentifier, action: key-identifier, source: {spec: RFC 5280, version: "2008-05", clause: "4.2.1.2"}}
+    - {oid: 2.5.29.15, name: keyUsage, action: keep, source: {spec: RFC 5280, version: "2008-05", clause: "4.2.1.3"}}
+    - {oid: 2.5.29.32, name: certificatePolicies, action: policies, source: {spec: RFC 5280, version: "2008-05", clause: "4.2.1.4"}}
+    - {oid: 2.5.29.17, name: subjectAltName, action: general-names, source: {spec: RFC 5280, version: "2008-05", clause: "4.2.1.6"}}
+    - {oid: 2.5.29.18, name: issuerAltName, action: general-names, source: {spec: RFC 5280, version: "2008-05", clause: "4.2.1.7"}}
+    - {oid: 2.5.29.19, name: basicConstraints, action: keep, source: {spec: RFC 5280, version: "2008-05", clause: "4.2.1.9"}}
+    - {oid: 2.5.29.36, name: policyConstraints, action: keep, source: {spec: RFC 5280, version: "2008-05", clause: "4.2.1.11"}}
+    - {oid: 2.5.29.37, name: extKeyUsage, action: keep, source: {spec: RFC 5280, version: "2008-05", clause: "4.2.1.12"}}
+    - {oid: 2.5.29.31, name: cRLDistributionPoints, action: uri-access, source: {spec: RFC 5280, version: "2008-05", clause: "4.2.1.13"}}
+    - {oid: 2.5.29.54, name: inhibitAnyPolicy, action: keep, source: {spec: RFC 5280, version: "2008-05", clause: "4.2.1.14"}}
+    - {oid: 2.5.29.46, name: freshestCRL, action: uri-access, source: {spec: RFC 5280, version: "2008-05", clause: "4.2.1.15"}}
+    - {oid: 1.3.6.1.5.5.7.1.1, name: authorityInfoAccess, action: uri-access, source: {spec: RFC 5280, version: "2008-05", clause: "4.2.2.1"}}
+    - {oid: 1.3.6.1.5.5.7.1.11, name: subjectInfoAccess, action: uri-access, source: {spec: RFC 5280, version: "2008-05", clause: "4.2.2.2"}}
+  public_keys:
+    - {oid: 1.2.840.113549.1.1.1, name: rsaEncryption, action: rsa, source: {spec: RFC 3279, version: "2002-04", clause: "2.3.1"}}
+    - {oid: 1.2.840.10045.2.1, name: id-ecPublicKey, action: ec, source: {spec: RFC 5480, version: "2009-03", clause: "2.2"}}

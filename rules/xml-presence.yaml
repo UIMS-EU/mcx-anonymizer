@@ -1,0 +1,106 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# pidf and the MCX presence extensions (Appendix E §E.3).
+# XML rule set (feature 003). Sources: rules/SOURCES.md § MCX XML bodies.
+ruleset: mcxanon-xml
+version: 1.0.0
+namespaces:
+  - name: "urn:ietf:params:xml:ns:pidf"
+    source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD RFC3863_pdif"}
+    elements:
+      - {name: presence, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "9.3.1.2"}}
+      - {name: tuple, action: container, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD RFC3863_pdif"}}
+      - {name: status, action: container, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD RFC3863_pdif"}}
+      - {name: basic, action: keep, value: {enum: [open, closed]}, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD RFC3863_pdif"}}
+      - {name: contact, action: pseudonymise, category: uri, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD RFC3863_pdif"}}
+      - {name: note, action: remove, reason: free-text, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD RFC3863_pdif"}}
+      - {name: timestamp, action: keep, value: datetime, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD RFC3863_pdif"}}
+    attributes:
+      - {element: presence, name: entity, action: pseudonymise, category: uri, source: {spec: TS 24.379, version: "19.6.0", clause: "9.3.1.2"}}
+      - {element: tuple, name: id, action: pseudonymise, category: any-id, source: {spec: TS 24.379, version: "19.6.0", clause: "9.3.1.2"}}
+      - {element: contact, name: priority, action: keep, value: {token: qvalue}, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD RFC3863_pdif"}}
+      - {element: "*", ns: "urn:ietf:params:xml:ns:pidf", name: mustUnderstand, action: keep, value: boolean, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD RFC3863_pdif"}}
+  - name: "urn:3gpp:ns:mcpttPresInfo:1.0"
+    source: {spec: TS 24.379, version: "19.6.0", clause: "9.3.1.2"}
+    elements:
+      - {name: p-id, action: pseudonymise, category: opaque, source: {spec: TS 24.379, version: "19.6.0", clause: "9.3.1.2"}}
+      - {name: groupStatus, action: keep, value: {enum: [in-peril, emergency]}, source: {spec: TS 24.379, version: "19.6.0", clause: "9.3.1.2"}}
+      - {name: additionalData, action: keep, value: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "9.3.1.2"}}
+      - {name: affiliation, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "9.3.1.2"}}
+      - {name: functionalAlias, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "9.3.1.2"}}
+    attributes:
+      - {element: groupStatus, name: ModifiedBy, action: pseudonymise, category: uri, source: {spec: TS 24.379, version: "19.6.0", clause: "9.3.1.2"}}
+      - {element: additionalData, name: groupBroadcastAlias, action: pseudonymise, category: uri, source: {spec: TS 24.379, version: "19.6.0", clause: "9.3.1.2"}}
+      - {element: additionalData, name: groupRegroupAlias, action: pseudonymise, category: uri, source: {spec: TS 24.379, version: "19.6.0", clause: "9.3.1.2"}}
+      - {element: additionalData, name: groupCallOngoing, action: keep, value: boolean, source: {spec: TS 24.379, version: "19.6.0", clause: "9.3.1.2"}}
+      - {element: affiliation, name: group, action: pseudonymise, category: uri, source: {spec: TS 24.379, version: "19.6.0", clause: "9.3.1.2"}}
+      - {element: affiliation, name: client, action: pseudonymise, category: any-id, source: {spec: TS 24.379, version: "19.6.0", clause: "9.3.1.2"}}
+      - {element: affiliation, name: status, action: keep, value: {enum: [affiliating, affiliated, deaffiliating]}, source: {spec: TS 24.379, version: "19.6.0", clause: "9.3.1.2"}}
+      - {element: affiliation, name: expires, action: keep, value: datetime, source: {spec: TS 24.379, version: "19.6.0", clause: "9.3.1.2"}}
+      - {element: functionalAlias, name: functionalAliasID, action: pseudonymise, category: uri, source: {spec: TS 24.379, version: "19.6.0", clause: "9.3.1.2"}}
+      - {element: functionalAlias, name: expires, action: keep, value: datetime, source: {spec: TS 24.379, version: "19.6.0", clause: "9.3.1.2"}}
+  - name: "urn:3gpp:ns:mcdataPresInfo:1.0"
+    source: {spec: TS 24.282, version: "19.6.0", clause: "8.4.1.2"}
+    elements:
+      - {name: p-id, action: pseudonymise, category: opaque, source: {spec: TS 24.282, version: "19.6.0", clause: "8.4.1.2"}}
+      - {name: affiliation, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "8.4.1.2"}}
+      - {name: functionalAlias, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "8.4.1.2"}}
+    attributes:
+      - {element: affiliation, name: group, action: pseudonymise, category: uri, source: {spec: TS 24.282, version: "19.6.0", clause: "8.4.1.2"}}
+      - {element: affiliation, name: client, action: pseudonymise, category: any-id, source: {spec: TS 24.282, version: "19.6.0", clause: "8.4.1.2"}}
+      - {element: affiliation, name: status, action: keep, value: {enum: [affiliating, affiliated, deaffiliating]}, source: {spec: TS 24.282, version: "19.6.0", clause: "8.4.1.2"}}
+      - {element: affiliation, name: expires, action: keep, value: datetime, source: {spec: TS 24.282, version: "19.6.0", clause: "8.4.1.2"}}
+      - {element: functionalAlias, name: functionalAliasID, action: pseudonymise, category: uri, source: {spec: TS 24.282, version: "19.6.0", clause: "8.4.1.2"}}
+      - {element: functionalAlias, name: expires, action: keep, value: datetime, source: {spec: TS 24.282, version: "19.6.0", clause: "8.4.1.2"}}
+  - name: "urn:3gpp:ns:mcvideoPresInfo:1.0"
+    source: {spec: TS 24.281, version: "19.5.0", clause: "8.3.1.2"}
+    elements:
+      - {name: p-id, action: pseudonymise, category: opaque, source: {spec: TS 24.281, version: "19.5.0", clause: "8.3.1.2"}}
+      - {name: groupStatus, action: keep, value: {enum: [in-peril, emergency]}, source: {spec: TS 24.281, version: "19.5.0", clause: "8.3.1.2"}}
+      - {name: additionalData, action: keep, value: empty, source: {spec: TS 24.281, version: "19.5.0", clause: "8.3.1.2"}}
+      - {name: affiliation, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "8.3.1.2"}}
+      - {name: functionalAlias, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "8.3.1.2"}}
+    attributes:
+      - {element: groupStatus, name: ModifiedBy, action: pseudonymise, category: uri, source: {spec: TS 24.281, version: "19.5.0", clause: "8.3.1.2"}}
+      - {element: additionalData, name: groupBroadcastAlias, action: pseudonymise, category: uri, source: {spec: TS 24.281, version: "19.5.0", clause: "8.3.1.2"}}
+      - {element: additionalData, name: groupRegroupAlias, action: pseudonymise, category: uri, source: {spec: TS 24.281, version: "19.5.0", clause: "8.3.1.2"}}
+      - {element: additionalData, name: groupCallOngoing, action: keep, value: boolean, source: {spec: TS 24.281, version: "19.5.0", clause: "8.3.1.2"}}
+      - {element: affiliation, name: group, action: pseudonymise, category: uri, source: {spec: TS 24.281, version: "19.5.0", clause: "8.3.1.2"}}
+      - {element: affiliation, name: client, action: pseudonymise, category: any-id, source: {spec: TS 24.281, version: "19.5.0", clause: "8.3.1.2"}}
+      - {element: affiliation, name: status, action: keep, value: {enum: [affiliating, affiliated, deaffiliating]}, source: {spec: TS 24.281, version: "19.5.0", clause: "8.3.1.2"}}
+      - {element: affiliation, name: expires, action: keep, value: datetime, source: {spec: TS 24.281, version: "19.5.0", clause: "8.3.1.2"}}
+      - {element: functionalAlias, name: functionalAliasID, action: pseudonymise, category: uri, source: {spec: TS 24.281, version: "19.5.0", clause: "8.3.1.2"}}
+      - {element: functionalAlias, name: expires, action: keep, value: datetime, source: {spec: TS 24.281, version: "19.5.0", clause: "8.3.1.2"}}
+  - name: "urn:3gpp:ns:mcpttPresInfoFA:1.0"
+    source: {spec: TS 24.379, version: "19.6.0", clause: "9A.3.1.2"}
+    elements:
+      - {name: p-id-fa, action: pseudonymise, category: opaque, source: {spec: TS 24.379, version: "19.6.0", clause: "9A.3.1.2"}}
+      - {name: functionalAlias, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "9A.3.1.2"}}
+      - {name: take-over, action: keep, value: boolean, source: {spec: TS 24.379, version: "19.6.0", clause: "9A.3.1.2"}}
+    attributes:
+      - {element: functionalAlias, name: functionalAliasID, action: pseudonymise, category: uri, source: {spec: TS 24.379, version: "19.6.0", clause: "9A.3.1.2"}}
+      - {element: functionalAlias, name: user, action: pseudonymise, category: any-id, source: {spec: TS 24.379, version: "19.6.0", clause: "9A.3.1.2"}}
+      - {element: functionalAlias, name: status, action: keep, value: {enum: [activating, activated, deactivating, take-over-possible]}, source: {spec: TS 24.379, version: "19.6.0", clause: "9A.3.1.2"}}
+      - {element: functionalAlias, name: expires, action: keep, value: datetime, source: {spec: TS 24.379, version: "19.6.0", clause: "9A.3.1.2"}}
+  - name: "urn:3gpp:ns:mcdataPresInfoFA:1.0"
+    source: {spec: TS 24.282, version: "19.6.0", clause: "22.3.1.2"}
+    elements:
+      - {name: p-id-fa, action: pseudonymise, category: opaque, source: {spec: TS 24.282, version: "19.6.0", clause: "22.3.1.2"}}
+      - {name: functionalAlias, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "22.3.1.2"}}
+      - {name: take-over, action: keep, value: boolean, source: {spec: TS 24.282, version: "19.6.0", clause: "22.3.1.2"}}
+    attributes:
+      - {element: functionalAlias, name: functionalAliasID, action: pseudonymise, category: uri, source: {spec: TS 24.282, version: "19.6.0", clause: "22.3.1.2"}}
+      - {element: functionalAlias, name: user, action: pseudonymise, category: any-id, source: {spec: TS 24.282, version: "19.6.0", clause: "22.3.1.2"}}
+      - {element: functionalAlias, name: status, action: keep, value: {enum: [activating, activated, deactivating, take-over-possible]}, source: {spec: TS 24.282, version: "19.6.0", clause: "22.3.1.2"}}
+      - {element: functionalAlias, name: expires, action: keep, value: datetime, source: {spec: TS 24.282, version: "19.6.0", clause: "22.3.1.2"}}
+  - name: "urn:3gpp:ns:mcvideoPresInfoFA:1.0"
+    source: {spec: TS 24.281, version: "19.5.0", clause: "20.3.1.2"}
+    elements:
+      - {name: p-id-fa, action: pseudonymise, category: opaque, source: {spec: TS 24.281, version: "19.5.0", clause: "20.3.1.2"}}
+      - {name: functionalAlias, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "20.3.1.2"}}
+      - {name: take-over, action: keep, value: boolean, source: {spec: TS 24.281, version: "19.5.0", clause: "20.3.1.2"}}
+    attributes:
+      - {element: functionalAlias, name: functionalAliasID, action: pseudonymise, category: uri, source: {spec: TS 24.281, version: "19.5.0", clause: "20.3.1.2"}}
+      - {element: functionalAlias, name: user, action: pseudonymise, category: any-id, source: {spec: TS 24.281, version: "19.5.0", clause: "20.3.1.2"}}
+      - {element: functionalAlias, name: status, action: keep, value: {enum: [activating, activated, deactivating, take-over-possible]}, source: {spec: TS 24.281, version: "19.5.0", clause: "20.3.1.2"}}
+      - {element: functionalAlias, name: expires, action: keep, value: datetime, source: {spec: TS 24.281, version: "19.5.0", clause: "20.3.1.2"}}

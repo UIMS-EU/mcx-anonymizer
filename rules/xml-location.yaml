@@ -1,0 +1,553 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# The location information documents of MCPTT, MCData and MCVideo (Appendix B).
+# XML rule set (feature 003). Sources: rules/SOURCES.md § MCX XML bodies.
+ruleset: mcxanon-xml
+version: 1.0.0
+namespaces:
+  - name: "urn:3gpp:ns:mcpttLocationInfo:1.0"
+    source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.2"}
+    elements:
+      - {name: location-info, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.2"}}
+      - {name: anyExt, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.2"}}
+      - {name: Configuration, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: NonEmergencyLocationInformation, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: EmergencyLocationInformation, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: ServingEcgi, action: keep, value: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: NeighbouringEcgi, parent: [NonEmergencyLocationInformation, EmergencyLocationInformation], action: keep, value: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: MbmsSaId, parent: [NonEmergencyLocationInformation, EmergencyLocationInformation], action: keep, value: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: MbsfnArea, parent: [NonEmergencyLocationInformation, EmergencyLocationInformation], action: keep, value: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: GeographicalCoordinate, action: keep, value: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: minimumIntervalLength, action: keep, value: {int: [1, 4294967295]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: ServingNcgi, action: keep, value: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: NeighbouringNcgi, action: keep, value: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: NR5GMbsfsaArea, action: keep, value: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: R_BearingAndSpeed, action: keep, value: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: TriggeringCriteria, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: EmergencyTriggeringCriteria, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: CellChange, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: AnyCellChange, action: keep, value: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: AnyTrackingAreaChange, action: keep, value: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: AnyPlmnChange, action: keep, value: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: AnyMbmsSaChange, action: keep, value: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: AnyMbsfnAreaChange, action: keep, value: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: InitialLogOn, action: keep, value: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: GroupCallNonEmergency, action: keep, value: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: PrivateCallNonEmergency, action: keep, value: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: LocationConfigurationReceived, action: keep, value: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: FunctionalAliasActivation, action: keep, value: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: FunctionalAliasDeactivation, action: keep, value: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: AnyAreaChange, action: keep, value: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: AnyRatTypeChange, action: keep, value: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: Any5GMbsfsaAreaChange, action: keep, value: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: Any5GTrackingAreaChange, action: keep, value: empty, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: EnterSpecificCell, action: pseudonymise, category: ecgi, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: ExitSpecificCell, action: pseudonymise, category: ecgi, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: EnterSpecificNRCell, action: pseudonymise, category: ncgi, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: ExitSpecificNRCell, action: pseudonymise, category: ncgi, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: TrackingAreaChange, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: EnterSpecificTrackingArea, action: pseudonymise, category: tai, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: ExitSpecificTrackingArea, action: pseudonymise, category: tai, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: PlmnChange, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: EnterSpecificPlmn, action: pseudonymise, category: plmn, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: ExitSpecificPlmn, action: pseudonymise, category: plmn, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: MbmsSaChange, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: EnterSpecificMbmsSa, action: pseudonymise, category: mbms-sai, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: ExitSpecificMbmsSa, action: pseudonymise, category: mbms-sai, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: MbsfnAreaChange, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: EnterSpecificMbsfnArea, action: pseudonymise, category: mbsfn-area, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: ExitSpecificMbsfnArea, action: pseudonymise, category: mbsfn-area, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: PeriodicReport, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: TravelledDistance, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: McpttSignallingEvent, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: GeographicalAreaChange, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: EnterSpecificAreaType, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: ExitSpecificAreaType, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: GeographicalArea, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: PolygonArea, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: Corner, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.2"}}
+      - {name: EllipsoidArcArea, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: Center, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.2"}}
+      - {name: Radius, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.2"}}
+      - {name: OffsetAngle, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.2"}}
+      - {name: IncludedAngle, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.2"}}
+      - {name: InnerBorderWidth, action: keep, value: {int: [0, 127]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: OuterBorderWidth, action: keep, value: {int: [0, 127]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: RatTypeChange, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: NR5GMbsfsaAreaChange, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: EnterSpecific5GMbsfsaArea, action: pseudonymise, category: mbs-fsa, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: ExitSpecific5GMbsfsaArea, action: pseudonymise, category: mbs-fsa, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: NR5GTrackingAreaChange, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: EnterSpecific5GTrackingArea, action: pseudonymise, category: tac-bin, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: ExitSpecific5GTrackingArea, action: pseudonymise, category: tac-bin, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: AddaptiveTrigger, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.2"}}
+      - {name: MinPeriod, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: PersistencePeriod, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: RRC_INACTIVE_MinPeriod, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: RRC_INACTIVE_MinDistance, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: RRC_INACTIVE_PersistencePeriod, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: RRC_INACTIVE_AdditionalTime, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: MinDistance, action: keep, value: {int: [1, 4294967295]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: AdditionalTime, action: keep, value: {int: [1, 4294967295]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: Request, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: LocationFilter, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: AreaIdentifier, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: AreaIn, action: keep, value: boolean, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: Report, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: mcptt-reporting-uri, action: pseudonymise, category: uri, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: CurrentLocation, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: CurrentServingEcgi, action: container, encryptable: true, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: NeighbouringEcgi, parent: [CurrentLocation], action: container, encryptable: true, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: MbmsSaId, parent: [CurrentLocation], action: container, encryptable: true, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: MbsfnArea, parent: [CurrentLocation], action: container, encryptable: true, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: CurrentCoordinate, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: CurrentServingNcgi, action: container, encryptable: true, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: CL_NeighbouringNcgi, action: container, encryptable: true, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: CL_5GMbsfsaArea, action: container, encryptable: true, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: CL_BearingAndSpeed, action: container, encryptable: true, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: BearingAndSpeed, action: fixed, constant: "00000000000000", source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: locTimestamp, action: keep, value: datetime, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: FunctionalAlias, action: pseudonymise, category: uri, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: InterRatType, action: keep, value: {enum: [5G-MBS-to-LTE-MBMS, 5G-MBS-to-LTE-unicast, LTE-MBMS-to-5G-MBS, LTE-MBMS-to-5G-unicast]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: Ecgi, action: pseudonymise, category: ecgi, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: SaId, action: pseudonymise, category: mbms-sai, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: MbsfnAreaId, action: pseudonymise, category: mbsfn-area, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: Ncgi, action: pseudonymise, category: ncgi, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: NR5GMbsfsaAreaId, action: pseudonymise, category: mbs-fsa, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: longitude, action: container, encryptable: true, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: latitude, action: container, encryptable: true, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: altitude, action: container, encryptable: true, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: horizontalaccuracy, action: container, encryptable: true, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: verticalaccuracy, action: container, encryptable: true, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: threebytes, action: fixed, constant: "0", source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: twobytes, action: fixed, constant: "0", source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {name: onebyteunsignedhalfrange, action: fixed, constant: "0", source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+    attributes:
+      - {element: Configuration, name: ConfigScope, action: keep, value: {enum: [Full, Update]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: Request, name: RequestId, action: pseudonymise, category: opaque, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: Request, name: refresh, action: keep, value: boolean, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: Report, name: ReportID, action: pseudonymise, category: opaque, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.2"}}
+      - {element: Report, name: ReportType, action: keep, value: {enum: [Emergency, NonEmergency]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: AnyCellChange, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: AnyTrackingAreaChange, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: AnyPlmnChange, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: AnyMbmsSaChange, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: AnyMbsfnAreaChange, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: InitialLogOn, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: GroupCallNonEmergency, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: PrivateCallNonEmergency, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: LocationConfigurationReceived, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: FunctionalAliasActivation, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: FunctionalAliasDeactivation, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: AnyAreaChange, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: AnyRatTypeChange, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: Any5GMbsfsaAreaChange, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: Any5GTrackingAreaChange, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: EnterSpecificCell, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: ExitSpecificCell, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: EnterSpecificNRCell, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: ExitSpecificNRCell, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: EnterSpecificTrackingArea, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: ExitSpecificTrackingArea, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: EnterSpecific5GTrackingArea, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: ExitSpecific5GTrackingArea, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: EnterSpecificPlmn, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: ExitSpecificPlmn, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: EnterSpecificMbmsSa, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: ExitSpecificMbmsSa, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: SaId, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: EnterSpecificMbsfnArea, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: ExitSpecificMbsfnArea, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: MbsfnAreaId, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: EnterSpecific5GMbsfsaArea, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: ExitSpecific5GMbsfsaArea, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: NR5GMbsfsaAreaId, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: PeriodicReport, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: TravelledDistance, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: MinPeriod, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: PersistencePeriod, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: RRC_INACTIVE_MinPeriod, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: RRC_INACTIVE_MinDistance, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: RRC_INACTIVE_PersistencePeriod, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: RRC_INACTIVE_AdditionalTime, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: AddaptiveTrigger, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: EnterSpecificAreaType, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: ExitSpecificAreaType, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: CurrentServingEcgi, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: NeighbouringEcgi, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: MbmsSaId, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: MbsfnArea, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: CurrentServingNcgi, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: CL_NeighbouringNcgi, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: CL_5GMbsfsaArea, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: longitude, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: latitude, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: altitude, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: horizontalaccuracy, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: verticalaccuracy, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+      - {element: CL_BearingAndSpeed, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.3.3"}}
+  - name: "urn:3gpp:ns:mcdataLocationInfo:1.0"
+    source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.2"}
+    elements:
+      - {name: location-info, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.2"}}
+      - {name: anyExt, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.2"}}
+      - {name: Configuration, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: NonEmergencyLocationInformation, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: EmergencyLocationInformation, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: ServingEcgi, action: keep, value: empty, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: NeighbouringEcgi, parent: [NonEmergencyLocationInformation, EmergencyLocationInformation], action: keep, value: empty, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: MbmsSaId, parent: [NonEmergencyLocationInformation, EmergencyLocationInformation], action: keep, value: empty, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: MbsfnArea, parent: [NonEmergencyLocationInformation, EmergencyLocationInformation], action: keep, value: empty, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: GeographicalCoordinate, action: keep, value: empty, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: minimumIntervalLength, action: keep, value: {int: [1, 4294967295]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: ServingNcgi, action: keep, value: empty, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: NeighbouringNcgi, action: keep, value: empty, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: NR5GMbsfsaArea, action: keep, value: empty, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: R_BearingAndSpeed, action: keep, value: empty, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: TriggeringCriteria, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: EmergencyTriggeringCriteria, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: CellChange, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: AnyCellChange, action: keep, value: empty, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: AnyTrackingAreaChange, action: keep, value: empty, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: AnyPlmnChange, action: keep, value: empty, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: AnyMbmsSaChange, action: keep, value: empty, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: AnyMbsfnAreaChange, action: keep, value: empty, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: InitialLogOn, action: keep, value: empty, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: GroupCallNonEmergency, action: keep, value: empty, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: PrivateCallNonEmergency, action: keep, value: empty, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: LocationConfigurationReceived, action: keep, value: empty, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: FunctionalAliasActivation, action: keep, value: empty, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: FunctionalAliasDeactivation, action: keep, value: empty, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: AnyAreaChange, action: keep, value: empty, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: AnyRatTypeChange, action: keep, value: empty, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: Any5GMbsfsaAreaChange, action: keep, value: empty, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: Any5GTrackingAreaChange, action: keep, value: empty, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: EnterSpecificCell, action: pseudonymise, category: ecgi, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: ExitSpecificCell, action: pseudonymise, category: ecgi, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: EnterSpecificNRCell, action: pseudonymise, category: ncgi, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: ExitSpecificNRCell, action: pseudonymise, category: ncgi, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: TrackingAreaChange, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: EnterSpecificTrackingArea, action: pseudonymise, category: tai, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: ExitSpecificTrackingArea, action: pseudonymise, category: tai, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: PlmnChange, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: EnterSpecificPlmn, action: pseudonymise, category: plmn, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: ExitSpecificPlmn, action: pseudonymise, category: plmn, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: MbmsSaChange, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: EnterSpecificMbmsSa, action: pseudonymise, category: mbms-sai, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: ExitSpecificMbmsSa, action: pseudonymise, category: mbms-sai, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: MbsfnAreaChange, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: EnterSpecificMbsfnArea, action: pseudonymise, category: mbsfn-area, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: ExitSpecificMbsfnArea, action: pseudonymise, category: mbsfn-area, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: PeriodicReport, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: TravelledDistance, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: McdataSignallingEvent, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: GeographicalAreaChange, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: EnterSpecificAreaType, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: ExitSpecificAreaType, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: GeographicalArea, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: PolygonArea, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: Corner, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.2"}}
+      - {name: EllipsoidArcArea, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: Center, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.2"}}
+      - {name: Radius, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.2"}}
+      - {name: OffsetAngle, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.2"}}
+      - {name: IncludedAngle, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.2"}}
+      - {name: InnerBorderWidth, action: keep, value: {int: [0, 127]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: OuterBorderWidth, action: keep, value: {int: [0, 127]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: RatTypeChange, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: NR5GMbsfsaAreaChange, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: EnterSpecific5GMbsfsaArea, action: pseudonymise, category: mbs-fsa, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: ExitSpecific5GMbsfsaArea, action: pseudonymise, category: mbs-fsa, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: NR5GTrackingAreaChange, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: EnterSpecific5GTrackingArea, action: pseudonymise, category: tac-bin, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: ExitSpecific5GTrackingArea, action: pseudonymise, category: tac-bin, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: AddaptiveTrigger, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.2"}}
+      - {name: MinPeriod, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: PersistencePeriod, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: RRC_INACTIVE_MinPeriod, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: RRC_INACTIVE_MinDistance, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: RRC_INACTIVE_PersistencePeriod, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: RRC_INACTIVE_AdditionalTime, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: MinDistance, action: keep, value: {int: [1, 4294967295]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: AdditionalTime, action: keep, value: {int: [1, 4294967295]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: Request, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: LocationFilter, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: AreaIdentifier, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: AreaIn, action: keep, value: boolean, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: Report, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: mcdata-reporting-uri, action: pseudonymise, category: uri, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: CurrentLocation, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: CurrentServingEcgi, action: container, encryptable: true, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: NeighbouringEcgi, parent: [CurrentLocation], action: container, encryptable: true, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: MbmsSaId, parent: [CurrentLocation], action: container, encryptable: true, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: MbsfnArea, parent: [CurrentLocation], action: container, encryptable: true, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: CurrentCoordinate, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: CurrentServingNcgi, action: container, encryptable: true, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: CL_NeighbouringNcgi, action: container, encryptable: true, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: CL_5GMbsfsaArea, action: container, encryptable: true, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: CL_BearingAndSpeed, action: container, encryptable: true, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: BearingAndSpeed, action: fixed, constant: "00000000000000", source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: locTimestamp, action: keep, value: datetime, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: FunctionalAlias, action: pseudonymise, category: uri, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: InterRatType, action: keep, value: {enum: [5G-MBS-to-LTE-MBMS, 5G-MBS-to-LTE-unicast, LTE-MBMS-to-5G-MBS, LTE-MBMS-to-5G-unicast]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: Ecgi, action: pseudonymise, category: ecgi, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: SaId, action: pseudonymise, category: mbms-sai, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: MbsfnAreaId, action: pseudonymise, category: mbsfn-area, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: Ncgi, action: pseudonymise, category: ncgi, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: NR5GMbsfsaAreaId, action: pseudonymise, category: mbs-fsa, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: longitude, action: container, encryptable: true, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: latitude, action: container, encryptable: true, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: altitude, action: container, encryptable: true, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: horizontalaccuracy, action: container, encryptable: true, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: verticalaccuracy, action: container, encryptable: true, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: threebytes, action: fixed, constant: "0", source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: twobytes, action: fixed, constant: "0", source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {name: onebyteunsignedhalfrange, action: fixed, constant: "0", source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+    attributes:
+      - {element: Configuration, name: ConfigScope, action: keep, value: {enum: [Full, Update]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: Request, name: RequestId, action: pseudonymise, category: opaque, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: Request, name: refresh, action: keep, value: boolean, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: Report, name: ReportID, action: pseudonymise, category: opaque, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.2"}}
+      - {element: Report, name: ReportType, action: keep, value: {enum: [Emergency, NonEmergency]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: AnyCellChange, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: AnyTrackingAreaChange, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: AnyPlmnChange, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: AnyMbmsSaChange, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: AnyMbsfnAreaChange, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: InitialLogOn, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: GroupCallNonEmergency, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: PrivateCallNonEmergency, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: LocationConfigurationReceived, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: FunctionalAliasActivation, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: FunctionalAliasDeactivation, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: AnyAreaChange, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: AnyRatTypeChange, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: Any5GMbsfsaAreaChange, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: Any5GTrackingAreaChange, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: EnterSpecificCell, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: ExitSpecificCell, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: EnterSpecificNRCell, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: ExitSpecificNRCell, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: EnterSpecificTrackingArea, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: ExitSpecificTrackingArea, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: EnterSpecific5GTrackingArea, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: ExitSpecific5GTrackingArea, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: EnterSpecificPlmn, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: ExitSpecificPlmn, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: EnterSpecificMbmsSa, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: ExitSpecificMbmsSa, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: SaId, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: EnterSpecificMbsfnArea, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: ExitSpecificMbsfnArea, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: MbsfnAreaId, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: EnterSpecific5GMbsfsaArea, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: ExitSpecific5GMbsfsaArea, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: NR5GMbsfsaAreaId, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: PeriodicReport, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: TravelledDistance, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: MinPeriod, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: PersistencePeriod, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: RRC_INACTIVE_MinPeriod, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: RRC_INACTIVE_MinDistance, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: RRC_INACTIVE_PersistencePeriod, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: RRC_INACTIVE_AdditionalTime, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: AddaptiveTrigger, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: EnterSpecificAreaType, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: ExitSpecificAreaType, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: CurrentServingEcgi, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: NeighbouringEcgi, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: MbmsSaId, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: MbsfnArea, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: CurrentServingNcgi, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: CL_NeighbouringNcgi, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: CL_5GMbsfsaArea, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: longitude, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: latitude, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: altitude, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: horizontalaccuracy, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: verticalaccuracy, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+      - {element: CL_BearingAndSpeed, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.4.3"}}
+  - name: "urn:3gpp:ns:mcvideoLocationInfo:1.0"
+    source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.2"}
+    elements:
+      - {name: location-info, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.2"}}
+      - {name: anyExt, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.2"}}
+      - {name: Configuration, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: NonEmergencyLocationInformation, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: EmergencyLocationInformation, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: ServingEcgi, action: keep, value: empty, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: NeighbouringEcgi, parent: [NonEmergencyLocationInformation, EmergencyLocationInformation], action: keep, value: empty, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: MbmsSaId, parent: [NonEmergencyLocationInformation, EmergencyLocationInformation], action: keep, value: empty, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: MbsfnArea, parent: [NonEmergencyLocationInformation, EmergencyLocationInformation], action: keep, value: empty, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: GeographicalCoordinate, action: keep, value: empty, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: minimumIntervalLength, action: keep, value: {int: [1, 4294967295]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: ServingNcgi, action: keep, value: empty, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: NeighbouringNcgi, action: keep, value: empty, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: NR5GMbsfsaArea, action: keep, value: empty, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: R_BearingAndSpeed, action: keep, value: empty, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: TriggeringCriteria, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: EmergencyTriggeringCriteria, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: CellChange, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: AnyCellChange, action: keep, value: empty, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: AnyTrackingAreaChange, action: keep, value: empty, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: AnyPlmnChange, action: keep, value: empty, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: AnyMbmsSaChange, action: keep, value: empty, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: AnyMbsfnAreaChange, action: keep, value: empty, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: InitialLogOn, action: keep, value: empty, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: GroupCallNonEmergency, action: keep, value: empty, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: PrivateCallNonEmergency, action: keep, value: empty, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: LocationConfigurationReceived, action: keep, value: empty, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: FunctionalAliasActivation, action: keep, value: empty, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: FunctionalAliasDeactivation, action: keep, value: empty, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: AnyAreaChange, action: keep, value: empty, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: AnyRatTypeChange, action: keep, value: empty, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: Any5GMbsfsaAreaChange, action: keep, value: empty, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: Any5GTrackingAreaChange, action: keep, value: empty, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: EnterSpecificCell, action: pseudonymise, category: ecgi, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: ExitSpecificCell, action: pseudonymise, category: ecgi, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: EnterSpecificNRCell, action: pseudonymise, category: ncgi, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: ExitSpecificNRCell, action: pseudonymise, category: ncgi, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: TrackingAreaChange, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: EnterSpecificTrackingArea, action: pseudonymise, category: tai, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: ExitSpecificTrackingArea, action: pseudonymise, category: tai, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: PlmnChange, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: EnterSpecificPlmn, action: pseudonymise, category: plmn, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: ExitSpecificPlmn, action: pseudonymise, category: plmn, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: MbmsSaChange, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: EnterSpecificMbmsSa, action: pseudonymise, category: mbms-sai, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: ExitSpecificMbmsSa, action: pseudonymise, category: mbms-sai, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: MbsfnAreaChange, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: EnterSpecificMbsfnArea, action: pseudonymise, category: mbsfn-area, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: ExitSpecificMbsfnArea, action: pseudonymise, category: mbsfn-area, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: PeriodicReport, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: TravelledDistance, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: McvideoSignallingEvent, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: GeographicalAreaChange, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: EnterSpecificAreaType, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: ExitSpecificAreaType, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: GeographicalArea, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: PolygonArea, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: Corner, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.2"}}
+      - {name: EllipsoidArcArea, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: Center, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.2"}}
+      - {name: Radius, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.2"}}
+      - {name: OffsetAngle, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.2"}}
+      - {name: IncludedAngle, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.2"}}
+      - {name: InnerBorderWidth, action: keep, value: {int: [0, 127]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: OuterBorderWidth, action: keep, value: {int: [0, 127]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: RatTypeChange, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: NR5GMbsfsaAreaChange, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: EnterSpecific5GMbsfsaArea, action: pseudonymise, category: mbs-fsa, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: ExitSpecific5GMbsfsaArea, action: pseudonymise, category: mbs-fsa, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: NR5GTrackingAreaChange, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: EnterSpecific5GTrackingArea, action: pseudonymise, category: tac-bin, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: ExitSpecific5GTrackingArea, action: pseudonymise, category: tac-bin, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: AddaptiveTrigger, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.2"}}
+      - {name: MinPeriod, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: PersistencePeriod, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: RRC_INACTIVE_MinPeriod, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: RRC_INACTIVE_MinDistance, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: RRC_INACTIVE_PersistencePeriod, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: RRC_INACTIVE_AdditionalTime, action: keep, value: {int: [0, 4294967295]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: MinDistance, action: keep, value: {int: [1, 4294967295]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: AdditionalTime, action: keep, value: {int: [1, 4294967295]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: Request, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: LocationFilter, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: AreaIdentifier, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: AreaIn, action: keep, value: boolean, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: Report, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: mcvideo-reporting-uri, action: pseudonymise, category: uri, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: CurrentLocation, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: CurrentServingEcgi, action: container, encryptable: true, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: NeighbouringEcgi, parent: [CurrentLocation], action: container, encryptable: true, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: MbmsSaId, parent: [CurrentLocation], action: container, encryptable: true, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: MbsfnArea, parent: [CurrentLocation], action: container, encryptable: true, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: CurrentCoordinate, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: CurrentServingNcgi, action: container, encryptable: true, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: CL_NeighbouringNcgi, action: container, encryptable: true, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: CL_5GMbsfsaArea, action: container, encryptable: true, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: CL_BearingAndSpeed, action: container, encryptable: true, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: BearingAndSpeed, action: fixed, constant: "00000000000000", source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: locTimestamp, action: keep, value: datetime, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: FunctionalAlias, action: pseudonymise, category: uri, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: InterRatType, action: keep, value: {enum: [5G-MBS-to-LTE-MBMS, 5G-MBS-to-LTE-unicast, LTE-MBMS-to-5G-MBS, LTE-MBMS-to-5G-unicast]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: Ecgi, action: pseudonymise, category: ecgi, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: SaId, action: pseudonymise, category: mbms-sai, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: MbsfnAreaId, action: pseudonymise, category: mbsfn-area, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: Ncgi, action: pseudonymise, category: ncgi, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: NR5GMbsfsaAreaId, action: pseudonymise, category: mbs-fsa, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: longitude, action: container, encryptable: true, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: latitude, action: container, encryptable: true, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: altitude, action: container, encryptable: true, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: horizontalaccuracy, action: container, encryptable: true, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: verticalaccuracy, action: container, encryptable: true, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: threebytes, action: fixed, constant: "0", source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: twobytes, action: fixed, constant: "0", source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {name: onebyteunsignedhalfrange, action: fixed, constant: "0", source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+    attributes:
+      - {element: Configuration, name: ConfigScope, action: keep, value: {enum: [Full, Update]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: Request, name: RequestId, action: pseudonymise, category: opaque, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: Request, name: refresh, action: keep, value: boolean, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: Report, name: ReportID, action: pseudonymise, category: opaque, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.2"}}
+      - {element: Report, name: ReportType, action: keep, value: {enum: [Emergency, NonEmergency]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: AnyCellChange, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: AnyTrackingAreaChange, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: AnyPlmnChange, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: AnyMbmsSaChange, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: AnyMbsfnAreaChange, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: InitialLogOn, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: GroupCallNonEmergency, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: PrivateCallNonEmergency, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: LocationConfigurationReceived, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: FunctionalAliasActivation, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: FunctionalAliasDeactivation, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: AnyAreaChange, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: AnyRatTypeChange, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: Any5GMbsfsaAreaChange, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: Any5GTrackingAreaChange, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: EnterSpecificCell, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: ExitSpecificCell, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: EnterSpecificNRCell, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: ExitSpecificNRCell, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: EnterSpecificTrackingArea, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: ExitSpecificTrackingArea, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: EnterSpecific5GTrackingArea, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: ExitSpecific5GTrackingArea, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: EnterSpecificPlmn, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: ExitSpecificPlmn, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: EnterSpecificMbmsSa, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: ExitSpecificMbmsSa, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: SaId, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: EnterSpecificMbsfnArea, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: ExitSpecificMbsfnArea, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: MbsfnAreaId, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: EnterSpecific5GMbsfsaArea, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: ExitSpecific5GMbsfsaArea, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: NR5GMbsfsaAreaId, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: PeriodicReport, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: TravelledDistance, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: MinPeriod, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: PersistencePeriod, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: RRC_INACTIVE_MinPeriod, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: RRC_INACTIVE_MinDistance, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: RRC_INACTIVE_PersistencePeriod, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: RRC_INACTIVE_AdditionalTime, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: AddaptiveTrigger, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: EnterSpecificAreaType, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: ExitSpecificAreaType, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: CurrentServingEcgi, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: NeighbouringEcgi, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: MbmsSaId, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: MbsfnArea, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: CurrentServingNcgi, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: CL_NeighbouringNcgi, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: CL_5GMbsfsaArea, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: longitude, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: latitude, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: altitude, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: horizontalaccuracy, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: verticalaccuracy, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}
+      - {element: CL_BearingAndSpeed, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.281, version: "19.5.0", clause: "F.3.3"}}

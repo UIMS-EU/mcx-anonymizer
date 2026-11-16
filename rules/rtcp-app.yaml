@@ -1,0 +1,288 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# Media rule set (feature 004). Sources: rules/SOURCES.md § Media plane.
+ruleset: mcxanon-media
+version: 1.0.0
+
+# MCX RTCP APP families (FR-014 to FR-024). Rules are keyed on (family, field ID); a name, subtype or field ID without a
+# rule is zeroed or removed and counted.
+app:
+  # --- MCPTT floor control (TS 24.380 §8.2) ----------------------------------------------
+  - family: mcpt
+    names: [MCPT]
+    source: {spec: TS 24.380, version: "V19.1.0", clause: "8.1.2"}
+    messages:
+      - {name: Floor Request, subtype: 0, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.4"}}
+      - {name: Floor Granted, subtype: 1, ack_variant: true, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.5"}}
+      - {name: Floor Taken, subtype: 2, ack_variant: true, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.9"}}
+      - {name: Floor Deny, subtype: 3, ack_variant: true, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.6"}}
+      - {name: Floor Release, subtype: 4, ack_variant: true, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.7"}}
+      - {name: Floor Idle, subtype: 5, ack_variant: true, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.8"}}
+      - {name: Floor Revoke, subtype: 6, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.10"}}
+      - {name: Floor Revoke Request, subtype: 7, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.17"}}
+      - {name: Floor Queue Position Request, subtype: 8, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.11"}}
+      - {name: Floor Queue Position Info, subtype: 9, ack_variant: true, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.12"}}
+      - {name: Floor Ack, subtype: 10, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.13"}}
+      - {name: Unicast Media Flow Control, subtype: 11, ack_variant: true, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.16"}}
+      - {name: Queued Floor Requests, subtype: 14, ack_variant: true, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.15"}}
+      - {name: Floor Release Multi Talker, subtype: 15, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.14"}}
+    fields:  # Table 8.2.3.1-2
+      - {id: 0, name: Floor Priority, encoding: u8+spare, action: keep, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.3.2"}}
+      - {id: 1, name: Duration, encoding: u16, action: keep, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.3.3"}}
+      # The Reject Phrase is free text and is removed.
+      - {id: 2, name: Reject Cause, encoding: reject-cause, action: keep, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.3.4"}}
+      - {id: 3, name: Queue Info, encoding: u16, action: keep, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.3.5"}}
+      - {id: 4, name: Granted Party's Identity, encoding: uri, action: pseudonymise, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.3.6"}}
+      - {id: 5, name: Permission to Request the Floor, encoding: u16, action: keep, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.3.7"}}
+      - {id: 6, name: User ID, encoding: uri, action: pseudonymise, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.3.8"}}
+      - {id: 7, name: Queue Size, encoding: u16, action: keep, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.3.9"}}
+      - {id: 8, name: Message Sequence-Number, encoding: u16, action: keep, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.3.10"}}
+      - {id: 9, name: Queued User ID, encoding: uri, action: pseudonymise, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.3.11"}}
+      - {id: 10, name: Source, encoding: u16, action: keep, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.3.12"}}
+      # Participant Type -> "unknown" (FR-019); Floor Participant References -> fc_ref.
+      - {id: 11, name: Track Info, encoding: track-info, action: pseudonymise, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.3.13"}}
+      - {id: 12, name: Message Type, encoding: u8+spare, action: keep, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.3.14"}}
+      - {id: 13, name: Floor Indicator, encoding: u16, action: keep, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.3.15"}}
+      - {id: 14, name: Audio SSRC of Granted Participant, encoding: ssrc+spare, action: pseudonymise, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.3.16"}}
+      - {id: 15, name: List of Granted Users, encoding: uri-list, action: pseudonymise, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.3.17"}}
+      - {id: 16, name: List of SSRCs, encoding: ssrc-list, action: pseudonymise, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.3.18"}}
+      - {id: 17, name: Functional Alias, encoding: uri, action: pseudonymise, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.3.19"}}
+      - {id: 18, name: List of Functional Aliases, encoding: uri-list, action: pseudonymise, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.3.20"}}
+      # FR-020: type kept, cell and area identities per component (P6), coordinates zeroed.
+      - {id: 19, name: Location, encoding: location, action: pseudonymise, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.3.21"}}
+      - {id: 20, name: List of Locations, encoding: location-list, action: pseudonymise, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.3.22"}}
+      - {id: 21, name: Queued Floor Requests Purpose, encoding: u16, action: keep, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.3.23"}}
+      - {id: 22, name: List of Queued Users, encoding: uri-list, action: pseudonymise, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.3.24"}}
+      - {id: 23, name: Response State, encoding: u16, action: keep, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.3.25"}}
+      - {id: 24, name: Media Flow Control Indicator, encoding: u8+spare, action: keep, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.3.26"}}
+      - {id: 25, name: Floor Revoke Request User ID, encoding: uri, action: pseudonymise, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.2.3.27"}}
+  # --- MCPTT pre-established session call control (TS 24.380 §8.3); Warning Text removed (FR-021), PCK I_MESSAGE zeroed until feature 005 ---
+  - family: mcpc
+    names: [MCPC]
+    source: {spec: TS 24.380, version: "V19.1.0", clause: "8.3.2"}
+    messages:
+      - {name: Connect, subtype: 0, ack_variant: true, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.3.4"}}
+      - {name: Disconnect, subtype: 1, ack_variant: true, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.3.5"}}
+      - {name: Acknowledge, subtype: 2, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.3.6"}}
+    fields:
+      - {id: 0, name: Media Streams, encoding: u16, action: keep, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.3.3.2"}}
+      - {id: 1, name: MCPTT Session Identity, encoding: session-identity, action: pseudonymise, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.3.3.3"}}
+      - {id: 2, name: Warning Text, encoding: opaque, action: remove, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.3.3.4"}}
+      - {id: 3, name: MCPTT Group Identity, encoding: uri, action: pseudonymise, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.3.3.5"}}
+      - {id: 4, name: Answer State, encoding: u16, action: keep, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.3.3.6"}}
+      - {id: 5, name: Inviting MCPTT User Identity, encoding: uri, action: pseudonymise, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.3.3.7"}}
+      - {id: 6, name: Reason Code, encoding: u16, action: keep, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.3.3.8"}}
+      - {id: 7, name: Reason Cause, encoding: u16, action: keep, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.3.3.11"}}
+      - {id: 8, name: Invited MCPTT User Identity, encoding: uri, action: pseudonymise, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.3.3.12"}}
+      # Feature 005: the I_MESSAGE "as received in the SIP INVITE" is rewritten by rules/mikey.yaml; one
+      # that does not parse is zeroed (FR-020 d).
+      - {id: 192, name: PCK I_MESSAGE, encoding: mikey, action: pseudonymise, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.3.3.10"}}
+  # --- MBMS subchannel control (TS 24.380 §8.4); TMGI zeroed until TS 24.008 is indexed (A9) ---
+  - family: mcmc
+    names: [MCMC]
+    source: {spec: TS 24.380, version: "V19.1.0", clause: "8.4.2"}
+    messages:
+      - {name: Map Group To Bearer, subtype: 0, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.4.4"}}
+      - {name: Unmap Group To Bearer, subtype: 1, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.4.5"}}
+      - {name: Application Paging, subtype: 2, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.4.6"}}
+      - {name: Bearer Announcement, subtype: 3, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.4.7"}}
+    fields:
+      - {id: 0, name: MBMS Subchannel, encoding: subchannel, action: pseudonymise, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.4.3.3"}}
+      - {id: 1, name: TMGI, encoding: opaque, action: zero, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.4.3.4"}}
+      - {id: 2, name: MCPTT Group ID, encoding: uri, action: pseudonymise, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.4.3.2"}}
+      - {id: 3, name: Monitoring State, encoding: u8, action: keep, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.4.3.6"}}
+  # --- MBMS notifications (TS 24.380 §8.5) -------------------------------------
+  - family: mcnc
+    names: [MCNC]
+    source: {spec: TS 24.380, version: "V19.1.0", clause: "8.5.2"}
+    messages:
+      - {name: Group Dynamic Data Notify, subtype: 0, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.5.4"}}
+    fields:
+      - {id: 0, name: Status, encoding: u16, action: keep, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.5.3.2"}}
+      - {id: 1, name: Status changing MCPTT User Identity, encoding: uri, action: pseudonymise, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.5.3.3"}}
+      - {id: 2, name: Group call ongoing, encoding: u8, action: keep, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.5.3.4"}}
+      - {id: 3, name: Group broadcast alias, encoding: uri, action: pseudonymise, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.5.3.5"}}
+      - {id: 4, name: Group regroup alias, encoding: uri, action: pseudonymise, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.5.3.6"}}
+  # --- MBS subchannel control (TS 24.380 §8.6); MBS Session ID zeroed until TS 24.501 is indexed (A9) ---
+  - family: mcsc
+    names: [MCSC]
+    source: {spec: TS 24.380, version: "V19.1.0", clause: "8.6.2"}
+    messages:
+      - {name: MapGroupToSessionStream, subtype: 0, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.6.4"}}
+      - {name: UnMapGroupFromSessionStream, subtype: 1, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.6.5"}}
+      - {name: MBS Application Paging, subtype: 2, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.6.6"}}
+      - {name: Session Announcement, subtype: 3, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.6.7"}}
+    fields:
+      - {id: 0, name: MBS Subchannel, encoding: mbs-subchannel, action: pseudonymise, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.6.3.3"}}
+      - {id: 1, name: MBS Session ID, encoding: opaque, action: zero, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.6.3.4"}}
+      - {id: 2, name: MCPTT Group ID, encoding: uri, action: pseudonymise, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.6.3.2"}}
+      - {id: 3, name: Monitoring State, encoding: u8, action: keep, source: {spec: TS 24.380, version: "V19.1.0", clause: "8.6.3.5"}}
+  # --- MCVideo transmission control, participant to server (TS 24.581 §9.2, Table 9.2.2.1-1) ---
+  - family: mcv0
+    names: [MCV0]
+    source: {spec: TS 24.581, version: "V19.1.0", clause: "9.1.2"}
+    messages:
+      - {name: Transmission Request, subtype: 0, ack_variant: true, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.4"}}
+      - {name: Transmission Release, subtype: 2, ack_variant: true, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.7"}}
+      - {name: Queue Position Request, subtype: 3, ack_variant: true, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.11"}}
+      - {name: Receive media request, subtype: 4, ack_variant: true, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.14"}}
+      - {name: Remote Transmission request, subtype: 7, ack_variant: true, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.22"}}
+      - {name: Remote Transmission cancel request, subtype: 8, ack_variant: true, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.24"}}
+    fields:
+      - {id: 0, name: Transmission Priority, encoding: u8+spare, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.2"}}
+      - {id: 1, name: Duration, encoding: u16, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.3"}}
+      - {id: 2, name: Reject Cause, encoding: reject-cause, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.4"}}
+      - {id: 3, name: Queue Info, encoding: u16, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.5"}}
+      - {id: 4, name: User Id of the Transmitting User, encoding: uri, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.6"}}
+      - {id: 5, name: Permission to Request the Transmission, encoding: u16, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.7"}}
+      - {id: 6, name: User ID, encoding: uri, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.8"}}
+      - {id: 7, name: Queue Size, encoding: u16, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.15"}}
+      - {id: 8, name: Message Sequence-Number, encoding: u16, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.9"}}
+      - {id: 9, name: Queued User ID, encoding: uri, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.14"}}
+      - {id: 10, name: Source, encoding: u16, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.12"}}
+      - {id: 11, name: Track Info, encoding: track-info, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.13"}}
+      - {id: 12, name: Message Type, encoding: u8+spare, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.10"}}
+      - {id: 13, name: Transmission Indicator, encoding: u16, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.11"}}
+      - {id: 14, name: Audio SSRC of the Transmitting User, encoding: ssrc+spare, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.16"}}
+      - {id: 15, name: Result, encoding: u16, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.17"}}
+      - {id: 16, name: Message Name, encoding: message-name, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.18"}}
+      - {id: 17, name: Overriding ID, encoding: uri, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.8"}}
+      - {id: 18, name: Overridden ID, encoding: uri, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.8"}}
+      - {id: 19, name: Reception Priority, encoding: u8+spare, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.19"}}
+      - {id: 20, name: MCVideo Group Identity, encoding: uri, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.20"}}
+      - {id: 21, name: Functional Alias, encoding: uri, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.21"}}
+      - {id: 22, name: Reception Mode, encoding: u16, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.22"}}
+      - {id: 23, name: Video SSRC of the Transmitting User (binary code point), encoding: ssrc+spare, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.23"}}
+      - {id: 24, name: Video SSRC of the Transmitting User, encoding: ssrc+spare, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.23"}}
+  # --- MCVideo transmission control, server to participant (TS 24.581 §9.2, Table 9.2.2.1-2) ---
+  - family: mcv1
+    names: [MCV1]
+    source: {spec: TS 24.581, version: "V19.1.0", clause: "9.1.2"}
+    messages:
+      - {name: Transmission Granted, subtype: 0, ack_variant: true, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.5"}}
+      - {name: Transmission Rejected, subtype: 1, ack_variant: true, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.6"}}
+      - {name: Transmission Arbitration Taken, subtype: 2, ack_variant: true, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.8"}}
+      - {name: Transmission Arbitration Release, subtype: 3, ack_variant: true, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.9"}}
+      - {name: Transmission Revoked, subtype: 4, ack_variant: true, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.10"}}
+      - {name: Queue Position Info, subtype: 5, ack_variant: true, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.12"}}
+      - {name: Media transmission notification, subtype: 6, ack_variant: true, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.13"}}
+      - {name: Receive media response, subtype: 7, ack_variant: true, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.15"}}
+      - {name: Media reception notification, subtype: 8, ack_variant: true, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.16"}}
+      - {name: Transmission cancel request notify, subtype: 10, ack_variant: true, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.19"}}
+      - {name: Remote Transmission response, subtype: 11, ack_variant: true, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.23"}}
+      - {name: Remote Transmission cancel response, subtype: 12, ack_variant: true, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.25"}}
+      - {name: Media reception override notification, subtype: 13, ack_variant: true, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.28"}}
+      - {name: Transmission end notify, subtype: 14, ack_variant: true, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.29"}}
+      - {name: Transmission idle, subtype: 15, ack_variant: true, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.30"}}
+    fields:
+      - {id: 0, name: Transmission Priority, encoding: u8+spare, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.2"}}
+      - {id: 1, name: Duration, encoding: u16, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.3"}}
+      - {id: 2, name: Reject Cause, encoding: reject-cause, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.4"}}
+      - {id: 3, name: Queue Info, encoding: u16, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.5"}}
+      - {id: 4, name: User Id of the Transmitting User, encoding: uri, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.6"}}
+      - {id: 5, name: Permission to Request the Transmission, encoding: u16, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.7"}}
+      - {id: 6, name: User ID, encoding: uri, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.8"}}
+      - {id: 7, name: Queue Size, encoding: u16, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.15"}}
+      - {id: 8, name: Message Sequence-Number, encoding: u16, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.9"}}
+      - {id: 9, name: Queued User ID, encoding: uri, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.14"}}
+      - {id: 10, name: Source, encoding: u16, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.12"}}
+      - {id: 11, name: Track Info, encoding: track-info, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.13"}}
+      - {id: 12, name: Message Type, encoding: u8+spare, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.10"}}
+      - {id: 13, name: Transmission Indicator, encoding: u16, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.11"}}
+      - {id: 14, name: Audio SSRC of the Transmitting User, encoding: ssrc+spare, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.16"}}
+      - {id: 15, name: Result, encoding: u16, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.17"}}
+      - {id: 16, name: Message Name, encoding: message-name, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.18"}}
+      - {id: 17, name: Overriding ID, encoding: uri, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.8"}}
+      - {id: 18, name: Overridden ID, encoding: uri, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.8"}}
+      - {id: 19, name: Reception Priority, encoding: u8+spare, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.19"}}
+      - {id: 20, name: MCVideo Group Identity, encoding: uri, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.20"}}
+      - {id: 21, name: Functional Alias, encoding: uri, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.21"}}
+      - {id: 22, name: Reception Mode, encoding: u16, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.22"}}
+      - {id: 23, name: Video SSRC of the Transmitting User (binary code point), encoding: ssrc+spare, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.23"}}
+      - {id: 24, name: Video SSRC of the Transmitting User, encoding: ssrc+spare, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.23"}}
+  # --- MCVideo transmission control, both directions (TS 24.581 §9.2, Table 9.2.2.1-3) ---
+  - family: mcv2
+    names: [MCV2]
+    source: {spec: TS 24.581, version: "V19.1.0", clause: "9.1.2"}
+    messages:
+      - {name: Transmission end request, subtype: 0, ack_variant: true, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.20"}}
+      - {name: Transmission end response, subtype: 1, ack_variant: true, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.21"}}
+      - {name: Media reception end request, subtype: 2, ack_variant: true, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.26"}}
+      - {name: Media reception end response, subtype: 3, ack_variant: true, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.27"}}
+      - {name: Transmission control ack, subtype: 4, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.31"}}
+    fields:
+      - {id: 0, name: Transmission Priority, encoding: u8+spare, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.2"}}
+      - {id: 1, name: Duration, encoding: u16, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.3"}}
+      - {id: 2, name: Reject Cause, encoding: reject-cause, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.4"}}
+      - {id: 3, name: Queue Info, encoding: u16, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.5"}}
+      - {id: 4, name: User Id of the Transmitting User, encoding: uri, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.6"}}
+      - {id: 5, name: Permission to Request the Transmission, encoding: u16, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.7"}}
+      - {id: 6, name: User ID, encoding: uri, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.8"}}
+      - {id: 7, name: Queue Size, encoding: u16, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.15"}}
+      - {id: 8, name: Message Sequence-Number, encoding: u16, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.9"}}
+      - {id: 9, name: Queued User ID, encoding: uri, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.14"}}
+      - {id: 10, name: Source, encoding: u16, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.12"}}
+      - {id: 11, name: Track Info, encoding: track-info, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.13"}}
+      - {id: 12, name: Message Type, encoding: u8+spare, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.10"}}
+      - {id: 13, name: Transmission Indicator, encoding: u16, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.11"}}
+      - {id: 14, name: Audio SSRC of the Transmitting User, encoding: ssrc+spare, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.16"}}
+      - {id: 15, name: Result, encoding: u16, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.17"}}
+      - {id: 16, name: Message Name, encoding: message-name, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.18"}}
+      - {id: 17, name: Overriding ID, encoding: uri, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.8"}}
+      - {id: 18, name: Overridden ID, encoding: uri, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.8"}}
+      - {id: 19, name: Reception Priority, encoding: u8+spare, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.19"}}
+      - {id: 20, name: MCVideo Group Identity, encoding: uri, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.20"}}
+      - {id: 21, name: Functional Alias, encoding: uri, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.21"}}
+      - {id: 22, name: Reception Mode, encoding: u16, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.22"}}
+      - {id: 23, name: Video SSRC of the Transmitting User (binary code point), encoding: ssrc+spare, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.23"}}
+      - {id: 24, name: Video SSRC of the Transmitting User, encoding: ssrc+spare, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.2.3.23"}}
+  # --- MCVideo MBMS subchannel control (TS 24.581 §9.3); Bearer Announcement has no subtype value (B4) ---
+  - family: mcv3
+    names: [MCV3]
+    source: {spec: TS 24.581, version: "V19.1.0", clause: "9.3.2"}
+    messages:
+      - {name: Map Group To Bearer, subtype: 0, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.3.4"}}
+      - {name: Unmap Group To Bearer, subtype: 1, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.3.5"}}
+      - {name: Application Paging, subtype: 2, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.3.6"}}
+    fields:
+      - {id: 0, name: MBMS Subchannel, encoding: mcvideo-subchannel, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.3.3.3"}}
+      - {id: 1, name: TMGI, encoding: opaque, action: zero, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.3.3.4"}}
+      - {id: 2, name: MCVideo Group ID, encoding: uri, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.3.3.2"}}
+  # --- MCVideo notifications (TS 24.581 §9.4) ----------------------------------
+  - family: mcv4
+    names: [MCV4]
+    source: {spec: TS 24.581, version: "V19.1.0", clause: "9.4.2"}
+    messages:
+      - {name: Group Dynamic Data Notify, subtype: 0, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.4.4"}}
+    fields:
+      - {id: 0, name: Status, encoding: u16, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.4.3.2"}}
+      - {id: 1, name: Status changing MCVideo User Identity, encoding: uri, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.4.3.3"}}
+      - {id: 2, name: Group call ongoing, encoding: u8, action: keep, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.4.3.4"}}
+      - {id: 3, name: Group broadcast alias, encoding: uri, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.4.3.5"}}
+      - {id: 4, name: Group regroup alias, encoding: uri, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.4.3.6"}}
+  # --- MCVideo MBS subchannel control (TS 24.581 §9.5); Session Announcement has no subtype value (B4) ---
+  - family: mcv5
+    names: [MCV5]
+    source: {spec: TS 24.581, version: "V19.1.0", clause: "9.5.2"}
+    messages:
+      - {name: MapGroupToSessionStream, subtype: 0, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.5.4"}}
+      - {name: UnMapGroupFromSessionStream, subtype: 1, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.5.5"}}
+      - {name: MBS Application Paging, subtype: 2, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.5.6"}}
+    fields:
+      - {id: 0, name: MBS Subchannel, encoding: mcvideo-mbs-subchannel, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.5.3.3"}}
+      - {id: 1, name: MBS Session ID, encoding: opaque, action: zero, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.5.3.4"}}
+      - {id: 2, name: MCVideo Group ID, encoding: uri, action: pseudonymise, source: {spec: TS 24.581, version: "V19.1.0", clause: "9.5.3.2"}}
+  # --- MCData over MBMS (TS 24.582 §11) ----------------------
+  - family: mcdm
+    names: [MCDM]
+    source: {spec: TS 24.582, version: "V19.0.0", clause: "11.1.2"}
+    messages:
+      - {name: Map Group To Bearer, subtype: 0, source: {spec: TS 24.582, version: "V19.0.0", clause: "11.2.4"}}
+      - {name: Unmap Group To Bearer, subtype: 1, source: {spec: TS 24.582, version: "V19.0.0", clause: "11.2.5"}}
+      - {name: Application Paging, subtype: 2, source: {spec: TS 24.582, version: "V19.0.0", clause: "11.2.6"}}
+      - {name: Bearer Announcement, subtype: 3, source: {spec: TS 24.582, version: "V19.0.0", clause: "11.2.7"}}
+    fields:
+      - {id: 0, name: MBMS Subchannel, encoding: mcdm-subchannel, action: pseudonymise, source: {spec: TS 24.582, version: "V19.0.0", clause: "11.2.3.3"}}
+      - {id: 1, name: TMGI, encoding: opaque, action: zero, source: {spec: TS 24.582, version: "V19.0.0", clause: "11.2.3.4"}}
+      - {id: 2, name: MCData Group ID, encoding: uri, action: pseudonymise, source: {spec: TS 24.582, version: "V19.0.0", clause: "11.2.3.2"}}
+      - {id: 3, name: Monitoring State, encoding: u8, action: keep, source: {spec: TS 24.582, version: "V19.0.0", clause: "11.2.3.5"}}

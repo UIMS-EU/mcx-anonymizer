@@ -1,0 +1,52 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# GRE and GTP-U.
+# Sources: rules/SOURCES.md. Every field the dissectors emit has exactly one rule.
+ruleset: mcxanon-l2l4
+version: 1.0.0
+rules:
+  - field: gre.flags
+    action: keep
+    source: {spec: "RFC 2784", version: "2000-03", clause: "2.1"}
+  - field: gre.proto
+    action: keep
+    source: {spec: "RFC 2784", version: "2000-03", clause: "2.4"}
+  - field: gre.checksum
+    action: recompute
+    source: {spec: "RFC 2784", version: "2000-03", clause: "2.5"}
+  - field: gre.reserved1
+    action: keep
+    source: {spec: "RFC 2784", version: "2000-03", clause: "2.6"}
+  - field: gre.key
+    action: keep
+    source: {spec: "RFC 2890", version: "2000-09", clause: "2.1"}
+  - field: gre.seq
+    action: keep
+    source: {spec: "RFC 2890", version: "2000-09", clause: "2.2"}
+  - field: gtpu.flags
+    action: keep
+    source: {spec: "3GPP TS 29.281", version: "19.2.0", clause: "5.1"}
+  - field: gtpu.type
+    action: keep
+    source: {spec: "3GPP TS 29.281", version: "19.2.0", clause: "5.1"}
+  - field: gtpu.len
+    action: recompute
+    source: {spec: "3GPP TS 29.281", version: "19.2.0", clause: "5.1"}
+  - field: gtpu.teid
+    action: keep
+    source: {spec: "3GPP TS 29.281", version: "19.2.0", clause: "5.1"}
+  - field: gtpu.opt
+    action: keep
+    source: {spec: "3GPP TS 29.281", version: "19.2.0", clause: "5.1"}
+  - field: gtpu.next_ext
+    action: keep
+    source: {spec: "3GPP TS 29.281", version: "19.2.0", clause: "5.1"}
+  - field: gtpu.ext.len
+    action: keep
+    source: {spec: "3GPP TS 29.281", version: "19.2.0", clause: "5.2.1"}
+  - field: gtpu.ext.pdu_session
+    action: keep
+    source: {spec: "3GPP TS 29.281", version: "19.2.0", clause: "5.2.2.7"}
+  - field: gtpu.ext.other
+    action: zero
+    source: {spec: "3GPP TS 29.281", version: "19.2.0", clause: "5.2.2"}

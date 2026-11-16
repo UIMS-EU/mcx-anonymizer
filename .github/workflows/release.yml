@@ -1,0 +1,87 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# On a version tag (v1.2.3): build the runtime image with the pinned toolchain, publish it to
+# GitHub Container Registry, and create the GitHub release with the Linux binary and the notes
+# of CHANGELOG.md. The tests of the tagged commit run in the ci workflow.
+name: release
+
+on:
+  push:
+    tags: ["v[0-9]+.[0-9]+.[0-9]+"]
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+
+      - name: Version
+        id: v
+        run: |
+          tag="${GITHUB_REF_NAME}"
+          version="${tag#v}"
+          cmake_version="$(sed -nE 's/^ *VERSION ([0-9]+\.[0-9]+\.[0-9]+).*/\1/p' CMakeLists.txt | head -1)"
+          if [[ "$version" != "$cmake_version" ]]; then
+            echo "tag $tag does not match the project version $cmake_version" >&2
+            exit 1
+          fi
+          image="ghcr.io/${GITHUB_REPOSITORY,,}"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "image=$image" >> "$GITHUB_OUTPUT"
+
+      - name: Build image
+        run: |
+          docker build -t mcxanon-ci .ci
+          docker build --build-arg BUILDER=mcxanon-ci --build-arg VERSION=${{ steps.v.outputs.version }} \
+            -t "${{ steps.v.outputs.image }}:${{ steps.v.outputs.version }}" .
+
+      - name: Smoke test (no network)
+        run: |
+          img="${{ steps.v.outputs.image }}:${{ steps.v.outputs.version }}"
+          docker run --rm --network none "$img" --version | tee version.txt
+          grep -qx "mcxanon ${{ steps.v.outputs.version }}" <(head -1 version.txt)
+          docker run --rm --network none "$img" project where
+
+      - name: Binary archive
+        run: |
+          name="mcxanon-${{ steps.v.outputs.version }}-linux-x86_64"
+          mkdir -p "dist/$name"
+          id="$(docker create "${{ steps.v.outputs.image }}:${{ steps.v.outputs.version }}")"
+          docker cp "$id:/usr/local/bin/mcxanon" "dist/$name/mcxanon"
+          docker rm "$id"
+          cp LICENSE README.md CHANGELOG.md COMMERCIAL.md "dist/$name/"
+          tar -C dist --owner=0 --group=0 -czf "dist/$name.tar.gz" "$name"
+          (cd dist && sha256sum "$name.tar.gz" > SHA256SUMS)
+          cat dist/SHA256SUMS
+
+      - name: Release notes
+        run: |
+          awk -v v="${{ steps.v.outputs.version }}" '
+            $0 ~ "^## \\[" v "\\]" { on = 1; next }
+            on && /^## \[/ { exit }
+            on && /^\[[0-9.]+\]: / { next }
+            on { print }
+          ' CHANGELOG.md > notes.md
+          test -s notes.md
+
+      - name: Push image
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+          img="${{ steps.v.outputs.image }}"
+          docker tag "$img:${{ steps.v.outputs.version }}" "$img:latest"
+          docker push "$img:${{ steps.v.outputs.version }}"
+          docker push "$img:latest"
+
+      - name: GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          prerelease=""
+          [[ "${{ steps.v.outputs.version }}" == 0.* ]] && prerelease="--prerelease"
+          gh release create "$GITHUB_REF_NAME" $prerelease \
+            --title "mcx-anonymizer ${{ steps.v.outputs.version }}" \
+            --notes-file notes.md \
+            dist/*.tar.gz dist/SHA256SUMS

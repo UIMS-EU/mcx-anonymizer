@@ -1,0 +1,191 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# TS 24.282 Annex D documents except location and the shared namespaces (Appendix C).
+# XML rule set (feature 003). Sources: rules/SOURCES.md § MCX XML bodies.
+ruleset: mcxanon-xml
+version: 1.0.0
+namespaces:
+  # Appendix C §C.3. The global elements of §D.1.2 (item 11) match wherever they appear (C1).
+  - name: "urn:3gpp:ns:mcdataInfo:1.0"
+    source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.2"}
+    elements:
+      - {name: mcdatainfo, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3"}}
+      - {name: mcdata-Params, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3"}}
+      - {name: anyExt, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.2"}}
+      - {name: mcdata-access-token, action: container, encryptable: true, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 1, 2c"}}
+      - {name: request-type, action: keep, value: {enum: [one-to-one-sds, group-sds, ad-hoc-group-sds, one-to-one-fd, group-fd, msf-disc-req, msf-disc-res, notify, one-to-one-sds-session, group-sds-session, functional-alias-status-determination, fa-group-binding-req, store-comms-in-msgstore-ctrl-req, adhoc-group-sds-session, adhoc-group-fd-session, get-userlist-adhoc-group-data-comn-request, adhoc-group-data-comn-add-participants-request, adhoc-group-data-comn-remove-participants-request, adhoc-group-data-comn-release-notification-request, mc-service-authorisation-notify-request, migration-service-deauthorization-notification, migration-service-authorization-request, ad-hoc-emergency-alert-participant-criteria-modification, ad-hoc-group-determination, fa-user-status-determination, one-to-one-ipconn]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 2; 20.2.1"}}
+      - {name: mcdata-request-uri, action: container, encryptable: true, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 1, 2b, 3"}}
+      - {name: mcdata-calling-user-id, action: container, encryptable: true, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 1, 2b, 4"}}
+      - {name: mcdata-called-party-id, action: container, encryptable: true, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 1, 2b, 5"}}
+      - {name: mcdata-calling-group-id, action: container, encryptable: true, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 1, 2b, 6"}}
+      - {name: alert-ind, action: container, encryptable: true, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 1, 2d, 7"}}
+      - {name: originated-by, action: container, encryptable: true, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 1, 2b, 8"}}
+      - {name: mcdata-client-id, action: container, encryptable: true, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 1, 2c, 9"}}
+      - {name: mcdata-controller-psi, action: container, encryptable: true, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 1, 10"}}
+      - {name: gw-mcdata-usage, action: keep, value: boolean, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 10b"}}
+      - {name: emergency-alert-area-ind, action: keep, value: boolean, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 11g"}}
+      - {name: group-geo-area-ind, action: keep, value: boolean, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 11h"}}
+      - {name: pre-established-session-ind, action: keep, value: boolean, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 11a"}}
+      - {name: call-to-functional-alias-ind, action: keep, value: boolean, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 11s"}}
+      - {name: mcdata-communication-state, action: keep, value: {enum: [establish-request, establish-success, establish-fail, terminate-request, terminated]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 11b"}}
+      - {name: response-type, action: keep, value: {enum: [get-userlist-adhoc-group-data-comn-response, ad-hoc-emergency-alert-participant-criteria-modification, migration-service-authorization-response]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 11z4, 11z6"}}
+      - {name: emergency-ind, action: keep, value: boolean, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 11c"}}
+      - {name: alert-ind-rcvd, action: keep, value: boolean, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 11d"}}
+      - {name: mc-org, action: remove, reason: free-text, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 11e"}}
+      - {name: functional-alias-URI, action: container, encryptable: true, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 1, 2b, 11f"}}
+      - {name: user-requested-priority, action: keep, value: {int: [0, 18446744073709551615]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 11u"}}
+      - {name: multiple-devices-ind, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 11k"}}
+      - {name: imminentperil-ind, action: keep, value: boolean, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 11i"}}
+      - {name: emergency-ind-rcvd, action: keep, value: boolean, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 11j"}}
+      - {name: binding-ind, action: keep, value: boolean, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 11l"}}
+      - {name: binding-fa-uri, action: pseudonymise, category: uri, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 11m"}}
+      - {name: unbinding-fa-uri, action: pseudonymise, category: uri, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 11n"}}
+      - {name: called-functional-alias-URI, action: container, encryptable: true, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 1, 2b, 11t"}}
+      - {name: associated-group-id, action: pseudonymise, category: uri, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 11v"}}
+      - {name: store-all-private-comms-in-msgstore, action: keep, value: boolean, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 11o"}}
+      - {name: store-all-group-comms-in-msgstore, action: keep, value: boolean, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 11p"}}
+      - {name: store-specific-private-comms-in-msgstore, action: keep, value: {enum: [enable, disable]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 11q"}}
+      - {name: store-specific-group-comms-in-msgstore, action: keep, value: {enum: [enable, disable]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 11r"}}
+      - {name: end-to-end-security, action: keep, value: boolean, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 11w"}}
+      - {name: comn-participants-criteria, action: remove, reason: free-text, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 11x, 11z8"}}
+      - {name: preconfigured-group-id, action: pseudonymise, category: uri, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 11y"}}
+      - {name: adhoc-grp-emg-alert-grp-ind, action: keep, value: boolean, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 11z"}}
+      - {name: adhoc-emergency-ind, action: keep, value: boolean, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 11z11"}}
+      - {name: adhoc-additional-information, action: remove, reason: free-text, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 11z12"}}
+      - {name: adhoc-alert-ind, action: keep, value: boolean, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 11z9"}}
+      - {name: adhoc-alert-ind-rcvd, action: keep, value: boolean, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 11z10"}}
+      - {name: adhoc-alert-participant-list, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 11z13"}}
+      - {name: adhoc-alert-participant-not-ack-list, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 11z14"}}
+      - {name: forwarding-reason, action: keep, value: {enum: [migrated]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 11z15"}}
+      - {name: forwarding-target-id, action: pseudonymise, category: uri, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 11z16"}}
+      - {name: partner-mcdata-id, action: container, encryptable: true, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 1, 2b, 11z1"}}
+      - {name: migration-auth-result, action: container, encryptable: true, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 1, 2d, 11z2"}}
+      - {name: selected-user-profile-index, action: container, encryptable: true, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 1, 2e, 11z3"}}
+      - {name: user-profile-index, action: keep, value: {int: [0, 255]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 2e, 11z3"}}
+      - {name: primary-mcdata-id, action: container, encryptable: true, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 1, 2b, 11z5"}}
+      - {name: location-of-functional-alias-URI, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 11z6"}}
+      - {name: application-data, action: remove, reason: free-text, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 11z7"}}
+      - {name: entry, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.2"}}
+      - {name: uri-entry, action: pseudonymise, category: uri, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 11z13, 11z14"}}
+      - {name: display-name, action: pseudonymise, category: display-name, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.2"}}
+      - {name: mcdataURI, action: pseudonymise, category: uri, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 2b"}}
+      - {name: mcdataString, action: remove, reason: free-text, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 item 2"}}
+      - {name: mcdataString, parent: [mcdata-access-token], action: remove, reason: credential, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 1, 2c"}}
+      - {name: mcdataString, parent: [mcdata-client-id], action: pseudonymise, category: instance, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 2c, 9; 3.1"}}
+      - {name: mcdataBoolean, action: keep, value: boolean, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 2d, 11k"}}
+    attributes:
+      - {element: mcdata-access-token, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 2a, 3a"}}
+      - {element: mcdata-request-uri, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 2a, 3a"}}
+      - {element: mcdata-calling-user-id, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 2a, 3a"}}
+      - {element: mcdata-called-party-id, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 2a, 3a"}}
+      - {element: mcdata-calling-group-id, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 2a, 3a"}}
+      - {element: alert-ind, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 2a, 3a"}}
+      - {element: originated-by, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 2a, 3a"}}
+      - {element: mcdata-client-id, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 2a, 3a"}}
+      - {element: mcdata-controller-psi, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 2a, 3a"}}
+      - {element: functional-alias-URI, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 2a, 3a"}}
+      - {element: multiple-devices-ind, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.2"}}
+      - {element: called-functional-alias-URI, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 2a, 3a"}}
+      - {element: partner-mcdata-id, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 2a, 3a"}}
+      - {element: migration-auth-result, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 2a, 3a"}}
+      - {element: primary-mcdata-id, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 2a, 3a"}}
+      - {element: location-of-functional-alias-URI, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.2"}}
+      - {element: selected-user-profile-index, name: type, action: keep, value: {enum: [Normal, Encrypted]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.1.3 items 1, 2a, 3a"}}
+
+  # Appendix C §C.5. The outer mbms-listening-status / mbms-suspension-status are containers
+  # under the root; the inner ones of the same name carry the status value (C1, X1).
+  - name: "urn:3gpp:ns:mcdataMbmsUsage:1.0"
+    source: {spec: TS 24.282, version: "19.6.0", clause: "D.5.2"}
+    elements:
+      - {name: mcdata-mbms-usage-info, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.5.3"}}
+      - {name: mbms-listening-status, parent: [mcdata-mbms-usage-info], action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.5.3 item 1"}}
+      - {name: mbms-listening-status, action: keep, value: {enum: [listening, not-listening]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.5.3 item 1a"}}
+      - {name: session-id, action: pseudonymise, category: uri, source: {spec: TS 24.282, version: "19.6.0", clause: "D.5.3 item 1b"}}
+      - {name: general-purpose, action: keep, value: boolean, source: {spec: TS 24.282, version: "19.6.0", clause: "D.5.3 item 1c"}}
+      - {name: TMGI, action: empty, source: {spec: TS 24.282, version: "19.6.0", clause: "D.5.3 items 1d, 3a"}}
+      - {name: anyExt, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.5.2"}}
+      - {name: mbms-suspension-status, parent: [mcdata-mbms-usage-info], action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.5.3 item 2"}}
+      - {name: mbms-suspension-status, action: keep, value: {enum: [suspending, not-suspending]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.5.3 item 2a"}}
+      - {name: number-of-reported-bearers, action: keep, value: {token: hex-counter}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.5.3 item 2b"}}
+      - {name: suspended-TMGI, action: empty, source: {spec: TS 24.282, version: "19.6.0", clause: "D.5.3 item 2c"}}
+      - {name: other-TMGI, action: empty, source: {spec: TS 24.282, version: "19.6.0", clause: "D.5.3 item 2d"}}
+      - {name: announcement, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.5.3 item 3"}}
+      - {name: QCI, action: keep, value: {int: [-9223372036854775808, 9223372036854775807]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.5.3 item 3b"}}
+      - {name: frequency, action: keep, value: {int: [0, 18446744073709551615]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.5.3 item 3c"}}
+      - {name: mbms-service-areas, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.5.3 item 3d"}}
+      - {name: mbms-service-area-id, action: pseudonymise, category: mbms-sai-hex, source: {spec: TS 24.282, version: "19.6.0", clause: "D.5.3 item 3d"}}
+      - {name: GPMS, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.5.3 item 3e"}}
+      - {name: report-suspension, action: keep, value: boolean, source: {spec: TS 24.282, version: "19.6.0", clause: "D.5.3 item 3f"}}
+      - {name: mcdata-mbms-rohc, action: keep, value: empty, source: {spec: TS 24.282, version: "19.6.0", clause: "D.5.3 item 3g"}}
+      - {name: max-cid, action: keep, value: {int: [1, 16383]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.5.2"}}
+      - {name: version, action: keep, value: {int: [-9223372036854775808, 9223372036854775807]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.5.3 item 4"}}
+      - {name: mbms-defaultMuSiK-download, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.5.3 item 5a"}}
+      - {name: mbms-explicitMuSiK-download, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.5.3 item 5b"}}
+      - {name: group, action: pseudonymise, category: uri, source: {spec: TS 24.282, version: "19.6.0", clause: "D.5.3 items 5a, 5b"}}
+
+  # Appendix C §C.8, both Content-Type spellings (X6). Same-name nesting as in §C.5 (C1, X1).
+  - name: "urn:3gpp:ns:mvdataMbsUsage:1.0"
+    source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.2"}
+    elements:
+      - {name: mvdata-mbs-usage-info, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3"}}
+      - {name: mbs-listening-status, parent: [mvdata-mbs-usage-info], action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3 item 1"}}
+      - {name: mbs-listening-status, action: keep, value: {enum: [listening, not-listening]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3 item 1; D.5.3 item 1a"}}
+      - {name: unicast-listening-status, action: keep, value: {enum: [listening, not-listening]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.2"}}
+      - {name: session-id, action: pseudonymise, category: uri, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3 items 1, 3c"}}
+      - {name: general-purpose, action: keep, value: boolean, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3 item 1"}}
+      - {name: mbs-session-id, action: empty, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3 items 1, 3b, 4a"}}
+      - {name: anyExt, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.2"}}
+      - {name: mbs-session-de-announcement-status, parent: [mvdata-mbs-usage-info], action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3 item 2"}}
+      - {name: mbs-session-de-announcement-status, action: keep, value: {enum: [deleteing, not-deleteing, deleting, not-deleting]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3 item 2a"}}
+      - {name: number-of-reported-sessions, action: keep, value: {token: hex-counter}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3 item 2b"}}
+      - {name: deleted-mbs-session-id, action: empty, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3 item 2c"}}
+      - {name: other-mbs-session-id, action: empty, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3 item 2d"}}
+      - {name: ue-session-join-notification, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3 item 3"}}
+      - {name: mbs-multicast-joining-status, action: keep, value: {enum: [ue-session-join, ue-session-leave]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3 item 3a"}}
+      - {name: announcement, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3 item 4"}}
+      - {name: mbs-session-info, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3 item 4a"}}
+      - {name: mbs-session-mode, action: keep, value: {enum: [multicast, broadcast]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3 item 4a(ii)"}}
+      - {name: mc-service-group-id, action: remove, reason: structure, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3 item 4a(iii)"}}
+      - {name: frequency, action: keep, value: {int: [0, 18446744073709551615]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3 item 4a(ix); D.5.3 item 3c"}}
+      - {name: GPMS, action: keep, value: {int: [1, 18446744073709551615]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3 item 4a(iv); D.5.3 item 3e"}}
+      - {name: mbs-service-areas, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3 item 4a(v)"}}
+      - {name: mbs-service-area-id, action: pseudonymise, category: mbms-sai-hex, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3 item 4a(v)"}}
+      - {name: report-ue-session-join-notification, action: keep, value: boolean, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3 item 4a(vi)"}}
+      - {name: multicast-mbs-session-related-info, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3 item 4a(vii)"}}
+      - {name: PlmnId, action: pseudonymise, category: plmn, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3 item 4a(vii)"}}
+      - {name: DNN, action: pseudonymise, category: host, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3 item 4a(vii)"}}
+      - {name: IPInformation, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3 item 4a(vii)"}}
+      - {name: IPInformationListEntry, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.2"}}
+      - {name: IPv4Address, action: pseudonymise, category: ip, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.2"}}
+      - {name: IPv6Address, action: pseudonymise, category: ip, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.2"}}
+      - {name: FQDN, action: pseudonymise, category: host, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.2"}}
+      - {name: MC-ID-ref-SNSSAI, action: remove, reason: structure, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3 item 4a(vii)"}}
+      - {name: mbs-fsa-id, action: pseudonymise, category: mbs-fsa, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3 item 4a(viii)"}}
+      - {name: mbs-session-de-announcement-acknowledgement, action: keep, value: boolean, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3 item 4a(x)"}}
+      - {name: eMBMS-bearer-info, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3 item 4b"}}
+      - {name: TMGI, action: empty, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3 item 4b; D.5.3 item 3a"}}
+      - {name: Alternative-TMGI, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3 item 4b(i)"}}
+      - {name: Alternative-TMGI-id, action: empty, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3 item 4b(i)"}}
+      - {name: QCI, action: keep, value: {int: [-9223372036854775808, 9223372036854775807]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.5.3 item 3b"}}
+      - {name: mbms-service-areas, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.5.3 item 3d"}}
+      - {name: mbms-service-area-id, action: pseudonymise, category: mbms-sai-hex, source: {spec: TS 24.282, version: "19.6.0", clause: "D.5.3 item 3d"}}
+      - {name: report-suspension, action: keep, value: boolean, source: {spec: TS 24.282, version: "19.6.0", clause: "D.5.3 item 3f"}}
+      - {name: mvdata-mbs-rohc, action: keep, value: empty, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.2; D.5.3 item 3g"}}
+      - {name: max-cid, action: keep, value: {int: [1, 16383]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.2"}}
+      - {name: version, action: keep, value: {int: [-9223372036854775808, 9223372036854775807]}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.2"}}
+      - {name: mbs-defaultMuSiK-download, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.2; D.5.3 item 5a"}}
+      - {name: mbs-explicitMuSiK-download, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.2; D.5.3 item 5b"}}
+      - {name: group, action: pseudonymise, category: uri, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.2; D.5.3 item 5"}}
+    attributes:
+      - {element: PlmnId, name: TriggerId, action: keep, value: {token: trigger-id}, source: {spec: TS 24.282, version: "19.6.0", clause: "D.8.3 item 4a(vii)"}}
+
+  # Appendix C §C.7.
+  - name: "urn:3gpp:ns:msgstoreControlRequest:1.0"
+    source: {spec: TS 24.282, version: "19.6.0", clause: "D.7.2"}
+    elements:
+      - {name: msgstore-ctrl-command-list, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.7.3"}}
+      - {name: enable, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.7.3"}}
+      - {name: disable, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.7.3"}}
+      - {name: group, action: pseudonymise, category: uri, source: {spec: TS 24.282, version: "19.6.0", clause: "D.7.3 item 1"}}
+      - {name: private, action: pseudonymise, category: uri, source: {spec: TS 24.282, version: "19.6.0", clause: "D.7.3 item 2"}}
+      - {name: anyExt, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.7.2"}}

@@ -1,0 +1,152 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# pcapng blocks and options.
+# Sources: rules/SOURCES.md. Every field the dissectors emit has exactly one rule.
+ruleset: mcxanon-l2l4
+version: 1.0.0
+rules:
+  - field: pcapng.blk.shb
+    action: keep
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.1"}
+  - field: pcapng.blk.idb
+    action: keep
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.2"}
+  - field: pcapng.blk.epb
+    action: keep
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.3"}
+  - field: pcapng.blk.spb
+    action: keep
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.4"}
+  - field: pcapng.blk.pb
+    action: keep
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "Appendix A"}
+    note: "converted to an Enhanced Packet Block"
+  - field: pcapng.blk.isb
+    action: keep
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.6"}
+  - field: pcapng.blk.nrb
+    action: remove
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.5"}
+  - field: pcapng.blk.dsb
+    action: remove
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.7"}
+  - field: pcapng.blk.journal
+    action: remove
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "10.1"}
+  - field: pcapng.blk.custom
+    action: remove
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.8"}
+  - field: pcapng.blk.other
+    action: remove
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "10.1"}
+  - field: pcapng.opt.comment
+    action: remove
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "3.5"}
+  - field: pcapng.opt.custom
+    action: remove
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "3.5.1"}
+  - field: pcapng.opt.other
+    action: remove
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "3.5"}
+  - field: pcapng.shb.hardware
+    action: remove
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.1"}
+  - field: pcapng.shb.os
+    action: remove
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.1"}
+  - field: pcapng.shb.userappl
+    action: remove
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.1"}
+  - field: pcapng.idb.name
+    action: remove
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.2"}
+  - field: pcapng.idb.description
+    action: remove
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.2"}
+  - field: pcapng.idb.ipv4addr
+    action: remove
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.2"}
+  - field: pcapng.idb.ipv6addr
+    action: remove
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.2"}
+  - field: pcapng.idb.macaddr
+    action: remove
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.2"}
+  - field: pcapng.idb.euiaddr
+    action: remove
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.2"}
+  - field: pcapng.idb.speed
+    action: remove
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.2"}
+  - field: pcapng.idb.tsresol
+    action: keep
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.2"}
+  - field: pcapng.idb.tzone
+    action: remove
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.2"}
+  - field: pcapng.idb.filter
+    action: remove
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.2"}
+  - field: pcapng.idb.os
+    action: remove
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.2"}
+  - field: pcapng.idb.fcslen
+    action: keep
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.2"}
+  - field: pcapng.idb.tsoffset
+    action: keep
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.2"}
+  - field: pcapng.idb.hardware
+    action: remove
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.2"}
+  - field: pcapng.idb.txspeed
+    action: remove
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.2"}
+  - field: pcapng.idb.rxspeed
+    action: remove
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.2"}
+  - field: pcapng.idb.iana_tzname
+    action: remove
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.2"}
+  - field: pcapng.epb.flags
+    action: keep
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.3.1"}
+  - field: pcapng.epb.hash
+    action: remove
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.3"}
+  - field: pcapng.epb.dropcount
+    action: keep
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.3"}
+  - field: pcapng.epb.packetid
+    action: remove
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.3"}
+  - field: pcapng.epb.queue
+    action: remove
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.3"}
+  - field: pcapng.epb.verdict
+    action: remove
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.3"}
+  - field: pcapng.epb.processid_threadid
+    action: remove
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.3"}
+  - field: pcapng.isb.starttime
+    action: keep
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.6"}
+  - field: pcapng.isb.endtime
+    action: keep
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.6"}
+  - field: pcapng.isb.ifrecv
+    action: keep
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.6"}
+  - field: pcapng.isb.ifdrop
+    action: keep
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.6"}
+  - field: pcapng.isb.filteraccept
+    action: keep
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.6"}
+  - field: pcapng.isb.osdrop
+    action: keep
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.6"}
+  - field: pcapng.isb.usrdeliv
+    action: keep
+    source: {spec: "draft-ietf-opsawg-pcapng", version: "06", clause: "4.6"}

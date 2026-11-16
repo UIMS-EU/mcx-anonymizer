@@ -1,0 +1,29 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Build output (cppbuild / CMake / Conan)
+build/
+CMakeUserPresets.json
+
+# Python
+__pycache__/
+dist/
+wheelhouse/
+
+# mcxanon project data: mappings and secrets must never leave the machine
+*.map.json
+*.secret
+.mcxanon/
+mcxanon-data/
+
+# Fuzzing: generated corpora and crash artefacts
+tests/fuzz/corpus/
+/crash-*
+/leak-*
+/oom-*
+/timeout-*
+/slow-unit-*
+
+# Editors and OS
+.vscode/
+.idea/
+*.swp
+.DS_Store

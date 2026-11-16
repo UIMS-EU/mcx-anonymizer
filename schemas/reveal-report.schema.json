@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:mcxanon:reveal-report:1",
+  "title": "mcxanon reveal report (format 1)",
+  "type": "object",
+  "required": ["format", "kind", "tool", "project", "options", "bytes", "revealed", "ambiguous", "unknown",
+               "not_searchable", "candidates"],
+  "additionalProperties": false,
+  "properties": {
+    "format": {"const": 1},
+    "kind": {"const": "reveal"},
+    "tool": {
+      "type": "object",
+      "required": ["name", "version"],
+      "additionalProperties": false,
+      "properties": {"name": {"const": "mcxanon"}, "version": {"type": "string"}}
+    },
+    "project": {"type": "string"},
+    "options": {
+      "type": "object",
+      "required": ["replace_ambiguous", "annotate"],
+      "additionalProperties": false,
+      "properties": {"replace_ambiguous": {"type": "boolean"}, "annotate": {"type": "boolean"}}
+    },
+    "bytes": {
+      "type": "object",
+      "required": ["in", "out"],
+      "additionalProperties": false,
+      "properties": {"in": {"type": "integer", "minimum": 0}, "out": {"type": "integer", "minimum": 0}}
+    },
+    "revealed": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 1}},
+    "ambiguous": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 1}},
+    "unknown": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 1}},
+    "not_searchable": {"type": "integer", "minimum": 0},
+    "candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["kind", "ambiguity", "line", "column", "category", "matched", "original"],
+        "additionalProperties": false,
+        "properties": {
+          "kind": {"enum": ["ambiguous", "unknown"]},
+          "ambiguity": {"enum": ["", "small-space", "short", "overlap", "pseudonym-and-original"]},
+          "line": {"type": "integer", "minimum": 1},
+          "column": {"type": "integer", "minimum": 1},
+          "category": {"type": "string", "pattern": "^[a-z0-9-]+(\\|[a-z0-9-]+)*$"},
+          "matched": {"type": "string"},
+          "original": {"type": "string"}
+        }
+      }
+    }
+  }
+}

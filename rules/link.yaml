@@ -1,0 +1,104 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# Link layer: Ethernet, 802.1Q tags, Linux cooked capture, BSD loopback, ARP.
+# Sources: rules/SOURCES.md. Every field the dissectors emit has exactly one rule.
+ruleset: mcxanon-l2l4
+version: 1.0.0
+rules:
+  - field: eth.dst
+    action: pseudonymise
+    category: mac
+    source: {spec: "IEEE 802.3", version: "2022", clause: "3.2.3"}
+  - field: eth.src
+    action: pseudonymise
+    category: mac
+    source: {spec: "IEEE 802.3", version: "2022", clause: "3.2.3"}
+  - field: eth.type
+    action: keep
+    source: {spec: "IEEE 802.3", version: "2022", clause: "3.2.6"}
+  - field: eth.fcs
+    action: recompute
+    source: {spec: "IEEE 802.3", version: "2022", clause: "3.2.9"}
+  - field: link.trailer
+    action: zero
+    source: {spec: "IEEE 802.3", version: "2022", clause: "3.2.7"}
+    note: "bytes after the network-layer datagram (padding)"
+  - field: vlan.tci
+    action: keep
+    source: {spec: "IEEE 802.1Q", version: "2022", clause: "9.6"}
+    note: "VID pseudonymised with --pseudonymise-vlan"
+  - field: vlan.type
+    action: keep
+    source: {spec: "IEEE 802.1Q", version: "2022", clause: "9.5"}
+  - field: sll.pkttype
+    action: keep
+    source: {spec: "tcpdump.org LINKTYPE_LINUX_SLL", version: "2026-11-11", clause: "Description"}
+  - field: sll.hatype
+    action: keep
+    source: {spec: "tcpdump.org LINKTYPE_LINUX_SLL", version: "2026-11-11", clause: "Description"}
+  - field: sll.halen
+    action: keep
+    source: {spec: "tcpdump.org LINKTYPE_LINUX_SLL", version: "2026-11-11", clause: "Description"}
+  - field: sll.addr
+    action: pseudonymise
+    category: mac
+    source: {spec: "tcpdump.org LINKTYPE_LINUX_SLL", version: "2026-11-11", clause: "Description"}
+  - field: sll.addr_pad
+    action: zero
+    source: {spec: "tcpdump.org LINKTYPE_LINUX_SLL", version: "2026-11-11", clause: "Description"}
+  - field: sll.addr_other
+    action: zero
+    source: {spec: "tcpdump.org LINKTYPE_LINUX_SLL", version: "2026-11-11", clause: "Description"}
+  - field: sll.protocol
+    action: keep
+    source: {spec: "tcpdump.org LINKTYPE_LINUX_SLL", version: "2026-11-11", clause: "Description"}
+  - field: sll2.protocol
+    action: keep
+    source: {spec: "tcpdump.org LINKTYPE_LINUX_SLL2", version: "2026-11-11", clause: "Description"}
+  - field: sll2.reserved
+    action: keep
+    source: {spec: "tcpdump.org LINKTYPE_LINUX_SLL2", version: "2026-11-11", clause: "Description"}
+  - field: sll2.ifindex
+    action: keep
+    source: {spec: "tcpdump.org LINKTYPE_LINUX_SLL2", version: "2026-11-11", clause: "Description"}
+  - field: sll2.hatype
+    action: keep
+    source: {spec: "tcpdump.org LINKTYPE_LINUX_SLL2", version: "2026-11-11", clause: "Description"}
+  - field: sll2.pkttype
+    action: keep
+    source: {spec: "tcpdump.org LINKTYPE_LINUX_SLL2", version: "2026-11-11", clause: "Description"}
+  - field: sll2.halen
+    action: keep
+    source: {spec: "tcpdump.org LINKTYPE_LINUX_SLL2", version: "2026-11-11", clause: "Description"}
+  - field: sll2.addr
+    action: pseudonymise
+    category: mac
+    source: {spec: "tcpdump.org LINKTYPE_LINUX_SLL2", version: "2026-11-11", clause: "Description"}
+  - field: sll2.addr_pad
+    action: zero
+    source: {spec: "tcpdump.org LINKTYPE_LINUX_SLL2", version: "2026-11-11", clause: "Description"}
+  - field: sll2.addr_other
+    action: zero
+    source: {spec: "tcpdump.org LINKTYPE_LINUX_SLL2", version: "2026-11-11", clause: "Description"}
+  - field: null.family
+    action: keep
+    source: {spec: "draft-ietf-opsawg-pcaplinktype", version: "18", clause: "2.2.1"}
+  - field: arp.fixed
+    action: keep
+    source: {spec: "RFC 826", version: "1982-11", clause: "Packet format"}
+  - field: arp.sha
+    action: pseudonymise
+    category: mac
+    source: {spec: "RFC 826", version: "1982-11", clause: "Packet format"}
+  - field: arp.spa
+    action: pseudonymise
+    category: ipv4
+    source: {spec: "RFC 826", version: "1982-11", clause: "Packet format"}
+  - field: arp.tha
+    action: pseudonymise
+    category: mac
+    source: {spec: "RFC 826", version: "1982-11", clause: "Packet format"}
+  - field: arp.tpa
+    action: pseudonymise
+    category: ipv4
+    source: {spec: "RFC 826", version: "1982-11", clause: "Packet format"}

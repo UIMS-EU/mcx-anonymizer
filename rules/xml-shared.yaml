@@ -1,0 +1,39 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# The namespaces shared by MCPTT, MCData and MCVideo: affiliation command and preconfigured
+# regroup.
+# XML rule set (feature 003). Sources: rules/SOURCES.md § MCX XML bodies.
+ruleset: mcxanon-xml
+version: 1.0.0
+namespaces:
+  - name: "urn:3gpp:ns:affiliationCommand:1.0"
+    source: {spec: TS 24.379, version: "19.6.0", clause: "F.4.2"}
+    elements:
+      - {name: command-list, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.4.3"}}
+      - {name: affiliate, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.4.2"}}
+      - {name: de-affiliate, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.4.2"}}
+      - {name: group, action: pseudonymise, category: uri, source: {spec: TS 24.379, version: "19.6.0", clause: "F.4.3"}}
+      - {name: anyExt, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.4.2"}}
+  - name: "urn:3gpp:ns:preconfiguredRegroup:1.0"
+    source: {spec: TS 24.379, version: "19.6.0", clause: "F.7.2"}
+    elements:
+      - {name: mcpttregroup, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.7.2"}}
+      - {name: mcdataregroup, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.6.2"}}
+      - {name: mcvideoregroup, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.6.2"}}
+      - {name: mcpttregroup-Params, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.7.2"}}
+      - {name: mcdataregroup-Params, action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.6.2"}}
+      - {name: mcvideoregroup-Params, action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.6.2"}}
+      - {name: anyExt, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.7.2"}}
+      - {name: preconfig-group-id, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.7.2"}}
+      - {name: preconfigured-group, action: pseudonymise, category: uri, source: {spec: TS 24.379, version: "19.6.0", clause: "F.7.3"}}
+      - {name: mcptt-regroup-uri, parent: [mcpttregroup-Params], action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.7.2"}}
+      - {name: mcptt-regroup-uri, parent: [mcptt-regroup-uri], action: pseudonymise, category: uri, source: {spec: TS 24.379, version: "19.6.0", clause: "F.7.3"}}
+      - {name: mcdata-regroup-uri, parent: [mcdataregroup-Params], action: container, source: {spec: TS 24.282, version: "19.6.0", clause: "D.6.2"}}
+      - {name: mcdata-regroup-uri, parent: [mcdata-regroup-uri], action: pseudonymise, category: uri, source: {spec: TS 24.282, version: "19.6.0", clause: "D.6.3"}}
+      - {name: mcvideo-regroup-uri, parent: [mcvideoregroup-Params], action: container, source: {spec: TS 24.281, version: "19.5.0", clause: "F.6.2"}}
+      - {name: mcvideo-regroup-uri, parent: [mcvideo-regroup-uri], action: pseudonymise, category: uri, source: {spec: TS 24.281, version: "19.5.0", clause: "F.6.3"}}
+      - {name: groups-for-regroup, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.7.3"}}
+      - {name: group, action: pseudonymise, category: uri, source: {spec: TS 24.379, version: "19.6.0", clause: "F.7.3"}}
+      - {name: users-for-regroup, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "F.7.3"}}
+      - {name: user, action: pseudonymise, category: uri, source: {spec: TS 24.379, version: "19.6.0", clause: "F.7.3"}}
+      - {name: regroup-action, action: keep, value: {enum: [create, remove]}, source: {spec: TS 24.379, version: "19.6.0", clause: "F.7.3"}}

@@ -1,0 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# UBSan runtime suppressions for fuzzing with Clang.
+# OpenSSL calls functions through pointers of a different (compatible) type,
+# which Clang's -fsanitize=function reports; the code is OpenSSL's, not ours.
+function:*crypto/*

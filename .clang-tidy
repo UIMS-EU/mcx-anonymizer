@@ -1,0 +1,30 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+---
+# Checks: the listed families, minus checks that conflict with this code base.
+#   -bugprone-easily-swappable-parameters   protocol fields are often adjacent integers
+#   -cert-err58-cpp                         Catch2 test registration uses static objects
+#   -cppcoreguidelines-avoid-magic-numbers  protocol constants are spelled out where used
+#   -cppcoreguidelines-pro-bounds-pointer-arithmetic
+#   -cppcoreguidelines-pro-bounds-constant-array-index
+#                                           byte parsing goes through bounded span readers
+#   -cppcoreguidelines-pro-type-reinterpret-cast
+#                                           needed for std::byte <-> OpenSSL unsigned char
+#   -cppcoreguidelines-avoid-do-while       used in local macros only
+#   -modernize-use-trailing-return-type     style preference, not adopted
+Checks: >
+  bugprone-*,
+  cert-*,
+  cppcoreguidelines-*,
+  modernize-*,
+  performance-*,
+  -bugprone-easily-swappable-parameters,
+  -cert-err58-cpp,
+  -cppcoreguidelines-avoid-magic-numbers,
+  -cppcoreguidelines-pro-bounds-pointer-arithmetic,
+  -cppcoreguidelines-pro-bounds-constant-array-index,
+  -cppcoreguidelines-pro-type-reinterpret-cast,
+  -cppcoreguidelines-avoid-do-while,
+  -modernize-use-trailing-return-type
+WarningsAsErrors: ''
+HeaderFilterRegex: '(include/mcxanon|src)/.*'
+...

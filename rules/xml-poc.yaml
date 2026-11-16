@@ -1,0 +1,31 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# poc-settings and its MCX extension (Appendix E).
+# XML rule set (feature 003). Sources: rules/SOURCES.md § MCX XML bodies.
+ruleset: mcxanon-xml
+version: 1.0.0
+namespaces:
+  - name: "urn:oma:params:xml:ns:poc:poc-settings"
+    source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD RFC4354-poc-settings"}
+    elements:
+      - {name: poc-settings, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "7.4.1.2.2"}}
+      - {name: entity, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "7.4.1.2.2"}}
+      - {name: isb-settings, action: container, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD RFC4354-poc-settings"}}
+      - {name: incoming-session-barring, action: keep, value: empty, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD RFC4354-poc-settings"}}
+      - {name: am-settings, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "7.2.3"}}
+      - {name: answer-mode, action: keep, value: {enum: [automatic, manual]}, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD RFC4354-poc-settings"}}
+      - {name: ipab-settings, action: container, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD RFC4354-poc-settings"}}
+      - {name: incoming-personal-alert-barring, action: keep, value: empty, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD RFC4354-poc-settings"}}
+      - {name: sss-settings, action: container, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD RFC4354-poc-settings"}}
+      - {name: simultaneous-sessions-support, action: keep, value: empty, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD RFC4354-poc-settings"}}
+    attributes:
+      - {element: entity, name: id, action: pseudonymise, category: any-id, source: {spec: TS 24.379, version: "19.6.0", clause: "7.2.4"}}
+      - {element: incoming-session-barring, name: active, action: keep, value: boolean, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD RFC4354-poc-settings"}}
+      - {element: incoming-personal-alert-barring, name: active, action: keep, value: boolean, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD RFC4354-poc-settings"}}
+      - {element: simultaneous-sessions-support, name: active, action: keep, value: boolean, source: {spec: TS 37.579-5, version: "19.1.0", clause: "XSD RFC4354-poc-settings"}}
+  - name: "urn:3gpp:mcsSettings:1.0"
+    source: {spec: TS 24.379, version: "19.6.0", clause: "7.4.1.2.2"}
+    elements:
+      - {name: selected-user-profile-index, action: container, source: {spec: TS 24.379, version: "19.6.0", clause: "7.4.1.2.2"}}
+      - {name: user-profile-index, action: keep, value: {int: [0, 18446744073709551615]}, source: {spec: TS 24.379, version: "19.6.0", clause: "7.2.3"}}
+      - {name: multiplex-support, action: keep, value: boolean, source: {spec: TS 24.379, version: "19.6.0", clause: "7.4.1.2.2"}}

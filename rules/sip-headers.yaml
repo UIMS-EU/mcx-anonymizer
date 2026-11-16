@@ -1,0 +1,922 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# Header field rules, one per header of the inventory (RFC 3261 §20, TS 24.229 annex A.2.1.4;
+# FR-004 to FR-017). Header parameters are listed with their header; media feature tags are in
+# sip-feature-tags.yaml, URI parameters in sip-params.yaml. Sources: rules/SOURCES.md.
+# A header without a rule is removed; a parameter without a rule is removed. Header action
+# keep: the values are kept and the parameters filtered; opaque headers are copied as they are.
+ruleset: mcxanon-sip
+version: 1.2.0
+# Request methods the output keeps: the 14 methods of TS 24.229 annex A.2.1.4 (one subclause per
+# method). Any other method token is an extension the rules do not understand: the message is
+# zeroed. Methods are case-sensitive (RFC 3261 §7.1).
+methods:
+  - {name: ACK, source: {spec: RFC 3261, version: "2002-06", clause: "7.1"}}
+  - {name: BYE, source: {spec: RFC 3261, version: "2002-06", clause: "7.1"}}
+  - {name: CANCEL, source: {spec: RFC 3261, version: "2002-06", clause: "7.1"}}
+  - {name: INFO, source: {spec: RFC 6086, version: "2011-01", clause: "4.2"}}
+  - {name: INVITE, source: {spec: RFC 3261, version: "2002-06", clause: "7.1"}}
+  - {name: MESSAGE, source: {spec: RFC 3428, version: "2002-12", clause: "9"}}
+  - {name: NOTIFY, source: {spec: RFC 6665, version: "2012-07", clause: "8.1"}}
+  - {name: OPTIONS, source: {spec: RFC 3261, version: "2002-06", clause: "7.1"}}
+  - {name: PRACK, source: {spec: RFC 3262, version: "2002-06", clause: "6"}}
+  - {name: PUBLISH, source: {spec: RFC 3903, version: "2004-10", clause: "11.1"}}
+  - {name: REFER, source: {spec: RFC 3515, version: "2003-04", clause: "2.2"}}
+  - {name: REGISTER, source: {spec: RFC 3261, version: "2002-06", clause: "7.1"}}
+  - {name: SUBSCRIBE, source: {spec: RFC 6665, version: "2012-07", clause: "8.1"}}
+  - {name: UPDATE, source: {spec: RFC 3311, version: "2002-09", clause: "7"}}
+headers:
+  - name: Accept
+    grammar: media-type
+    multi: true
+    action: keep
+    params:
+      - {name: q, action: keep, value: token, source: {spec: RFC 3261, version: "2002-06", clause: "20.1"}}
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.1"}
+  - name: Accept-Contact
+    compact: a
+    grammar: token-list
+    multi: true
+    action: keep
+    params:
+      - {name: require, action: keep, value: flag, source: {spec: RFC 3841, version: "2004-08", clause: "9.2"}}
+      - {name: explicit, action: keep, value: flag, source: {spec: RFC 3841, version: "2004-08", clause: "9.2"}}
+    source: {spec: RFC 3841, version: "2004-08", clause: "9.2"}
+    note: "feature tags: rules/sip-feature-tags.yaml"
+  - name: Accept-Encoding
+    grammar: token-list
+    multi: true
+    action: keep
+    params:
+      - {name: q, action: keep, value: token, source: {spec: RFC 3261, version: "2002-06", clause: "20.2"}}
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.2"}
+  - name: Accept-Language
+    grammar: token-list
+    multi: true
+    action: keep
+    params:
+      - {name: q, action: keep, value: token, source: {spec: RFC 3261, version: "2002-06", clause: "20.3"}}
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.3"}
+  - name: Accept-Resource-Priority
+    grammar: token-list
+    multi: true
+    action: keep
+    source: {spec: RFC 4412, version: "2006-02", clause: "3.2"}
+  - name: Additional-Identity
+    grammar: name-addr-list
+    multi: true
+    components:
+      display-name: {action: pseudonymise, category: display-name}
+      uri: {action: uri}
+    source: {spec: TS 24.229, version: "24229-j70", clause: "7.2.20.7"}
+  - name: Alert-Info
+    grammar: name-addr-list
+    multi: true
+    components:
+      uri: {action: uri}
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.4"}
+    note: "other URIs than SIP, SIPS and tel are removed unless listed under uri.keep"
+  - name: Allow
+    grammar: token-list
+    multi: true
+    action: keep
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.5"}
+  - name: Allow-Events
+    compact: u
+    grammar: token-list
+    multi: true
+    action: keep
+    source: {spec: RFC 6665, version: "2012-07", clause: "8.2.2"}
+  - name: Answer-Mode
+    grammar: token
+    action: keep
+    params:
+      - {name: require, action: keep, value: flag, source: {spec: RFC 5373, version: "2008-11", clause: "2"}}
+    source: {spec: RFC 5373, version: "2008-11", clause: "2"}
+  - name: Attestation-Info
+    grammar: token
+    action: keep
+    source: {spec: TS 24.229, version: "24229-j70", clause: "7.2.18.7"}
+  - name: Authentication-Info
+    grammar: auth-params
+    params:
+      - {name: nextnonce, action: pseudonymise, category: digest, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.6"}}
+      - {name: qop, action: keep, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.6"}}
+      - {name: rspauth, action: pseudonymise, category: digest, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.6"}}
+      - {name: cnonce, action: pseudonymise, category: digest, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.6"}}
+      - {name: nc, action: keep, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.6"}}
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.6"}
+  - name: Authorization
+    grammar: credentials
+    components:
+      scheme: {action: keep}
+    params:
+      - {name: username, action: pseudonymise, category: sip-user, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.7"}}
+      - {name: realm, action: pseudonymise, category: domain, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.7"}}
+      - {name: nonce, action: pseudonymise, category: digest, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.7"}}
+      - {name: uri, action: uri, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.7"}}
+      - {name: response, action: pseudonymise, category: digest, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.7"}}
+      - {name: algorithm, action: keep, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.7"}}
+      - {name: cnonce, action: pseudonymise, category: digest, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.7"}}
+      - {name: opaque, action: pseudonymise, category: digest, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.7"}}
+      - {name: qop, action: keep, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.7"}}
+      - {name: nc, action: keep, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.7"}}
+      - {name: auts, action: pseudonymise, category: digest, value: any, source: {spec: RFC 3310, version: "2002-09", clause: "3.4"}}
+      - {name: integrity-protected, action: keep, value: any, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.2.2"}}
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.7"}
+    note: "FR-012, FR-013: the IMPI username uses the user and domain mappings"
+  - name: Call-ID
+    compact: i
+    grammar: call-id
+    components:
+      value: {action: pseudonymise, category: call-id}
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.8"}
+  - name: Call-Info
+    grammar: name-addr-list
+    multi: true
+    components:
+      uri: {action: uri}
+    params:
+      - {name: purpose, action: keep, value: token, source: {spec: RFC 3261, version: "2002-06", clause: "20.9"}}
+      - {name: call-reason, action: remove, value: any, source: {spec: RFC 9796, version: "2025-07", clause: "8"}}
+      - {name: integrity, action: remove, value: any, source: {spec: RFC 9796, version: "2025-07", clause: "7"}}
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.9"}
+  - name: Cellular-Network-Info
+    grammar: token-list
+    multi: true
+    components:
+      value: {action: keep}
+    params:
+      - {name: cgi-3gpp, action: pseudonymise, category: cell-id, value: any, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2.15.7"}}
+      - {name: utran-cell-id-3gpp, action: pseudonymise, category: cell-id, value: any, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2.15.7"}}
+      - {name: ci-3gpp2, action: pseudonymise, category: cell-id, value: any, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2.15.7"}}
+      - {name: ci-3gpp2-femto, action: pseudonymise, category: cell-id, value: any, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2.15.7"}}
+      - {name: cell-info-age, action: keep, value: number, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2.15.7"}}
+    source: {spec: TS 24.229, version: "24229-j70", clause: "7.2.15.7"}
+  - name: Contact
+    compact: m
+    grammar: name-addr-list
+    multi: true
+    components:
+      display-name: {action: pseudonymise, category: display-name}
+      uri: {action: uri}
+    params:
+      - {name: expires, action: keep, value: number, source: {spec: RFC 3261, version: "2002-06", clause: "20.10"}}
+      - {name: q, action: keep, value: token, source: {spec: RFC 3261, version: "2002-06", clause: "20.10"}}
+      - {name: reg-id, action: keep, value: number, source: {spec: RFC 5626, version: "2009-10", clause: "4.2"}}
+      - {name: pub-gruu, action: uri, value: quoted, source: {spec: RFC 5627, version: "2009-10", clause: "7"}}
+      - {name: temp-gruu, action: uri, value: quoted, source: {spec: RFC 5627, version: "2009-10", clause: "7"}}
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.10"}
+    note: "feature tags (+sip.instance, +g.3gpp.*): rules/sip-feature-tags.yaml"
+  - name: Content-Disposition
+    grammar: token
+    action: keep
+    params:
+      - {name: handling, action: keep, value: token, source: {spec: RFC 3261, version: "2002-06", clause: "20.11"}}
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.11"}
+  - name: Content-Encoding
+    compact: e
+    grammar: token-list
+    multi: true
+    action: keep
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.12"}
+  # Feature 005: how an application/mikey body or part is encoded.
+  - name: Content-Transfer-Encoding
+    grammar: token
+    action: keep
+    values: [base64, binary, 7bit, 8bit]
+    source: {spec: RFC 2045, version: "1996-11", clause: "6.1"}
+  - name: Content-ID
+    grammar: call-id
+    components:
+      value: {action: pseudonymise, category: call-id}
+    source: {spec: RFC 8262, version: "2017-10", clause: "3.2"}
+    note: "msg-id in angle brackets; cid: URIs use the same mapping"
+  - name: Content-Language
+    grammar: token-list
+    multi: true
+    action: keep
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.13"}
+  - name: Content-Length
+    compact: l
+    grammar: number
+    action: keep
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.14"}
+    note: "recomputed after the body is rewritten"
+  - name: Content-Type
+    compact: c
+    grammar: media-type
+    action: keep
+    params:
+      - {name: boundary, action: pseudonymise, category: boundary, value: any, source: {spec: RFC 2046, version: "1996-11", clause: "5.1.1"}}
+      - {name: charset, action: keep, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.15"}}
+      - {name: type, action: keep, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.15"}}
+      - {name: version, action: keep, value: number, source: {spec: RFC 3830, version: "2004-08", clause: "10.1"}}
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.15"}
+  - name: CSeq
+    grammar: cseq
+    action: keep
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.16"}
+  - name: Date
+    grammar: date
+    action: keep
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.17"}
+    note: "shifted by --time-shift (FR-017)"
+  - name: DC-Info
+    grammar: token
+    action: keep
+    source: {spec: TS 24.229, version: "24229-j70", clause: "7.2.23.7"}
+  - name: Error-Info
+    grammar: name-addr-list
+    multi: true
+    components:
+      uri: {action: uri}
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.18"}
+  - name: Event
+    compact: o
+    grammar: event
+    action: keep
+    params:
+      - {name: id, action: pseudonymise, category: tag, value: any, source: {spec: RFC 6665, version: "2012-07", clause: "8.4"}}
+    source: {spec: RFC 6665, version: "2012-07", clause: "8.2.1"}
+  - name: Expires
+    grammar: number
+    action: keep
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.19"}
+  - name: Feature-Caps
+    grammar: token-list
+    multi: true
+    action: keep
+    source: {spec: RFC 6809, version: "2012-11", clause: "6.2.1"}
+    note: "feature-capability indicators: rules/sip-feature-tags.yaml"
+  - name: Flow-Timer
+    grammar: number
+    action: keep
+    source: {spec: RFC 5626, version: "2009-10", clause: "11"}
+  - name: From
+    compact: f
+    grammar: name-addr
+    components:
+      display-name: {action: pseudonymise, category: display-name}
+      uri: {action: uri}
+    params:
+      - {name: tag, action: pseudonymise, category: tag, value: token, source: {spec: RFC 3261, version: "2002-06", clause: "19.3"}}
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.20"}
+  - name: Geolocation
+    grammar: name-addr-list
+    multi: true
+    components:
+      uri: {action: uri}
+    source: {spec: RFC 6442, version: "2011-12", clause: "4.1"}
+  - name: Geolocation-Error
+    grammar: number
+    action: keep
+    source: {spec: RFC 6442, version: "2011-12", clause: "4.4"}
+  - name: Geolocation-Routing
+    grammar: opaque
+    action: remove
+    source: {spec: RFC 6442, version: "2011-12", clause: "4.2"}
+    note: "only yes/no carry no data; other values are generic parameters"
+  - name: Handover-Info
+    grammar: token
+    action: keep
+    source: {spec: TS 24.229, version: "24229-j70", clause: "7.2.22.7"}
+  - name: History-Info
+    grammar: name-addr-list
+    multi: true
+    components:
+      display-name: {action: pseudonymise, category: display-name}
+      uri: {action: uri}
+    params:
+      - {name: index, action: keep, value: any, source: {spec: RFC 7044, version: "2014-02", clause: "4.1"}}
+      - {name: rc, action: keep, value: any, source: {spec: RFC 7044, version: "2014-02", clause: "4.1"}}
+      - {name: mp, action: keep, value: any, source: {spec: RFC 7044, version: "2014-02", clause: "4.1"}}
+      - {name: np, action: keep, value: any, source: {spec: RFC 7044, version: "2014-02", clause: "4.1"}}
+    source: {spec: RFC 7044, version: "2014-02", clause: "4.1"}
+  - name: Identity
+    compact: y
+    grammar: opaque
+    action: remove
+    source: {spec: RFC 8224, version: "2018-02", clause: "4"}
+    note: "a signed PASSporT cannot be pseudonymised"
+  - name: In-Reply-To
+    grammar: call-id
+    multi: true
+    components:
+      value: {action: pseudonymise, category: call-id}
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.21"}
+  - name: Info-Package
+    grammar: token
+    action: keep
+    source: {spec: RFC 6086, version: "2011-01", clause: "7.2"}
+  - name: Join
+    grammar: call-id
+    components:
+      value: {action: pseudonymise, category: call-id}
+    params:
+      - {name: to-tag, action: pseudonymise, category: tag, value: token, source: {spec: RFC 3911, version: "2004-10", clause: "7.1"}}
+      - {name: from-tag, action: pseudonymise, category: tag, value: token, source: {spec: RFC 3911, version: "2004-10", clause: "7.1"}}
+    source: {spec: RFC 3911, version: "2004-10", clause: "7.1"}
+  - name: Max-Breadth
+    grammar: number
+    action: keep
+    source: {spec: RFC 5393, version: "2008-12", clause: "5.8"}
+  - name: Max-Forwards
+    grammar: number
+    action: keep
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.22"}
+  - name: MIME-Version
+    grammar: token
+    action: keep
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.24"}
+  - name: Min-Expires
+    grammar: number
+    action: keep
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.23"}
+  - name: Min-SE
+    grammar: number
+    action: keep
+    source: {spec: RFC 4028, version: "2005-04", clause: "5"}
+  - name: Organization
+    grammar: opaque
+    action: remove
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.25"}
+    note: "free text (FR-016)"
+  - name: Origination-Id
+    grammar: token
+    components:
+      value: {action: pseudonymise, category: uuid}
+    source: {spec: TS 24.229, version: "24229-j70", clause: "7.2.19.7"}
+  - name: P-Access-Network-Info
+    grammar: pani
+    multi: true
+    components:
+      access-type: {action: keep}
+    params:
+      - {name: cgi-3gpp, action: pseudonymise, category: cell-id, value: any, source: {spec: RFC 7315, version: "2014-07", clause: "5.4"}}
+      - {name: utran-cell-id-3gpp, action: pseudonymise, category: cell-id, value: any, source: {spec: RFC 7315, version: "2014-07", clause: "5.4"}}
+      - {name: utran-sai-3gpp, action: pseudonymise, category: cell-id, value: any, source: {spec: RFC 7315, version: "2014-07", clause: "5.4"}}
+      - {name: i-wlan-node-id, action: pseudonymise, category: cell-id, value: any, source: {spec: RFC 7315, version: "2014-07", clause: "5.4"}}
+      - {name: dsl-location, action: pseudonymise, category: cell-id, value: any, source: {spec: RFC 7315, version: "2014-07", clause: "5.4"}}
+      - {name: eth-location, action: pseudonymise, category: cell-id, value: any, source: {spec: RFC 7315, version: "2014-07", clause: "5.4"}}
+      - {name: fiber-location, action: pseudonymise, category: cell-id, value: any, source: {spec: RFC 7315, version: "2014-07", clause: "5.4"}}
+      - {name: gstn-location, action: pseudonymise, category: cell-id, value: any, source: {spec: RFC 7315, version: "2014-07", clause: "5.4"}}
+      - {name: ci-3gpp2, action: pseudonymise, category: cell-id, value: any, source: {spec: RFC 7315, version: "2014-07", clause: "5.4"}}
+      - {name: ci-3gpp2-femto, action: pseudonymise, category: cell-id, value: any, source: {spec: RFC 7315, version: "2014-07", clause: "5.4"}}
+      - {name: dvb-rcs2-node-id, action: pseudonymise, category: cell-id, value: any, source: {spec: RFC 7315, version: "2014-07", clause: "5.4"}}
+      - {name: operator-specific-gi, action: pseudonymise, category: cell-id, value: any, source: {spec: RFC 7315, version: "2014-07", clause: "5.4"}}
+      - {name: network-provided, action: keep, value: flag, source: {spec: RFC 7315, version: "2014-07", clause: "5.4"}}
+      - {name: local-time-zone, action: keep, value: any, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.4.2"}}
+      - {name: daylight-saving-time, action: keep, value: any, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.4.2"}}
+      - {name: ue-local-ip-address, action: pseudonymise, category: ip, value: quoted, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.4.2"}}
+      - {name: epdg-ip-address, action: pseudonymise, category: ip, value: quoted, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.4.2"}}
+      - {name: udp-source-port, action: pseudonymise, category: port, value: number, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.4.2"}}
+      - {name: tcp-source-port, action: pseudonymise, category: port, value: number, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.4.2"}}
+      - {name: u2n-relay-id, action: pseudonymise, category: cell-id, value: quoted, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.4.2"}}
+      - {name: satellite-id, action: pseudonymise, category: cell-id, value: any, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.4.2"}}
+      - {name: eps-fallback, action: keep, value: any, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.4.2"}}
+    source: {spec: RFC 7315, version: "2014-07", clause: "4.4"}
+    note: "FR-015: cell and location identities keep their length and character class"
+  - name: P-Answer-State
+    grammar: token
+    action: keep
+    source: {spec: RFC 4964, version: "2007-09", clause: "7.1"}
+  - name: P-Asserted-Identity
+    grammar: name-addr-list
+    multi: true
+    components:
+      display-name: {action: pseudonymise, category: display-name}
+      uri: {action: uri}
+    source: {spec: RFC 3325, version: "2002-11", clause: "9.1"}
+  - name: P-Asserted-Service
+    grammar: uri-list
+    multi: true
+    components:
+      uri: {action: uri}
+    aliases: [P-Asserted-Service-Id]
+    source: {spec: RFC 6050, version: "2010-11", clause: "4.1"}
+    note: "ICSI values: only those of rules/sip-feature-tags.yaml are kept"
+  - name: P-Associated-URI
+    grammar: name-addr-list
+    multi: true
+    components:
+      display-name: {action: pseudonymise, category: display-name}
+      uri: {action: uri}
+    source: {spec: RFC 7315, version: "2014-07", clause: "4.1"}
+  - name: P-Called-Party-ID
+    grammar: name-addr
+    components:
+      display-name: {action: pseudonymise, category: display-name}
+      uri: {action: uri}
+    source: {spec: RFC 7315, version: "2014-07", clause: "4.2"}
+  - name: P-Charging-Function-Addresses
+    grammar: param-list
+    params:
+      - {name: ccf, action: pseudonymise, category: host, value: any, source: {spec: RFC 7315, version: "2014-07", clause: "4.5"}}
+      - {name: ecf, action: pseudonymise, category: host, value: any, source: {spec: RFC 7315, version: "2014-07", clause: "4.5"}}
+      - {name: ccf-2, action: pseudonymise, category: host, value: any, source: {spec: RFC 7315, version: "2014-07", clause: "4.5"}}
+      - {name: ecf-2, action: pseudonymise, category: host, value: any, source: {spec: RFC 7315, version: "2014-07", clause: "4.5"}}
+    source: {spec: RFC 7315, version: "2014-07", clause: "4.5"}
+  - name: P-Charging-Vector
+    grammar: param-list
+    params:
+      - {name: icid-value, action: pseudonymise, category: charging-id, value: any, source: {spec: RFC 7315, version: "2014-07", clause: "4.6"}}
+      - {name: icid-generated-at, action: pseudonymise, category: host, value: any, source: {spec: RFC 7315, version: "2014-07", clause: "4.6"}}
+      - {name: orig-ioi, action: pseudonymise, category: charging-id, value: any, source: {spec: RFC 7315, version: "2014-07", clause: "4.6"}}
+      - {name: term-ioi, action: pseudonymise, category: charging-id, value: any, source: {spec: RFC 7315, version: "2014-07", clause: "4.6"}}
+      - {name: transit-ioi, action: pseudonymise, category: charging-id, value: any, source: {spec: RFC 7315, version: "2014-07", clause: "4.6"}}
+      - {name: related-icid, action: pseudonymise, category: charging-id, value: any, source: {spec: RFC 7315, version: "2014-07", clause: "4.6"}}
+      - {name: related-icid-generated-at, action: pseudonymise, category: host, value: any, source: {spec: RFC 7315, version: "2014-07", clause: "4.6"}}
+      - {name: ggsn, action: pseudonymise, category: host, value: any, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.5.2"}}
+      - {name: pdngw, action: pseudonymise, category: host, value: any, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.5.2"}}
+      - {name: smf, action: pseudonymise, category: host, value: any, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.5.2"}}
+      - {name: bras, action: pseudonymise, category: host, value: any, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.5.2"}}
+      - {name: ip-edge, action: pseudonymise, category: host, value: any, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.5.2"}}
+      - {name: gcid, action: pseudonymise, category: charging-id, value: any, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.5.2"}}
+      - {name: auth-token, action: pseudonymise, category: charging-id, value: any, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.5.2"}}
+      - {name: ecid, action: pseudonymise, category: charging-id, value: any, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.5.2"}}
+      - {name: 5gscid, action: pseudonymise, category: charging-id, value: any, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.5.2"}}
+      - {name: dslcid, action: pseudonymise, category: charging-id, value: any, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.5.2"}}
+      - {name: bcid, action: pseudonymise, category: charging-id, value: any, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.5.2"}}
+    source: {spec: RFC 7315, version: "2014-07", clause: "4.6"}
+  - name: P-Early-Media
+    grammar: token-list
+    multi: true
+    action: keep
+    source: {spec: RFC 5009, version: "2007-09", clause: "9"}
+  - name: P-Media-Authorization
+    grammar: opaque
+    action: remove
+    source: {spec: RFC 3313, version: "2003-01", clause: "5.1"}
+  - name: P-Preferred-Identity
+    grammar: name-addr-list
+    multi: true
+    components:
+      display-name: {action: pseudonymise, category: display-name}
+      uri: {action: uri}
+    source: {spec: RFC 3325, version: "2002-11", clause: "9.2"}
+  - name: P-Preferred-Service
+    grammar: uri-list
+    multi: true
+    components:
+      uri: {action: uri}
+    source: {spec: RFC 6050, version: "2010-11", clause: "4.2"}
+  - name: P-Private-Network-Indication
+    grammar: token
+    components:
+      value: {action: pseudonymise, category: domain}
+    source: {spec: RFC 7316, version: "2014-07", clause: "7"}
+  - name: P-Profile-Key
+    grammar: name-addr
+    components:
+      display-name: {action: pseudonymise, category: display-name}
+      uri: {action: uri}
+    source: {spec: RFC 5002, version: "2007-08", clause: "5"}
+  - name: P-Refused-URI-List
+    grammar: name-addr-list
+    multi: true
+    components:
+      display-name: {action: pseudonymise, category: display-name}
+      uri: {action: uri}
+    params:
+      - {name: members, action: uri, value: quoted, source: {spec: RFC 5318, version: "2008-12", clause: "5"}}
+    source: {spec: RFC 5318, version: "2008-12", clause: "5"}
+  - name: P-Served-User
+    grammar: name-addr
+    components:
+      display-name: {action: pseudonymise, category: display-name}
+      uri: {action: uri}
+    params:
+      - {name: sescase, action: keep, value: token, source: {spec: RFC 5502, version: "2009-04", clause: "6"}}
+      - {name: regstate, action: keep, value: token, source: {spec: RFC 5502, version: "2009-04", clause: "6"}}
+      - {name: orig-cdiv, action: keep, value: flag, source: {spec: RFC 8498, version: "2019-02", clause: "6.2"}}
+    source: {spec: RFC 5502, version: "2009-04", clause: "6"}
+  - name: P-User-Database
+    grammar: name-addr
+    components:
+      uri: {action: uri}
+    source: {spec: RFC 4457, version: "2006-04", clause: "4"}
+  - name: P-Visited-Network-ID
+    grammar: token-list
+    multi: true
+    components:
+      value: {action: pseudonymise, category: domain}
+    source: {spec: RFC 7315, version: "2014-07", clause: "4.3"}
+  - name: Path
+    grammar: name-addr-list
+    multi: true
+    components:
+      display-name: {action: pseudonymise, category: display-name}
+      uri: {action: uri}
+    source: {spec: RFC 3327, version: "2002-12", clause: "4"}
+  - name: Permission-Missing
+    grammar: name-addr-list
+    multi: true
+    components:
+      display-name: {action: pseudonymise, category: display-name}
+      uri: {action: uri}
+    source: {spec: RFC 5360, version: "2008-10", clause: "5.9.3"}
+  - name: Priority
+    grammar: token
+    action: keep
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.26"}
+  - name: Priority-Share
+    grammar: token
+    action: keep
+    source: {spec: TS 24.229, version: "24229-j70", clause: "7.2.16.7"}
+  - name: Priority-Verstat
+    grammar: token
+    action: keep
+    source: {spec: TS 24.229, version: "24229-j70", clause: "7.2.21.7"}
+  - name: Priv-Answer-Mode
+    grammar: token
+    action: keep
+    params:
+      - {name: require, action: keep, value: flag, source: {spec: RFC 5373, version: "2008-11", clause: "2"}}
+    source: {spec: RFC 5373, version: "2008-11", clause: "2"}
+  - name: Privacy
+    grammar: token
+    action: keep
+    params:
+      - {name: header, action: keep, value: flag, source: {spec: RFC 3323, version: "2002-11", clause: "4.2"}}
+      - {name: session, action: keep, value: flag, source: {spec: RFC 3323, version: "2002-11", clause: "4.2"}}
+      - {name: user, action: keep, value: flag, source: {spec: RFC 3323, version: "2002-11", clause: "4.2"}}
+      - {name: none, action: keep, value: flag, source: {spec: RFC 3323, version: "2002-11", clause: "4.2"}}
+      - {name: critical, action: keep, value: flag, source: {spec: RFC 3323, version: "2002-11", clause: "4.2"}}
+      - {name: id, action: keep, value: flag, source: {spec: RFC 3323, version: "2002-11", clause: "4.2"}}
+      - {name: history, action: keep, value: flag, source: {spec: RFC 3323, version: "2002-11", clause: "4.2"}}
+    source: {spec: RFC 3323, version: "2002-11", clause: "4.2"}
+    note: "priv-value *(';' priv-value): the values after the first are parsed as flags"
+  - name: Proxy-Authenticate
+    grammar: challenge
+    components:
+      scheme: {action: keep}
+    params:
+      - {name: realm, action: pseudonymise, category: domain, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.27"}}
+      - {name: nonce, action: pseudonymise, category: digest, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.27"}}
+      - {name: opaque, action: pseudonymise, category: digest, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.27"}}
+      - {name: stale, action: keep, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.27"}}
+      - {name: algorithm, action: keep, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.27"}}
+      - {name: qop, action: keep, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.27"}}
+      - {name: ik, action: remove, value: any, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.1.2"}}
+      - {name: ck, action: remove, value: any, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.1.2"}}
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.27"}
+    note: "the AKA ik and ck are removed"
+  - name: Proxy-Authorization
+    grammar: credentials
+    components:
+      scheme: {action: keep}
+    params:
+      - {name: username, action: pseudonymise, category: sip-user, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.28"}}
+      - {name: realm, action: pseudonymise, category: domain, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.28"}}
+      - {name: nonce, action: pseudonymise, category: digest, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.28"}}
+      - {name: uri, action: uri, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.28"}}
+      - {name: response, action: pseudonymise, category: digest, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.28"}}
+      - {name: algorithm, action: keep, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.28"}}
+      - {name: cnonce, action: pseudonymise, category: digest, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.28"}}
+      - {name: opaque, action: pseudonymise, category: digest, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.28"}}
+      - {name: qop, action: keep, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.28"}}
+      - {name: nc, action: keep, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.28"}}
+      - {name: auts, action: pseudonymise, category: digest, value: any, source: {spec: RFC 3310, version: "2002-09", clause: "3.4"}}
+      - {name: integrity-protected, action: keep, value: any, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.2.2"}}
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.28"}
+  - name: Proxy-Require
+    grammar: token-list
+    multi: true
+    action: keep
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.29"}
+  - name: RAck
+    grammar: opaque
+    action: keep
+    source: {spec: RFC 3262, version: "2002-06", clause: "7.2"}
+  - name: Reason
+    grammar: reason
+    multi: true
+    components:
+      protocol: {action: keep}
+    params:
+      - {name: cause, action: keep, value: number, source: {spec: RFC 3326, version: "2002-12", clause: "2"}}
+      - {name: text, action: remove, value: quoted, source: {spec: RFC 3326, version: "2002-12", clause: "2"}}
+      - {name: ppi, action: remove, value: any, source: {spec: RFC 9410, version: "2023-07", clause: "5"}}
+    source: {spec: RFC 3326, version: "2002-12", clause: "2"}
+    note: "FR-016: the text parameter is removed"
+  - name: Record-Route
+    grammar: name-addr-list
+    multi: true
+    components:
+      display-name: {action: pseudonymise, category: display-name}
+      uri: {action: uri}
+    params:
+      - {name: tokenized-by, action: pseudonymise, category: host, value: any, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.3.2"}}
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.30"}
+  - name: Recv-Info
+    grammar: token-list
+    multi: true
+    action: keep
+    source: {spec: RFC 6086, version: "2011-01", clause: "7.3"}
+  - name: Refer-Sub
+    grammar: token
+    action: keep
+    source: {spec: RFC 4488, version: "2006-05", clause: "4"}
+  - name: Refer-To
+    compact: r
+    grammar: name-addr
+    components:
+      display-name: {action: pseudonymise, category: display-name}
+      uri: {action: uri}
+    source: {spec: RFC 3515, version: "2003-04", clause: "3"}
+  - name: Referred-By
+    compact: b
+    grammar: name-addr
+    components:
+      display-name: {action: pseudonymise, category: display-name}
+      uri: {action: uri}
+    params:
+      - {name: cid, action: pseudonymise, category: call-id, value: quoted, source: {spec: RFC 3892, version: "2004-09", clause: "2.3"}}
+    source: {spec: RFC 3892, version: "2004-09", clause: "3"}
+  - name: Reject-Contact
+    compact: j
+    grammar: token-list
+    multi: true
+    action: keep
+    params:
+      - {name: require, action: keep, value: flag, source: {spec: RFC 3841, version: "2004-08", clause: "9.2"}}
+      - {name: explicit, action: keep, value: flag, source: {spec: RFC 3841, version: "2004-08", clause: "9.2"}}
+    source: {spec: RFC 3841, version: "2004-08", clause: "9.2"}
+  - name: Relayed-Charge
+    grammar: param-list
+    params:
+      - {name: relay-source, action: keep, value: any, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2.12.7"}}
+      - {name: icid-value, action: pseudonymise, category: charging-id, value: any, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2.12.7"}}
+      - {name: icid-generated-at, action: pseudonymise, category: host, value: any, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2.12.7"}}
+      - {name: orig-ioi, action: pseudonymise, category: charging-id, value: any, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2.12.7"}}
+      - {name: term-ioi, action: pseudonymise, category: charging-id, value: any, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2.12.7"}}
+      - {name: transit-ioi, action: pseudonymise, category: charging-id, value: any, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2.12.7"}}
+      - {name: related-icid, action: pseudonymise, category: charging-id, value: any, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2.12.7"}}
+      - {name: related-icid-generated-at, action: pseudonymise, category: host, value: any, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2.12.7"}}
+    source: {spec: TS 24.229, version: "24229-j70", clause: "7.2.12.7"}
+  - name: Replaces
+    grammar: call-id
+    components:
+      value: {action: pseudonymise, category: call-id}
+    params:
+      - {name: to-tag, action: pseudonymise, category: tag, value: token, source: {spec: RFC 3891, version: "2004-09", clause: "6.1"}}
+      - {name: from-tag, action: pseudonymise, category: tag, value: token, source: {spec: RFC 3891, version: "2004-09", clause: "6.1"}}
+      - {name: early-only, action: keep, value: flag, source: {spec: RFC 3891, version: "2004-09", clause: "6.1"}}
+    source: {spec: RFC 3891, version: "2004-09", clause: "6.1"}
+  - name: Reply-To
+    grammar: name-addr
+    components:
+      display-name: {action: pseudonymise, category: display-name}
+      uri: {action: uri}
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.31"}
+  - name: Request-Disposition
+    compact: d
+    grammar: token-list
+    multi: true
+    action: keep
+    source: {spec: RFC 3841, version: "2004-08", clause: "9.1"}
+  - name: Require
+    grammar: token-list
+    multi: true
+    action: keep
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.32"}
+  - name: Resource-Priority
+    grammar: token-list
+    multi: true
+    action: keep
+    source: {spec: RFC 4412, version: "2006-02", clause: "3.1"}
+  - name: Resource-Share
+    grammar: opaque
+    action: keep
+    source: {spec: TS 24.229, version: "24229-j70", clause: "7.2.13.7"}
+  - name: Response-Source
+    grammar: opaque
+    action: keep
+    source: {spec: TS 24.229, version: "24229-j70", clause: "7.2.17.7"}
+  - name: Restoration-Info
+    grammar: opaque
+    action: remove
+    source: {spec: TS 24.229, version: "24229-j70", clause: "7.2.11.7"}
+    note: "may carry an IMSI"
+  - name: Retry-After
+    grammar: retry-after
+    action: keep
+    params:
+      - {name: duration, action: keep, value: number, source: {spec: RFC 3261, version: "2002-06", clause: "20.33"}}
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.33"}
+    note: "the free-text comment is removed"
+  - name: Route
+    grammar: name-addr-list
+    multi: true
+    components:
+      display-name: {action: pseudonymise, category: display-name}
+      uri: {action: uri}
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.34"}
+  - name: RSeq
+    grammar: number
+    action: keep
+    source: {spec: RFC 3262, version: "2002-06", clause: "7.1"}
+  - name: Security-Client
+    grammar: security-mech
+    multi: true
+    components:
+      mechanism: {action: keep}
+    params:
+      - {name: q, action: keep, value: any, source: {spec: RFC 3329, version: "2003-01", clause: "2.2"}}
+      - {name: alg, action: keep, value: any, source: {spec: RFC 3329, version: "2003-01", clause: "2.2"}}
+      - {name: ealg, action: keep, value: any, source: {spec: RFC 3329, version: "2003-01", clause: "2.2"}}
+      - {name: prot, action: keep, value: any, source: {spec: RFC 3329, version: "2003-01", clause: "2.2"}}
+      - {name: mod, action: keep, value: any, source: {spec: RFC 3329, version: "2003-01", clause: "2.2"}}
+      - {name: d-alg, action: keep, value: any, source: {spec: RFC 3329, version: "2003-01", clause: "2.2"}}
+      - {name: d-qop, action: keep, value: any, source: {spec: RFC 3329, version: "2003-01", clause: "2.2"}}
+      - {name: spi-c, action: pseudonymise, category: spi, value: number, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.7.2"}}
+      - {name: spi-s, action: pseudonymise, category: spi, value: number, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.7.2"}}
+      - {name: port-c, action: pseudonymise, category: port, value: number, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.7.2"}}
+      - {name: port-s, action: pseudonymise, category: port, value: number, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.7.2"}}
+      - {name: d-ver, action: pseudonymise, category: digest, value: quoted, source: {spec: RFC 3329, version: "2003-01", clause: "2.2"}}
+    source: {spec: RFC 3329, version: "2003-01", clause: "2.2"}
+    note: "FR-014: SPIs share the ESP SPI mapping"
+  - name: Security-Server
+    grammar: security-mech
+    multi: true
+    components:
+      mechanism: {action: keep}
+    params:
+      - {name: q, action: keep, value: any, source: {spec: RFC 3329, version: "2003-01", clause: "2.2"}}
+      - {name: alg, action: keep, value: any, source: {spec: RFC 3329, version: "2003-01", clause: "2.2"}}
+      - {name: ealg, action: keep, value: any, source: {spec: RFC 3329, version: "2003-01", clause: "2.2"}}
+      - {name: prot, action: keep, value: any, source: {spec: RFC 3329, version: "2003-01", clause: "2.2"}}
+      - {name: mod, action: keep, value: any, source: {spec: RFC 3329, version: "2003-01", clause: "2.2"}}
+      - {name: d-alg, action: keep, value: any, source: {spec: RFC 3329, version: "2003-01", clause: "2.2"}}
+      - {name: d-qop, action: keep, value: any, source: {spec: RFC 3329, version: "2003-01", clause: "2.2"}}
+      - {name: spi-c, action: pseudonymise, category: spi, value: number, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.7.2"}}
+      - {name: spi-s, action: pseudonymise, category: spi, value: number, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.7.2"}}
+      - {name: port-c, action: pseudonymise, category: port, value: number, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.7.2"}}
+      - {name: port-s, action: pseudonymise, category: port, value: number, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.7.2"}}
+      - {name: d-ver, action: pseudonymise, category: digest, value: quoted, source: {spec: RFC 3329, version: "2003-01", clause: "2.2"}}
+    source: {spec: RFC 3329, version: "2003-01", clause: "2.2"}
+    note: "FR-014: SPIs share the ESP SPI mapping"
+  - name: Security-Verify
+    grammar: security-mech
+    multi: true
+    components:
+      mechanism: {action: keep}
+    params:
+      - {name: q, action: keep, value: any, source: {spec: RFC 3329, version: "2003-01", clause: "2.2"}}
+      - {name: alg, action: keep, value: any, source: {spec: RFC 3329, version: "2003-01", clause: "2.2"}}
+      - {name: ealg, action: keep, value: any, source: {spec: RFC 3329, version: "2003-01", clause: "2.2"}}
+      - {name: prot, action: keep, value: any, source: {spec: RFC 3329, version: "2003-01", clause: "2.2"}}
+      - {name: mod, action: keep, value: any, source: {spec: RFC 3329, version: "2003-01", clause: "2.2"}}
+      - {name: d-alg, action: keep, value: any, source: {spec: RFC 3329, version: "2003-01", clause: "2.2"}}
+      - {name: d-qop, action: keep, value: any, source: {spec: RFC 3329, version: "2003-01", clause: "2.2"}}
+      - {name: spi-c, action: pseudonymise, category: spi, value: number, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.7.2"}}
+      - {name: spi-s, action: pseudonymise, category: spi, value: number, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.7.2"}}
+      - {name: port-c, action: pseudonymise, category: port, value: number, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.7.2"}}
+      - {name: port-s, action: pseudonymise, category: port, value: number, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.7.2"}}
+      - {name: d-ver, action: pseudonymise, category: digest, value: quoted, source: {spec: RFC 3329, version: "2003-01", clause: "2.2"}}
+    source: {spec: RFC 3329, version: "2003-01", clause: "2.2"}
+    note: "FR-014: SPIs share the ESP SPI mapping"
+  - name: Server
+    grammar: opaque
+    action: remove
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.35"}
+    note: "free text (FR-016)"
+  - name: Service-Interact-Info
+    grammar: opaque
+    action: remove
+    source: {spec: TS 24.229, version: "24229-j70", clause: "7.2.14.7"}
+  - name: Service-Route
+    grammar: name-addr-list
+    multi: true
+    components:
+      display-name: {action: pseudonymise, category: display-name}
+      uri: {action: uri}
+    source: {spec: RFC 3608, version: "2003-10", clause: "5"}
+  - name: Session-Expires
+    compact: x
+    grammar: number
+    action: keep
+    params:
+      - {name: refresher, action: keep, value: token, source: {spec: RFC 4028, version: "2005-04", clause: "4"}}
+    source: {spec: RFC 4028, version: "2005-04", clause: "4"}
+  - name: Session-ID
+    grammar: session-id
+    components:
+      value: {action: pseudonymise, category: session-id}
+    params:
+      - {name: remote, action: pseudonymise, category: session-id, value: token, source: {spec: RFC 7989, version: "2016-10", clause: "4.2"}}
+    source: {spec: RFC 7989, version: "2016-10", clause: "4.2"}
+    note: "the nil UUID is kept"
+  - name: SIP-ETag
+    grammar: token
+    components:
+      value: {action: pseudonymise, category: entity-tag}
+    source: {spec: RFC 3903, version: "2004-10", clause: "11.3.1"}
+  - name: SIP-If-Match
+    grammar: token
+    components:
+      value: {action: pseudonymise, category: entity-tag}
+    source: {spec: RFC 3903, version: "2004-10", clause: "11.3.2"}
+  - name: Subject
+    compact: s
+    grammar: opaque
+    action: remove
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.36"}
+    note: "free text (FR-016)"
+  - name: Subscription-State
+    grammar: token
+    action: keep
+    params:
+      - {name: reason, action: keep, value: token, source: {spec: RFC 6665, version: "2012-07", clause: "8.2.3"}}
+      - {name: expires, action: keep, value: number, source: {spec: RFC 6665, version: "2012-07", clause: "8.2.3"}}
+      - {name: retry-after, action: keep, value: number, source: {spec: RFC 6665, version: "2012-07", clause: "8.2.3"}}
+    source: {spec: RFC 6665, version: "2012-07", clause: "8.2.3"}
+  - name: Supported
+    compact: k
+    grammar: token-list
+    multi: true
+    action: keep
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.37"}
+  - name: Target-Dialog
+    grammar: call-id
+    components:
+      value: {action: pseudonymise, category: call-id}
+    params:
+      - {name: local-tag, action: pseudonymise, category: tag, value: token, source: {spec: RFC 4538, version: "2006-06", clause: "7"}}
+      - {name: remote-tag, action: pseudonymise, category: tag, value: token, source: {spec: RFC 4538, version: "2006-06", clause: "7"}}
+    source: {spec: RFC 4538, version: "2006-06", clause: "7"}
+  - name: Timestamp
+    grammar: opaque
+    action: keep
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.38"}
+  - name: To
+    compact: t
+    grammar: name-addr
+    components:
+      display-name: {action: pseudonymise, category: display-name}
+      uri: {action: uri}
+    params:
+      - {name: tag, action: pseudonymise, category: tag, value: token, source: {spec: RFC 3261, version: "2002-06", clause: "19.3"}}
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.39"}
+  - name: Trigger-Consent
+    grammar: uri-list
+    multi: true
+    components:
+      uri: {action: uri}
+    params:
+      - {name: target-uri, action: uri, value: quoted, source: {spec: RFC 5360, version: "2008-10", clause: "5.11.2"}}
+    source: {spec: RFC 5360, version: "2008-10", clause: "5.11.2"}
+  - name: Unsupported
+    grammar: token-list
+    multi: true
+    action: keep
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.40"}
+  - name: User-Agent
+    grammar: opaque
+    action: remove
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.41"}
+    note: "free text (FR-016)"
+  - name: User-to-User
+    grammar: opaque
+    action: remove
+    source: {spec: RFC 7433, version: "2015-01", clause: "4.1"}
+  - name: Via
+    compact: v
+    grammar: via
+    multi: true
+    components:
+      sent-protocol: {action: keep}
+      sent-by: {action: pseudonymise, category: host}
+      port: {action: pseudonymise, category: port}
+    params:
+      - {name: branch, action: pseudonymise, category: branch, value: token, source: {spec: RFC 3261, version: "2002-06", clause: "8.1.1.7"}}
+      - {name: received, action: pseudonymise, category: ip, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.42"}}
+      - {name: maddr, action: pseudonymise, category: host, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.42"}}
+      - {name: ttl, action: keep, value: number, source: {spec: RFC 3261, version: "2002-06", clause: "20.42"}}
+      - {name: rport, action: pseudonymise, category: port, value: any, source: {spec: RFC 3581, version: "2003-08", clause: "5"}}
+      - {name: tokenized-by, action: pseudonymise, category: host, value: any, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.3.2"}}
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.42"}
+  - name: Warning
+    grammar: warning
+    multi: true
+    components:
+      code: {action: keep}
+      agent: {action: pseudonymise, category: host}
+      text: {action: blank, value: ""}
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.43"}
+    note: "a leading 3-digit MCX warn code (TS 24.379 §4.4.2) is kept"
+  - name: WWW-Authenticate
+    grammar: challenge
+    components:
+      scheme: {action: keep}
+    params:
+      - {name: realm, action: pseudonymise, category: domain, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.44"}}
+      - {name: nonce, action: pseudonymise, category: digest, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.44"}}
+      - {name: opaque, action: pseudonymise, category: digest, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.44"}}
+      - {name: stale, action: keep, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.44"}}
+      - {name: algorithm, action: keep, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.44"}}
+      - {name: qop, action: keep, value: any, source: {spec: RFC 3261, version: "2002-06", clause: "20.44"}}
+      - {name: ik, action: remove, value: any, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.1.2"}}
+      - {name: ck, action: remove, value: any, source: {spec: TS 24.229, version: "24229-j70", clause: "7.2A.1.2"}}
+    source: {spec: RFC 3261, version: "2002-06", clause: "20.44"}

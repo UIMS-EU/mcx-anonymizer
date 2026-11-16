@@ -1,0 +1,127 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Prints a fully populated report; validated against schemas/report.schema.json by CTest.
+#include "mcxanon/report.hpp"
+
+#include <cstdio>
+
+int main() {
+  mcxanon::Report r;
+  r.command = "anonymize";
+  r.tool_version = "0.1.0";
+  r.ruleset_name = "mcxanon-l2l4";
+  r.ruleset_version = "1.0.0";
+  r.ruleset_digest = std::string(64, '0');
+  r.options.time_shift_ns = -2592000000000000LL;
+  r.options.deny_list_entries = 3;
+  r.files.input = "/data/in.pcapng";
+  r.files.output = "/data/out.pcapng";
+  r.files.input_format = "pcapng";
+  r.files.output_format = "pcapng";
+  r.files.frames = 10;
+  r.status.exit_code = 0;
+  r.status.result = "published";
+  r.counters["ipv4.src"]["pseudonymise"] = 10;
+  r.counters["payload.sip"]["l7"] = 2;
+  r.mapping.new_entries["ipv4"] = 2;
+  r.mapping.reused_entries["mac"] = 1;
+  r.removed_blocks["0x00000004"] = 1;
+  r.removed_options["0x00000001/2"] = 1;
+  r.unknown_protocols.push_back({"ethertype", 0x88b5, 1});
+  r.checksums.valid_kept_valid = 9;
+  r.scan.performed = true;
+  r.scan.tokens = 4;
+  r.scan.patterns = 120;
+  r.scan.hits.push_back({1, 100, "binary", "ipv4", "240.0.0.1"});
+  r.scan.hits.push_back({2, 200, "text", "number", "tel#1"});
+  r.scan.hits.push_back({3, 300, "binary", "binary", "spi#1"});
+  r.scan.unscannable_by_category["string/vocabulary"] = 1;
+  r.scan.unscannable_by_category["number/short"] = 2;
+  r.sip_ruleset = {"mcxanon-sip", "1.0.0", std::string(64, '1')};
+  mcxanon::SipReport s;
+  s.requests["INVITE"] = 1;
+  s.requests["bad method"] = 1;
+  s.responses["2xx"] = 1;
+  s.malformed = 1;
+  s.headers["From"]["pseudonymise"] = 2;
+  s.headers["User-Agent"]["remove"] = 1;
+  s.headers["Via"]["zero"] = 1;
+  s.malformed_headers["P-Asserted-Identity"] = 1;
+  s.removed_unknown["sip-header"]["X-Vendor"] = 1;
+  s.removed_unknown["sip-param"]["x-param"] = 1;
+  s.removed_unknown["sdp-attribute"]["crypto"] = 1;
+  s.removed_unknown["content-type"]["application/x-unknown"] = 1;
+  s.sdp["o="]["pseudonymise"] = 2;
+  s.sdp["a=fmtp:MCPTT"]["keep"] = 1;
+  s.bodies["application/sdp"]["sdp"] = 2;
+  s.bodies["application/vnd.3gpp.mcptt-info+xml"]["emptied"] = 1;
+  s.tcp.streams_sip = 1;
+  s.tcp.bytes_unframable = 10;
+  s.fragments.datagrams_rewritten = 1;
+  s.fragments.datagrams_zeroed["missing"] = 1;
+  s.fragments.datagrams_zeroed["timeout"] = 1;
+  s.limits.max_message_bytes = 1048576;
+  r.sip = s;
+  r.media_ruleset = {"mcxanon-media", "1.0.0", std::string(64, '2')};
+  mcxanon::MediaReport m;
+  m.announcements.endpoints["rtp"] = 2;
+  m.announcements.skipped["fqdn"] = 1;
+  m.rtp.packets = 10;
+  m.rtp.by_payload_type["96"] = 10;
+  m.rtp.streams = 1;
+  m.rtp.by_stream["0a1b2c3d"] = 10;
+  m.rtp.zeroed["malformed"] = 1;
+  m.rtcp.by_packet_type["204"] = 3;
+  m.rtcp.feedback["206/1"]["keep"] = 1;
+  m.rtcp.xr_blocks["7"]["keep"] = 1;
+  m.rtcp.sdes_removed["NAME"] = 1;
+  m.rtcp.srtcp_view["undecodable"] = 1;
+  m.app.messages["MCPT/1"] = 2;
+  m.app.fields["mcpt/4"]["pseudonymise"] = 2;
+  m.app.unknown["subtype"] = 1;
+  m.msrp.requests["SEND"] = 1;
+  m.msrp.responses["2xx"] = 1;
+  m.msrp.headers["To-Path"]["pseudonymise"] = 1;
+  m.msrp.zeroed["method"] = 1;
+  m.limits.max_endpoints = 65536;
+  r.media = m;
+  r.xml_ruleset = {"mcxanon-xml", "1.0.0", std::string(64, '3')};
+  mcxanon::XmlReport x;
+  x.bodies["application/vnd.3gpp.mcptt-info+xml"]["rewritten"] = 1;
+  x.bodies["application/pidf+xml"]["dtd"] = 1;
+  x.elements["urn:3gpp:ns:mcpttInfo:1.0 mcpttURI"]["pseudonymise"] = 1;
+  x.elements["(invalid-name) x"]["unknown"] = 1;
+  x.attributes["urn:3gpp:ns:mcpttInfo:1.0 mcptt-request-uri @ type"]["keep"] = 1;
+  x.removed.namespaces["(invalid-name)"] = 1;
+  x.removed.comments = 1;
+  x.removed.encrypted = 1;
+  x.embedded["rewritten"] = 1;
+  r.xml = x;
+  // Feature 005: a fully populated mikey object, the passthrough mode and a warning.
+  r.options.encrypted = "passthrough";
+  r.mikey_ruleset = {"mcxanon-mikey", "1.0.0", std::string(64, '4')};
+  mcxanon::MikeyReport mk;
+  for (const char* c : {"sdp", "body", "gktp", "mcpc"}) {
+    mk.carriers[c].rewritten = 1;
+    mk.carriers[c].passed_through = 1;
+    for (const char* reason : {"not-sakke", "malformed", "unknown-payload", "limit", "encoding"}) mk.carriers[c].fallback[reason] = 1;
+  }
+  mk.unexpected_carrier = 1;
+  mk.payloads["T"]["shifted"] = 1;
+  mk.payloads["RAND"]["pseudonymised"] = 1;
+  mk.payloads["IDR"]["identity"] = 2;
+  mk.payloads["IDR"]["unknown-identity"] = 1;
+  mk.payloads["SIGN"]["invalidated"] = 1;
+  mk.payloads["key-parameters"]["undelimited"] = 1;
+  mk.incomplete = 1;
+  mk.uids.resolved = 1;
+  mk.key_ids["PCK"] = 1;
+  mk.key_ids["undefined-purpose"] = 1;
+  mk.cs_ids["undefined-cs-id"] = 1;
+  mk.mki.pseudonymised = 1;
+  mk.encrypted_xml.kept = 1;
+  mk.encrypted_uri.structured = 1;
+  r.mikey = mk;
+  r.scan.warnings.push_back({4, 400, "sdp", "key"});
+  std::fputs(mcxanon::to_json(r).c_str(), stdout);
+  return 0;
+}

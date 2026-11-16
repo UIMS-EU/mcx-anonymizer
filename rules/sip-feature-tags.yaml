@@ -1,0 +1,61 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# Media feature tags (Contact, Accept-Contact, Reject-Contact; RFC 3840, RFC 3841),
+# feature-capability indicators (Feature-Caps, RFC 6809) and ICSI values (TS 24.229 §7.2A.8;
+# FR-008). Sources: rules/SOURCES.md. A tag, indicator or ICSI/IARI value without a rule is
+# removed and counted. Base tags (RFC 3840 §9) appear without "+" and without "sip.".
+# Not on the list because no indexed document defines them: g.3gpp.mcdata (used but not
+# defined in TS 24.282), g.3gpp.mcvideomedia, g.3gpp.ics, g.3gpp.atcf, g.3gpp.datachannel,
+# g.3gpp.dc-mux, the mmtel ICSI family and every IARI value.
+ruleset: mcxanon-sip
+version: 1.2.0
+feature_tags:
+  - {tag: "+g.3gpp.mcptt", value_type: boolean, action: keep, source: {spec: TS 24.379, version: "19.6.0", clause: "D.2"}}
+  - {tag: "+g.3gpp.mcvideo", value_type: boolean, action: keep, source: {spec: TS 24.281, version: "19.5.0", clause: "D.2"}}
+  - {tag: "+g.3gpp.mcdata.sds", value_type: boolean, action: keep, source: {spec: TS 24.282, version: "19.6.0", clause: "B.2"}}
+  - {tag: "+g.3gpp.mcdata.fd", value_type: boolean, action: keep, source: {spec: TS 24.282, version: "19.6.0", clause: "B.3"}}
+  - {tag: "+g.3gpp.mcdata.ipconn", value_type: boolean, action: keep, source: {spec: TS 24.282, version: "19.6.0", clause: "B.4"}}
+  - {tag: "+g.3gpp.icsi-ref", value_type: urn-list, action: keep, source: {spec: TS 24.229, version: "24229-j70", clause: "7.9.2"}}
+  - {tag: "+g.3gpp.iari-ref", value_type: urn-list, action: keep, source: {spec: TS 24.229, version: "24229-j70", clause: "7.9.3"}}
+  - {tag: "+g.3gpp.registration-token", value_type: identity, action: pseudonymise, category: reg-token, source: {spec: TS 24.229, version: "24229-j70", clause: "7.9.7"}}
+  - {tag: "+g.3gpp.ps-data-off", value_type: token, action: keep, source: {spec: TS 24.229, version: "24229-j70", clause: "7.9.8"}}
+  - {tag: "+g.3gpp.rlos", value_type: boolean, action: keep, source: {spec: TS 24.229, version: "24229-j70", clause: "7.9.9"}}
+  - {tag: "+sip.instance", value_type: identity, action: pseudonymise, category: instance, source: {spec: RFC 5626, version: "2009-10", clause: "11.7"}}
+  - {tag: "audio", value_type: boolean, action: keep, source: {spec: RFC 3840, version: "2004-08", clause: "10.1"}}
+  - {tag: "application", value_type: boolean, action: keep, source: {spec: RFC 3840, version: "2004-08", clause: "10.2"}}
+  - {tag: "data", value_type: boolean, action: keep, source: {spec: RFC 3840, version: "2004-08", clause: "10.3"}}
+  - {tag: "control", value_type: boolean, action: keep, source: {spec: RFC 3840, version: "2004-08", clause: "10.4"}}
+  - {tag: "video", value_type: boolean, action: keep, source: {spec: RFC 3840, version: "2004-08", clause: "10.5"}}
+  - {tag: "text", value_type: boolean, action: keep, source: {spec: RFC 3840, version: "2004-08", clause: "10.6"}}
+  - {tag: "automata", value_type: boolean, action: keep, source: {spec: RFC 3840, version: "2004-08", clause: "10.7"}}
+  - {tag: "class", value_type: token, action: keep, source: {spec: RFC 3840, version: "2004-08", clause: "10.8"}}
+  - {tag: "duplex", value_type: token, action: keep, source: {spec: RFC 3840, version: "2004-08", clause: "10.9"}}
+  - {tag: "mobility", value_type: token, action: keep, source: {spec: RFC 3840, version: "2004-08", clause: "10.10"}}
+  - {tag: "description", value_type: string, action: remove, source: {spec: RFC 3840, version: "2004-08", clause: "10.11"}}
+  - {tag: "events", value_type: token, action: keep, source: {spec: RFC 3840, version: "2004-08", clause: "10.12"}}
+  - {tag: "priority", value_type: token, action: keep, source: {spec: RFC 3840, version: "2004-08", clause: "10.13"}}
+  - {tag: "methods", value_type: token, action: keep, source: {spec: RFC 3840, version: "2004-08", clause: "10.14"}}
+  - {tag: "extensions", value_type: token, action: keep, source: {spec: RFC 3840, version: "2004-08", clause: "10.15"}}
+  - {tag: "schemes", value_type: token, action: keep, source: {spec: RFC 3840, version: "2004-08", clause: "10.16"}}
+  - {tag: "actor", value_type: token, action: keep, source: {spec: RFC 3840, version: "2004-08", clause: "10.17"}}
+  - {tag: "isfocus", value_type: boolean, action: keep, source: {spec: RFC 3840, version: "2004-08", clause: "10.18"}}
+  - {tag: "language", value_type: token, action: keep, source: {spec: RFC 3840, version: "2004-08", clause: "9"}}
+  - {tag: "type", value_type: token, action: keep, source: {spec: RFC 3840, version: "2004-08", clause: "9"}}
+  - {tag: "+g.3gpp.mcptt.ambient-listening-call-release", value_type: none, action: keep, source: {spec: TS 24.379, version: "19.6.0", clause: "D.3"}}
+  - {tag: "+g.3gpp.mcvideo.ambient-viewing-call-release", value_type: none, action: keep, source: {spec: TS 24.281, version: "19.5.0", clause: "D.3"}}
+  - {tag: "+g.3gpp.trf", value_type: uri, action: keep, source: {spec: TS 24.229, version: "24229-j70", clause: "7.9A.3"}}
+  - {tag: "+g.3gpp.loopback", value_type: string, action: pseudonymise, category: domain, source: {spec: TS 24.229, version: "24229-j70", clause: "7.9A.4"}}
+  - {tag: "+g.3gpp.home-visited", value_type: string, action: pseudonymise, category: domain, source: {spec: TS 24.229, version: "24229-j70", clause: "7.9A.5"}}
+  - {tag: "+g.3gpp.mrb", value_type: uri, action: keep, source: {spec: TS 24.229, version: "24229-j70", clause: "7.9A.6"}}
+  - {tag: "+g.3gpp.thig-path", value_type: uri, action: keep, source: {spec: TS 24.229, version: "24229-j70", clause: "7.9A.9"}}
+  - {tag: "+g.3gpp.priority-share", value_type: token-list, action: keep, source: {spec: TS 24.229, version: "24229-j70", clause: "7.9A.10"}}
+  - {tag: "+g.3gpp.verstat", value_type: none, action: keep, source: {spec: TS 24.229, version: "24229-j70", clause: "7.9A.11"}}
+  - {tag: "+g.3gpp.anbr", value_type: none, action: keep, source: {spec: TS 24.229, version: "24229-j70", clause: "7.9A.12"}}
+  - {tag: "+g.3gpp.in-call-access-update", value_type: uri, action: keep, source: {spec: TS 24.229, version: "24229-j70", clause: "7.9A.13"}}
+  - {value: "urn:urn-7:3gpp-service.ims.icsi.mcptt", value_type: none, action: keep, source: {spec: TS 24.379, version: "19.6.0", clause: "E.2.1"}}
+  - {value: "urn:urn-7:3gpp-service.ims.icsi.mcvideo", value_type: none, action: keep, source: {spec: TS 24.281, version: "19.5.0", clause: "E.2.1"}}
+  - {value: "urn:urn-7:3gpp-service.ims.icsi.mcdata", value_type: none, action: keep, source: {spec: TS 24.282, version: "19.6.0", clause: "C.2.1"}}
+  - {value: "urn:urn-7:3gpp-service.ims.icsi.mcdata.sds", value_type: none, action: keep, source: {spec: TS 24.282, version: "19.6.0", clause: "C.3.1"}}
+  - {value: "urn:urn-7:3gpp-service.ims.icsi.mcdata.fd", value_type: none, action: keep, source: {spec: TS 24.282, version: "19.6.0", clause: "C.4.1"}}
+  - {value: "urn:urn-7:3gpp-service.ims.icsi.mcdata.ipconn", value_type: none, action: keep, source: {spec: TS 24.282, version: "19.6.0", clause: "C.5.1"}}
+  - {value: "urn:urn-7:3gpp-service.ims.icsi.rlos", value_type: none, action: keep, source: {spec: TS 24.229, version: "24229-j70", clause: "7.11.2.2"}}

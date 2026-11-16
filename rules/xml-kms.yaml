@@ -1,0 +1,107 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# The KMS request and response documents (TS 33.180 Annex D, feature 007 FR-015 to FR-017)
+# and the KMS Redirect Response. User key sets, new transport and integrity keys
+# are removed whole as credentials regardless of --encrypted; the public KMS keys are zeroed with
+# their length kept; KMS and user URIs take the URI mappings of SIP and MIKEY; the times follow
+# --time-shift. A KMS signature (ds:SignatureValue) follows the 003 rule of the ds namespace.
+# The element inventory follows the schemas of §D.3.5 and §D.4.4.
+# XML rule set (feature 003).
+ruleset: mcxanon-xml
+version: 1.0.0
+documents:
+  - content_type: application/xml
+    roots: [{ns: "urn:3gpp:ns:mcsecKMSInterface:1.0", name: KmsRequest}, {ns: "urn:3gpp:ns:mcsecKMSInterface:1.0", name: SignedKmsRequest}, {ns: "urn:3gpp:ns:mcsecKMSInterface:1.0", name: KmsResponse}, {ns: "urn:3gpp:ns:mcsecKMSInterface:1.0", name: SignedKmsResponse}]
+    source: {spec: TS 33.180, version: "20.0.0", clause: "D.2.2"}
+  - content_type: text/xml
+    roots: [{ns: "urn:3gpp:ns:mcsecKMSInterface:1.0", name: KmsRequest}, {ns: "urn:3gpp:ns:mcsecKMSInterface:1.0", name: SignedKmsRequest}, {ns: "urn:3gpp:ns:mcsecKMSInterface:1.0", name: KmsResponse}, {ns: "urn:3gpp:ns:mcsecKMSInterface:1.0", name: SignedKmsResponse}]
+    source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.1"}
+namespaces:
+  - name: "urn:3gpp:ns:mcsecKMSInterface:1.0"
+    source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}
+    elements:
+      - {name: CertUri, action: pseudonymise, category: web-uri, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: ClientError, action: container, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: ClientId, action: pseudonymise, category: any-id, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: ClientReqUrl, action: pseudonymise, category: web-uri, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: DeviceId, action: pseudonymise, category: any-id, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: ErrorCode, action: keep, value: {int: [-9223372036854775808, 9223372036854775807]}, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: ErrorMsg, action: remove, reason: free-text, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: Issuer, action: pseudonymise, category: web-uri, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: KeyPeriodNo, action: keep, value: {int: [-9223372036854775808, 9223372036854775807]}, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: KmsCertCache, action: container, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: KmsCertificate, action: container, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: KmsDomain, action: pseudonymise, category: web-uri, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: KmsDomainList, action: container, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: KmsError, action: container, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: KmsId, action: pseudonymise, category: any-id, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: KmsInit, action: container, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: KmsKeyProv, action: container, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: KmsKeySet, action: container, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: KmsMessage, action: container, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: KmsRequest, action: container, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: KmsResponse, action: container, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: KmsUri, action: pseudonymise, category: web-uri, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: KrrList, action: remove, reason: structure, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: ParameterSet, action: keep, value: {int: [-9223372036854775808, 9223372036854775807]}, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: PubAuthKey, action: zero, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: PubEncKey, action: zero, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: Revoked, action: keep, value: boolean, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: SignedKmsCertificate, action: container, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: SignedKmsRequest, action: container, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: SignedKmsResponse, action: container, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: Time, action: keep, value: datetime-shifted, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: UserDecryptKey, action: remove, reason: credential, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: UserID, action: pseudonymise, category: any-id, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: UserIdFormat, action: keep, value: {token: trigger-id}, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: UserKeyOffset, action: keep, value: {int: [-9223372036854775808, 9223372036854775807]}, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: UserKeyPeriod, action: keep, value: {int: [-9223372036854775808, 9223372036854775807]}, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: UserPubTokenPVT, action: remove, reason: credential, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: UserSigningKeySSK, action: remove, reason: credential, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: UserUri, action: pseudonymise, category: web-uri, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: ValidFrom, action: keep, value: datetime-shifted, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {name: ValidTo, action: keep, value: datetime-shifted, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+    attributes:
+      - {element: ClientError, name: Id, action: pseudonymise, category: any-id, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {element: ClientError, name: Version, action: keep, value: {enum: ["1.0.0", "1.1.0"]}, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {element: KmsCertCache, name: CacheNum, action: keep, value: {int: [-9223372036854775808, 9223372036854775807]}, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {element: KmsCertCache, name: Id, action: pseudonymise, category: any-id, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {element: KmsCertCache, name: Version, action: keep, value: {enum: ["1.0.0", "1.1.0"]}, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {element: KmsCertificate, name: Id, action: pseudonymise, category: any-id, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {element: KmsCertificate, name: IsSecurityGateway, action: keep, value: boolean, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {element: KmsCertificate, name: Role, action: keep, value: {enum: ["Root", "External"]}, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {element: KmsCertificate, name: Version, action: keep, value: {enum: ["1.0.0", "1.1.0"]}, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {element: KmsError, name: Id, action: pseudonymise, category: any-id, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {element: KmsError, name: Version, action: keep, value: {enum: ["1.0.0", "1.1.0"]}, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {element: KmsInit, name: Id, action: pseudonymise, category: any-id, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {element: KmsInit, name: Version, action: keep, value: {enum: ["1.0.0", "1.1.0"]}, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {element: KmsKeyProv, name: Id, action: pseudonymise, category: any-id, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {element: KmsKeyProv, name: Version, action: keep, value: {enum: ["1.0.0", "1.1.0"]}, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {element: KmsKeySet, name: Id, action: pseudonymise, category: any-id, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {element: KmsKeySet, name: Version, action: keep, value: {enum: ["1.0.0", "1.1.0"]}, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {element: KmsRequest, name: Id, action: pseudonymise, category: any-id, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {element: KmsRequest, name: Version, action: keep, value: {enum: ["1.0.0", "1.1.0"]}, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {element: KmsResponse, name: Id, action: pseudonymise, category: any-id, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {element: KmsResponse, name: Version, action: keep, value: {enum: ["1.0.0", "1.1.0"]}, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {element: SignedKmsCertificate, name: Id, action: pseudonymise, category: any-id, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {element: SignedKmsRequest, name: Id, action: pseudonymise, category: any-id, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+      - {element: SignedKmsResponse, name: Id, action: pseudonymise, category: any-id, source: {spec: TS 33.180, version: "20.0.0", clause: "D.3.5"}}
+  - name: "urn:3gpp:ns:mcsecKMSKRR:1.0"
+    source: {spec: TS 33.180, version: "20.0.0", clause: "D.4.4"}
+    elements:
+      - {name: ANY, action: remove, reason: free-text, source: {spec: TS 33.180, version: "20.0.0", clause: "D.4.4"}}
+      - {name: InitiatorKmsList, action: container, source: {spec: TS 33.180, version: "20.0.0", clause: "D.4.4"}}
+      - {name: InitiatorKmsUri, action: pseudonymise, category: web-uri, source: {spec: TS 33.180, version: "20.0.0", clause: "D.4.4"}}
+      - {name: InitiatorUri, action: pseudonymise, category: web-uri, source: {spec: TS 33.180, version: "20.0.0", clause: "D.4.4"}}
+      - {name: KRRCreatorUri, action: pseudonymise, category: web-uri, source: {spec: TS 33.180, version: "20.0.0", clause: "D.4.4"}}
+      - {name: KmsRedirectResponse, action: container, source: {spec: TS 33.180, version: "20.0.0", clause: "D.4.4"}}
+      - {name: KmsUri, action: pseudonymise, category: web-uri, source: {spec: TS 33.180, version: "20.0.0", clause: "D.4.4"}}
+      - {name: ReceivedKmsRedirectResponse, action: container, source: {spec: TS 33.180, version: "20.0.0", clause: "D.4.4"}}
+      - {name: ReceiverKmsList, action: container, source: {spec: TS 33.180, version: "20.0.0", clause: "D.4.4"}}
+      - {name: ReceiverKmsUri, action: pseudonymise, category: web-uri, source: {spec: TS 33.180, version: "20.0.0", clause: "D.4.4"}}
+      - {name: ReceiverUri, action: pseudonymise, category: web-uri, source: {spec: TS 33.180, version: "20.0.0", clause: "D.4.4"}}
+      - {name: Signature, action: remove, reason: structure, source: {spec: TS 33.180, version: "20.0.0", clause: "D.4.4"}}
+      - {name: Time, action: keep, value: datetime-shifted, source: {spec: TS 33.180, version: "20.0.0", clause: "D.4.4"}}
+    attributes:
+      - {element: KmsRedirectResponse, name: Id, action: pseudonymise, category: any-id, source: {spec: TS 33.180, version: "20.0.0", clause: "D.4.4"}}
+      - {element: KmsRedirectResponse, name: Version, action: keep, value: {enum: ["1.0.0", "1.1.0"]}, source: {spec: TS 33.180, version: "20.0.0", clause: "D.4.4"}}
