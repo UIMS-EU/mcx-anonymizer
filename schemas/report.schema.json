@@ -644,6 +644,16 @@
         "suppressed_chance_matches": {
           "type": "integer"
         },
+        "skipped_input_fragments": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "feature 008 (FR-001): input values cut at the end of a TCP payload, dropped because the next payload of the direction gave the whole value"
+        },
+        "suppressed_cookie_matches": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "feature 008 (FR-002): matches wholly inside the z9hG4bK cookie after branch= in the output"
+        },
         "hits": {
           "type": "array",
           "items": {
@@ -1364,6 +1374,14 @@
               "type": "integer",
               "minimum": 0
             }
+          }
+        },
+        "prefixes_rewritten": {
+          "type": "object",
+          "description": "feature 008 (FR-004): key: namespace name; declarations whose non-standard prefix was renamed",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 1
           }
         },
         "limits": {

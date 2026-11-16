@@ -145,6 +145,11 @@ static nlohmann::json xml_json(const XmlReport& x) {
     for (const auto& [k, a] : m) out[k] = a;
     return out;
   };
+  const auto nested_counts = [](const XmlReport::Counts& m) {
+    json out = json::object();
+    for (const auto& [k, n] : m) out[k] = n;
+    return out;
+  };
   const auto& l = x.limits;
   return {
       {"bodies", nested(x.bodies)},
@@ -155,6 +160,7 @@ static nlohmann::json xml_json(const XmlReport& x) {
                    {"processing_instructions", x.removed.processing_instructions},
                    {"encrypted", x.removed.encrypted}}},
       {"embedded", x.embedded},
+      {"prefixes_rewritten", nested_counts(x.prefixes_rewritten)},
       {"limits", {{"max_depth", l.max_depth}, {"max_elements", l.max_elements},
                   {"max_attributes", l.max_attributes}, {"max_name_bytes", l.max_name_bytes},
                   {"max_value_bytes", l.max_value_bytes}, {"max_body_bytes", l.max_body_bytes},
@@ -331,6 +337,8 @@ nlohmann::json document(const Report& r, bool statements) {
                 {"patterns", r.scan.patterns},
                 {"unscannable_tokens", r.scan.unscannable_tokens},
                 {"suppressed_chance_matches", r.scan.suppressed_chance_matches},
+                {"skipped_input_fragments", r.scan.skipped_input_fragments},
+                {"suppressed_cookie_matches", r.scan.suppressed_cookie_matches},
                 {"unscannable_by_category", r.scan.unscannable_by_category},
                 {"hits", hits}}},
       {"not_anonymised", not_anonymised_statements(o)},

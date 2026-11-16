@@ -97,6 +97,8 @@ struct XmlReport {
     std::uint64_t encrypted = 0;
   } removed;
   Counts embedded;  // outcome of bodies inside resource-lists entry URIs
+  // Feature 008 (FR-004): declarations whose non-standard prefix was renamed, by namespace name.
+  Counts prefixes_rewritten;
   struct Limits {
     std::uint64_t max_depth = 32;
     std::uint64_t max_elements = 10000;
@@ -270,6 +272,10 @@ struct Report {
     std::uint64_t patterns = 0;
     std::uint64_t unscannable_tokens = 0;
     std::uint64_t suppressed_chance_matches = 0;
+    // Feature 008: input values cut at the end of a TCP payload whose whole value was harvested
+    // (FR-001), and matches inside the kept branch cookie (FR-002).
+    std::uint64_t skipped_input_fragments = 0;
+    std::uint64_t suppressed_cookie_matches = 0;
     std::map<std::string, std::uint64_t> unscannable_by_category;  // "<category>/<reason>"
     std::vector<ReportScanHit> hits;
     std::vector<ReportScanWarning> warnings;  // passthrough only (feature 005)

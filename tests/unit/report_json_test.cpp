@@ -84,3 +84,24 @@ TEST_CASE("the not-anonymised list carries the SIP statements (FR-037, R9)", "[r
   const std::string j = to_json(Report{});
   for (const auto& s : v) CHECK(j.find(nlohmann::json(s).dump()) != std::string::npos);
 }
+
+TEST_CASE("the scan and xml sections carry the counters of feature 008", "[report][scan][xml]") {
+  Report r = sample();
+  r.scan.skipped_input_fragments = 3;
+  r.scan.suppressed_cookie_matches = 5;
+  r.xml.emplace();
+  r.xml->prefixes_rewritten["urn:3gpp:ns:mcpttPresInfo:1.0"] = 2;
+  const auto j = nlohmann::json::parse(to_json(r));
+  CHECK(j["format"] == 6);
+  CHECK(j["scan"]["skipped_input_fragments"] == 3);
+  CHECK(j["scan"]["suppressed_cookie_matches"] == 5);
+  CHECK(j["xml"]["prefixes_rewritten"]["urn:3gpp:ns:mcpttPresInfo:1.0"] == 2);
+  // Written as zero and empty when nothing happened.
+  Report z = sample();
+  z.xml.emplace();
+  const auto k = nlohmann::json::parse(to_json(z));
+  CHECK(k["scan"]["skipped_input_fragments"] == 0);
+  CHECK(k["scan"]["suppressed_cookie_matches"] == 0);
+  CHECK(k["xml"]["prefixes_rewritten"].is_object());
+  CHECK(k["xml"]["prefixes_rewritten"].empty());
+}
