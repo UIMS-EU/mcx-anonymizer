@@ -73,7 +73,8 @@ struct Engine {
 
   ScanResult result();
   void hit(std::size_t pattern, std::uint64_t offset, std::uint64_t frame, std::string_view via = {});
-  // A text-encoded match of a 4-byte token, when the index has pseudonyms.
+  // A text-encoded match of a 4-byte token or of a number of at most 10 digits, when the index
+  // has pseudonyms.
   [[nodiscard]] bool coverable(std::size_t pattern) const;
   // Feature 008 (FR-002): a match short enough to lie inside the branch cookie, not a deny entry.
   [[nodiscard]] bool cookie_sized(std::size_t pattern) const;
@@ -204,6 +205,9 @@ ScanResult Engine::result() {
 
 bool Engine::coverable(std::size_t pattern) const {
   const auto c = ix.tokens[ix.matcher.token(pattern)].category;
+  // A number of at most 10 digits (the decimal width of a 32-bit value, an SDP session id) is as
+  // short as the decimal text of a 32-bit token, and as often met by chance in hex pseudonyms.
+  if (c == TokenCategory::number) return ix.matcher.length(pattern) <= 10 && !ix.pseudonyms.empty();
   if (c != TokenCategory::ipv4 && c != TokenCategory::binary && c != TokenCategory::key) return false;
   // The raw 4-byte form only inside a byte-string pseudonym (D21); text forms inside a text one.
   return ix.matcher.short_binary(pattern) ? !ix.byte_pseudonyms.empty() : !ix.pseudonyms.empty();

@@ -36,6 +36,10 @@ Fixes from the first run on captures of a third-party MCX system.
   that equals a pseudonym already issued no longer stops the run as an
   ambiguous mapping, as short SDP session IDs do not: such values are too short
   to be searched, and their pseudonyms come from a space of a few hundred.
+- A short number (at most 10 digits, such as a 4-digit SDP session ID) found
+  inside a pseudonym the anonymiser wrote (`c-4471b767…`) is counted as a chance
+  match, as the decimal form of a 32-bit value already was, instead of failing
+  the run as a leak.
 
 ## [0.1.0] - 2026-11-16
 

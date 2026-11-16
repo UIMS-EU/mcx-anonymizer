@@ -186,3 +186,22 @@ TEST_CASE("raw IPv4 octets inside a byte-string pseudonym are a chance match", "
   REQUIRE(r3.has_value());
   CHECK(r3->hits.size() == 1);
 }
+
+TEST_CASE("a number of at most 10 digits inside a pseudonym is a chance match", "[scan][pseudonym]") {
+  // A 4-digit SDP session id, digit-bounded inside the hex of a Call-ID pseudonym (seen in the
+  // determinism test): as the decimal text of a 32-bit token, it carries nothing of the original.
+  TempDir tmp;
+  const scan::Token sess{scan::TokenCategory::number, ascii("4471"), "sdp-sess:9788"};
+  const auto p = pcap_with_payload(tmp, "Call-ID: c-4471b7674b7b5c42\r\n");
+  CHECK(run_scan(p, {sess}, {}).hits.size() == 1);
+  const auto r = run_scan(p, {sess}, {"c-4471b7674b7b5c42"});
+  CHECK(r.hits.empty());
+  CHECK(r.suppressed_chance_matches == 1);
+  // The same number outside any pseudonym stays a hit.
+  const auto q = pcap_with_payload(tmp, "Call-ID: c-4471b7674b7b5c42\r\no=- 4471 1 IN IP4 x\r\n");
+  CHECK(run_scan(q, {sess}, {"c-4471b7674b7b5c42"}).hits.size() == 1);
+  // An 11-digit number (a telephone number) is never covered.
+  const scan::Token tel{scan::TokenCategory::number, ascii("48601234567"), "tel:+48000000000"};
+  const auto t = pcap_with_payload(tmp, "From: <sip:u-48601234567x@d.invalid>\r\n");
+  CHECK(run_scan(t, {tel}, {"u-48601234567x"}).hits.size() == 1);
+}
