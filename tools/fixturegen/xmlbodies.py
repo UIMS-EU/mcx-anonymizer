@@ -756,6 +756,14 @@ class LocCv:
     def plmn(self):
         return "262" + "%03d" % self.r.randrange(100, 999)
 
+    def plmn_canary(self, local):
+        """A PLMN element (MCC+MNC digits): a number canary, matched on digit boundaries as the
+        scanner matches PLMNs. As text it occurs in ECGI and NCGI pseudonyms, which start with 6
+        digits."""
+        v = self.text(local, self.plmn)
+        self.cv.c.items[-1]["category"] = "number"
+        return v
+
     def ecgi(self, local):
         return self.text(local, lambda: self.plmn() + _bits(self.r.getrandbits(28) | 1 << 20, 28))
 
@@ -817,8 +825,8 @@ def location_config(lc, svc):
                      El("EnterSpecificTrackingArea", lc.tai("EnterSpecificTrackingArea"), attrs=t("enter-ta")),
                      El("ExitSpecificTrackingArea", lc.tai("ExitSpecificTrackingArea"), attrs=t("exit-ta"))),
                   El("PlmnChange", El("AnyPlmnChange", attrs=t("plmn")),
-                     El("EnterSpecificPlmn", lc.text("EnterSpecificPlmn", lc.plmn), attrs=t("enter-plmn")),
-                     El("ExitSpecificPlmn", lc.text("ExitSpecificPlmn", lc.plmn), attrs=t("exit-plmn"))),
+                     El("EnterSpecificPlmn", lc.plmn_canary("EnterSpecificPlmn"), attrs=t("enter-plmn")),
+                     El("ExitSpecificPlmn", lc.plmn_canary("ExitSpecificPlmn"), attrs=t("exit-plmn"))),
                   El("MbmsSaChange", El("AnyMbmsSaChange", attrs=t("sa")),
                      El("EnterSpecificMbmsSa", lc.dec("EnterSpecificMbmsSa", 10000, 65535, chance=True), attrs=t("enter-sa")),
                      El("ExitSpecificMbmsSa", lc.dec("ExitSpecificMbmsSa", 10000, 65535, chance=True), attrs=t("exit-sa"))),
@@ -983,6 +991,13 @@ SIGNED_NS = "urn:3gpp:ns:mcpttSignedDoc:1.0"
 DSIG_NS = "http://www.w3.org/2000/09/xmldsig#"
 
 
+def _plmn(cv, value, key):
+    """A PLMN value (MCC+MNC digits) recorded as a number canary (see LocCv.plmn_canary)."""
+    out = cv.text(value, key)
+    cv.c.items[-1]["category"] = "number"
+    return out
+
+
 def _hex(cv, key, n):
     """A random hex canary of n digits for `key`."""
     r = cv.c.rng
@@ -1051,7 +1066,7 @@ def mbs_usage_doc(cv):
                     El("mbs-service-areas", El("mbs-service-area-id", _hex(cv, k("mbs-service-area-id"), 4))),
                     El("report-ue-session-join-notification", "true"),
                     El("multicast-mbs-session-related-info",
-                       El("PlmnId", cv.text("2620" + "%02d" % cv.c.rng.randrange(10, 99), k("PlmnId")),
+                       El("PlmnId", _plmn(cv, "2620" + "%02d" % cv.c.rng.randrange(10, 99), k("PlmnId")),
                           attrs=(("TriggerId", "plmn-1"),)),
                        El("DNN", cv.s(k("DNN"), "canary") + ".apn.example.net"),
                        El("IPInformation", El("IPInformationListEntry", El("IPv4Address", v4)),

@@ -198,8 +198,8 @@ def mbs_usage_doc(cv):
     sai = lambda local: El(local, X.short_hex(lc, local))  # noqa: E731
     ip_entry = lambda child: El("IPInformationListEntry", child)  # noqa: E731
     related = El("multicast-mbs-session-related-info",
-                 El("PlmnId", lc.text("PlmnId", lc.plmn), attrs=(("TriggerId", "trig-plmn-exit"),)),
-                 El("PlmnId", lc.text("PlmnId", lc.plmn), attrs=(("TriggerId", "trig-plmn-exit-2"),)),
+                 El("PlmnId", lc.plmn_canary("PlmnId"), attrs=(("TriggerId", "trig-plmn-exit"),)),
+                 El("PlmnId", lc.plmn_canary("PlmnId"), attrs=(("TriggerId", "trig-plmn-exit-2"),)),
                  El("DNN", _host(cv, lc.k("DNN"))),
                  El("IPInformation",
                     ip_entry(El("IPv4Address", cv.c.ipv4(None, cv.f, rule=lc.k("IPv4Address")))),
