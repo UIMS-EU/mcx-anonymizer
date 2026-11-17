@@ -8,9 +8,14 @@ no field decoder in tshark), the output must carry the same APP name and subtype
 frame and position. For the MCPT family, which tshark decodes field by field, the kept fields
 must also have the same values (priority, duration, reject cause, queue information,
 permission, queue size, message sequence number, source, floor indicator, message type,
-location type). Messages whose subtype the rules do not know (unknown names or subtypes) are
-expected with zeroed data: their name and subtype are compared only when --strict is not
-given and the input name is known (MCPT, MCPC, MCMC, MCNC, MCSC, MCV0-MCV5, MCDM).
+location type). When tshark itself reports the input message as malformed (its MCPTT dissector
+misreads the geographic coordinates of a List of Locations field, Wireshark 4.4, and goes on
+reading the following bytes as fields), only the values it decoded from the input are compared:
+each kept field of the output must start with the input's occurrences, since what tshark reads
+after the misread are the bytes of pseudonymised values. Messages whose subtype the rules do not
+know (unknown names or subtypes) are expected with zeroed data: their name and subtype are
+compared only when --strict is not given and the input name is known (MCPT, MCPC, MCMC, MCNC,
+MCSC, MCV0-MCV5, MCDM).
 
 Usage: floor_ladder.py INPUT OUTPUT [--known-only]
 Exit 0 when equal, 1 otherwise; prints the number of messages compared.
@@ -28,7 +33,7 @@ KEPT = ["rtcp.app_data.mcptt.priority", "rtcp.app_data.mcptt.duration", "rtcp.ap
 
 
 def rows(path):
-    names = ["frame.number", "rtcp.app.name", "rtcp.app.subtype"] + KEPT
+    names = ["frame.number", "rtcp.app.name", "rtcp.app.subtype", "_ws.malformed"] + KEPT
     r = subprocess.run(["tshark", "-r", path, "-Y", "rtcp.app.name", "-T", "fields", "-E", "occurrence=a",
                         "-E", "aggregator=|"] + [x for n in names for x in ("-e", n)],
                        capture_output=True, text=True, check=True)
@@ -56,8 +61,10 @@ def main():
             continue
         compared += 1
         if "MCPT" in names:
-            for name, x, y in zip(KEPT, row[2:], other[2:]):
-                if x != y:
+            malformed = bool(row[2])  # tshark misread the input message: compare what it decoded
+            for name, x, y in zip(KEPT, row[3:], other[3:]):
+                xs, ys = (x.split("|") if x else []), (y.split("|") if y else [])
+                if (ys[:len(xs)] != xs) if malformed else (x != y):
                     failures.append(f"frame {frame}: {name} {x!r} became {y!r}")
     print(f"{compared} APP messages compared")
     for f in failures[:30]:
